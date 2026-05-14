@@ -1,0 +1,121 @@
+/* ── Business Card Styles — Light Theme ── */
+
+.biz-card {
+  overflow: hidden;
+  position: relative;
+}
+
+.biz-card-cover {
+  height: 80px;
+  background: linear-gradient(135deg, #6c63ff 0%, #818cf8 30%, #a78bfa 60%, #ec4899 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
+  position: relative;
+}
+
+.biz-card-cover-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.biz-card-body {
+  padding: 0 1.25rem 1.25rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: -34px;
+}
+
+.biz-logo-wrap {
+  width: 68px;
+  height: 68px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--surface3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  border: 3px solid var(--surface3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s;
+}
+
+.biz-logo-wrap:hover {
+  transform: scale(1.05);
+}
+
+.biz-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.biz-logo-emoji {
+  font-size: 26px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.biz-info {
+  flex: 1;
+  padding-left: 1rem;
+  padding-bottom: 2px;
+  align-self: flex-end;
+}
+
+.biz-name-disp {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  margin-top: 38px;
+}
+
+.biz-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--pink);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.biz-tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pink);
+  display: inline-block;
+  animation: blink 2s ease-in-out infinite;
+}
+
+.edit-btn {
+  align-self: flex-start;
+  margin-top: 38px;
+  background: rgba(108, 99, 255, 0.06);
+  border: 1px solid rgba(108, 99, 255, 0.15);
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.25s;
+  white-space: nowrap;
+}
+
+.edit-btn:hover {
+  background: rgba(108, 99, 255, 0.12);
+  border-color: rgba(108, 99, 255, 0.3);
+  transform: translateY(-1px);
+}

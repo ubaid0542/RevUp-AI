@@ -1,0 +1,137 @@
+/* ── Setup Screen Styles — Light Theme ── */
+
+.app-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  animation: float 4s ease-in-out infinite;
+}
+
+.app-logo-mark {
+  font-size: 36px;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 4px 8px rgba(245, 158, 11, 0.3));
+}
+
+.app-name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.setup-card {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: scaleIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.setup-title {
+  font-size: 24px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+.setup-sub {
+  font-size: 13px;
+  color: var(--text2);
+  text-align: center;
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+/* Logo Upload */
+.logo-upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-drop {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 2.5px dashed rgba(108, 99, 255, 0.3);
+  background: linear-gradient(135deg, rgba(108, 99, 255, 0.04), rgba(167, 139, 250, 0.06));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 0 0 5px rgba(108, 99, 255, 0.05), var(--shadow-sm);
+  animation: breathe 3s ease-in-out infinite;
+}
+
+.logo-drop:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 7px rgba(108, 99, 255, 0.1), 0 8px 24px rgba(108, 99, 255, 0.15);
+  transform: scale(1.05);
+  animation: none;
+}
+
+.logo-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.logo-drop .plus {
+  font-size: 32px;
+  color: var(--accent2);
+  font-weight: 300;
+  transition: all 0.3s;
+}
+
+.logo-drop:hover .plus {
+  color: var(--accent);
+  transform: rotate(90deg);
+}
+
+.logo-hint {
+  font-size: 12px;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+/* Password Section */
+.setup-divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 0.25rem 0;
+}
+
+.setup-password-section {
+  text-align: center;
+}
+
+.setup-password-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.setup-password-hint {
+  font-size: 12px;
+  color: var(--text3);
+  line-height: 1.4;
+}
+
+.setup-pw-error {
+  font-size: 13px;
+  color: var(--red);
+  font-weight: 600;
+  text-align: center;
+  background: rgba(239, 68, 68, 0.06);
+  padding: 8px 12px;
+  border-radius: var(--radius-xs);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  animation: fadeIn 0.2s ease both;
+}

@@ -1,0 +1,20 @@
+/* ── Review Screen Styles — Light Theme ── */
+
+.rev-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.powered {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 0.75rem;
+  font-weight: 500;
+}
+
+.powered span {
+  color: var(--accent);
+  font-weight: 700;
+}
