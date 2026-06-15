@@ -14,6 +14,13 @@ WORKDIR /var/www
 # Copy files
 COPY . .
 
+# Ensure storage framework directories exist and have write permissions
+RUN mkdir -p storage/framework/cache/data \
+    && mkdir -p storage/framework/sessions \
+    && mkdir -p storage/framework/views \
+    && mkdir -p storage/logs \
+    && chmod -R 777 storage bootstrap/cache
+
 # Install php packages
 RUN composer install --no-dev --optimize-autoloader
 
