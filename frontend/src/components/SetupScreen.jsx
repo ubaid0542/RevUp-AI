@@ -86,7 +86,7 @@ export default function SetupScreen({ initialData, onComplete }) {
       {/* App Header */}
       <div className="app-header">
         <div className="app-logo-mark">⭐</div>
-        <div className="app-name">Review</div>
+        <div className="app-name">RevUp AI</div>
       </div>
 
       {/* Setup Card */}
@@ -135,15 +135,21 @@ export default function SetupScreen({ initialData, onComplete }) {
 
         {/* Business Type */}
         <div className="field">
-          <label htmlFor="biz-type-input">Business Type (optional)</label>
-          <input
+          <label htmlFor="biz-type-input">Business Type</label>
+          <select
             id="biz-type-input"
-            type="text"
-            placeholder="e.g. Restaurant, Salon, Shop…"
-            maxLength={50}
             value={type}
             onChange={(e) => setType(e.target.value)}
-          />
+          >
+            <option value="">— Select Business Type —</option>
+            <option value="Hospital/Clinic">Hospital / Clinic</option>
+            <option value="Restaurant/Cafe">Restaurant / Cafe</option>
+            <option value="Jewellery Shop">Jewellery Shop</option>
+            <option value="Hotel/Restro">Hotel / Restro</option>
+            <option value="Salon/Spa">Salon / Spa</option>
+            <option value="School/Coaching">School / Coaching</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
 
         {/* Divider */}

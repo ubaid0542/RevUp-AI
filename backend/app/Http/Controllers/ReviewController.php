@@ -33,6 +33,8 @@ class ReviewController extends Controller
             'ratings.ambience' => 'nullable|integer|min:1|max:5',
             'ratings.recommend' => 'nullable|integer|min:1|max:5',
             'language' => 'nullable|string|in:hinglish,english',
+            'subcategory' => 'nullable|string|max:255',
+            'customer_keywords' => 'nullable|string|max:500',
         ]);
 
         if ($validator->fails()) {
@@ -49,7 +51,11 @@ class ReviewController extends Controller
             businessName: $business->name,
             businessType: $business->type,
             ratings: $request->ratings,
-            language: $language
+            language: $language,
+            options: [
+                'businessSubcategory' => $request->subcategory,
+                'customerKeywords' => $request->customer_keywords,
+            ]
         );
 
         $review = Review::create([
@@ -57,6 +63,8 @@ class ReviewController extends Controller
             'ratings' => $request->ratings,
             'generated_text' => $generatedText,
             'language' => $language,
+            'source' => 'Backend API (Laravel)',
+            'stars' => $request->ratings['overall'] ?? 4,
         ]);
 
         return response()->json([
@@ -78,6 +86,10 @@ class ReviewController extends Controller
             'ratings' => 'required|array',
             'ratings.overall' => 'required|integer|min:1|max:5',
             'language' => 'nullable|string|in:hinglish,english',
+            'previous_text' => 'nullable|string|max:2000',
+            'variation_seed' => 'nullable|string|max:100',
+            'subcategory' => 'nullable|string|max:255',
+            'customer_keywords' => 'nullable|string|max:500',
         ]);
 
         if ($validator->fails()) {
@@ -94,7 +106,14 @@ class ReviewController extends Controller
             businessName: $business->name,
             businessType: $business->type,
             ratings: $request->ratings,
-            language: $language
+            language: $language,
+            options: [
+                'regenerate' => true,
+                'previous_text' => $request->previous_text,
+                'variation_seed' => $request->variation_seed ?? (string) microtime(true),
+                'businessSubcategory' => $request->subcategory,
+                'customerKeywords' => $request->customer_keywords,
+            ]
         );
 
         $review = Review::create([
@@ -102,6 +121,8 @@ class ReviewController extends Controller
             'ratings' => $request->ratings,
             'generated_text' => $generatedText,
             'language' => $language,
+            'source' => 'Backend API (Laravel)',
+            'stars' => $request->ratings['overall'] ?? 4,
         ]);
 
         return response()->json([
@@ -114,18 +135,177 @@ class ReviewController extends Controller
     }
 
     /**
-     * Get review generation history for a business.
+     * Get review generation history for a business (owner only).
+     * Auth enforced at route level (auth:sanctum).
      */
     public function history(int $businessId): JsonResponse
     {
+        $business = Business::find($businessId);
+
+        if (!$business) {
+            return response()->json(['success' => false, 'message' => 'Business not found.'], 404);
+        }
+
+        // Only owner can view their business history
+        if ($business->user_id && $business->user_id !== request()->user()->id) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
         $reviews = Review::where('business_id', $businessId)
             ->orderBy('created_at', 'desc')
             ->limit(20)
-            ->get();
+            ->get(['id', 'ratings', 'generated_text', 'language', 'stars', 'source', 'created_at']);
 
         return response()->json([
             'success' => true,
-            'data' => $reviews,
+            'data'    => $reviews,
+        ]);
+    }
+
+    /**
+     * Save an externally generated review (OpenRouter, Gemini, or Local fallback)
+     * POST /api/reviews/save-external
+     */
+    public function saveExternal(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'business_id' => 'required|exists:businesses,id',
+            'ratings' => 'required|array',
+            'generated_text' => 'required|string',
+            'language' => 'nullable|string',
+            'source' => 'nullable|string',
+            'stars' => 'nullable|integer|min:1|max:5',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $business = Business::findOrFail($request->business_id);
+
+        $review = Review::create([
+            'business_id' => $business->id,
+            'ratings' => $request->ratings,
+            'generated_text' => $request->generated_text,
+            'language' => $request->language ?? 'hinglish',
+            'source' => $request->source ?? 'External API',
+            'stars' => $request->stars ?? 4,
+            'photos' => null,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $review,
+        ]);
+    }
+
+    /**
+     * Generate a review via backend proxy (no DB ID required).
+     * POST /api/reviews/generate-proxy
+     *
+     * Frontend sends business_name + business_type directly.
+     * API keys stay server-side — never exposed to browser.
+     */
+    public function generateProxy(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'business_name' => 'required|string|max:255',
+            'business_type' => 'required|string|max:255',
+            'ratings'       => 'required|array',
+            'language'      => 'nullable|string|in:hinglish,english',
+            'subcategory'   => 'nullable|string|max:255',
+            'options'       => 'nullable|array',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        $language = $request->language ?? 'hinglish';
+        $options  = $request->options ?? [];
+        if ($request->subcategory) {
+            $options['businessSubcategory'] = $request->subcategory;
+        }
+
+        $generatedText = $this->generator->generate(
+            businessName: $request->business_name,
+            businessType: $request->business_type,
+            ratings: $request->ratings,
+            language: $language,
+            options: $options
+        );
+
+        return response()->json([
+            'success' => true,
+            'data'    => ['text' => $generatedText],
+        ]);
+    }
+
+    /**
+     * Upload photos for a review (supports base64 image data strings)
+     * POST /api/reviews/{review}/photos
+     */
+    public function uploadPhotos(Request $request, Review $review): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'photos' => 'required|array',
+            'photos.*' => 'required|string', // base64 representation
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // Max 5 photos per request
+        if (count($request->photos) > 5) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Maximum 5 photos allowed per upload.',
+            ], 422);
+        }
+
+        $paths = $review->photos ?? [];
+        
+        foreach ($request->photos as $base64Data) {
+            if (preg_match('/^data:image\/(\w+);base64,/', $base64Data, $type)) {
+                $data = substr($base64Data, strpos($base64Data, ',') + 1);
+                $type = strtolower($type[1]); // jpg, png, webp, etc.
+
+                if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png', 'webp'])) {
+                    continue;
+                }
+                $decoded = base64_decode($data);
+
+                if ($decoded === false) {
+                    continue;
+                }
+
+                // Reject files larger than 5MB
+                if (strlen($decoded) > 5 * 1024 * 1024) {
+                    continue;
+                }
+                
+                $filename = uniqid() . '.' . $type;
+                // Save to 'reviews' folder in public disk
+                \Illuminate\Support\Facades\Storage::disk('public')->put('reviews/' . $filename, $decoded);
+                $paths[] = '/storage/reviews/' . $filename;
+            }
+        }
+
+        $review->update(['photos' => $paths]);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'photos' => $paths,
+                'review' => $review,
+            ],
         ]);
     }
 }

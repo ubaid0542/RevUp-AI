@@ -1,52 +1,53 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { adminLogin, setAdminToken } from '../services/authService';
 import './AdminLogin.css';
 
-const PASSWORD_KEY = 'review_app_admin_pw';
-
 /**
- * AdminLogin — Admin authentication modal
- * 
- * Requires admin password to access the Setup page.
- * Password is stored in localStorage (set during initial setup).
+ * AdminLogin — Secure admin authentication modal
+ * Token stored in memory only — never in sessionStorage/localStorage.
  */
 export default function AdminLogin({ onSuccess, onCancel }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [shake, setShake] = useState(false);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
     setTimeout(() => inputRef.current?.focus(), 200);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Get stored password
-    let storedPw = null;
-    try {
-      const encoded = localStorage.getItem(PASSWORD_KEY);
-      if (encoded) storedPw = atob(encoded);
-    } catch { /* ignore */ }
-
-    if (!storedPw) {
-      // No password was set — shouldn't happen, but allow access
-      sessionStorage.setItem('admin_authenticated', 'true');
-      onSuccess();
+    if (!password.trim()) {
+      setError('Please enter the admin password.');
       return;
     }
 
-    if (password === storedPw) {
-      sessionStorage.setItem('admin_authenticated', 'true');
-      onSuccess();
-    } else {
-      setError('Incorrect password. Try again.');
+    setLoading(true);
+    setError('');
+
+    try {
+      const result = await adminLogin(password);
+      if (result.success) {
+        // Token stored in memory via setAdminToken — NOT in sessionStorage
+        setAdminToken(result.token);
+        onSuccess();
+      } else {
+        setError(result.message || 'Invalid password.');
+        setShake(true);
+        setPassword('');
+        setTimeout(() => {
+          setShake(false);
+          setError('');
+        }, 3000);
+      }
+    } catch {
+      setError('Server connection error. Please try again.');
       setShake(true);
-      setPassword('');
-      setTimeout(() => {
-        setShake(false);
-        setError('');
-      }, 2000);
+      setTimeout(() => { setShake(false); setError(''); }, 3000);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,7 +67,7 @@ export default function AdminLogin({ onSuccess, onCancel }) {
         </div>
 
         <h2 className="admin-title">Admin Access</h2>
-        <p className="admin-sub">Enter your admin password to edit business settings</p>
+        <p className="admin-sub">Enter your admin password to continue</p>
 
         <form onSubmit={handleSubmit} className="admin-form">
           <div className={`field ${error ? 'error' : ''}`}>
@@ -79,13 +80,14 @@ export default function AdminLogin({ onSuccess, onCancel }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
+              disabled={loading}
             />
           </div>
 
           {error && <p className="admin-error">{error}</p>}
 
-          <button type="submit" className="btn-primary" id="btn-admin-login">
-            🔓 Unlock Settings
+          <button type="submit" className="btn-primary" id="btn-admin-login" disabled={loading}>
+            {loading ? '⏳ Verifying...' : '🔓 Unlock Settings'}
           </button>
 
           <button

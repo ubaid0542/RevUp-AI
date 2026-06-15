@@ -11,19 +11,14 @@ class Review extends Model
     use HasFactory;
 
     protected $fillable = [
-        'business_id',
-        'ratings',
-        'generated_text',
-        'language',
+        'business_id', 'ratings', 'generated_text', 'language', 'source', 'stars', 'photos',
     ];
 
     protected $casts = [
         'ratings' => 'array',
+        'photos' => 'array',
     ];
 
-    /**
-     * Get the business this review belongs to.
-     */
     public function business(): BelongsTo
     {
         return $this->belongsTo(Business::class);

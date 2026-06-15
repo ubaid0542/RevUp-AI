@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import StarRating from './StarRating';
 import './QuestionSlider.css';
 
@@ -10,11 +10,64 @@ const MOOD_MAP = {
   5: '🤩 Amazing!',
 };
 
+/** Emojis that float in the background per mood level */
+const MOOD_EMOJIS = {
+  1: ['😞', '💔', '😢', '👎', '😤'],
+  2: ['😐', '🤔', '😕', '🫤', '☁️'],
+  3: ['🙂', '👍', '✌️', '😌', '🌤️'],
+  4: ['😊', '🎉', '✨', '💚', '🙌', '💫', '🌟'],
+  5: ['🤩', '🔥', '⭐', '💯', '🎊', '💫', '🏆', '💎', '✨', '🥳'],
+};
+
+/**
+ * Spawn floating emoji elements inside a container
+ */
+function spawnFloatingEmojis(container, mood) {
+  if (!container || !mood) return;
+
+  // Remove any existing floating emojis
+  container.querySelectorAll('.floating-emoji').forEach(el => el.remove());
+
+  const emojis = MOOD_EMOJIS[mood] || MOOD_EMOJIS[3];
+  const count = mood >= 4 ? 14 : mood >= 3 ? 8 : 6;
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('span');
+    el.className = 'floating-emoji';
+    el.textContent = emojis[i % emojis.length];
+
+    // Random position, size, delay, duration
+    const left = Math.random() * 90 + 5; // 5% to 95%
+    const startTop = 80 + Math.random() * 30; // start from bottom area
+    const size = mood >= 4 ? (16 + Math.random() * 14) : (14 + Math.random() * 10);
+    const duration = 3;
+    const delay = Math.random() * 0.8;
+    const drift = (Math.random() - 0.5) * 60; // horizontal drift
+    const rotation = (Math.random() - 0.5) * 120;
+
+    el.style.cssText = `
+      left: ${left}%;
+      top: ${startTop}%;
+      font-size: ${size}px;
+      --float-duration: ${duration}s;
+      --float-delay: ${delay}s;
+      --drift-x: ${drift}px;
+      --end-rotate: ${rotation}deg;
+      opacity: 0;
+    `;
+
+    container.appendChild(el);
+    // Auto-remove after animation completes
+    setTimeout(() => el.remove(), (duration + delay) * 1000 + 200);
+  }
+}
+
 /**
  * QuestionSlider — Sliding questionnaire with star ratings
  * 
  * Displays questions one-at-a-time with a sliding animation.
  * Progress bar tracks completion. Auto-advances on answer.
+ * Background animates with colors + floating emojis based on star rating.
  */
 export default function QuestionSlider({
   questions,
@@ -30,10 +83,52 @@ export default function QuestionSlider({
     ? 100
     : (currentQ / total) * 100;
 
+  const [activeMood, setActiveMood] = useState(0);
+  const [confettiBurst, setConfettiBurst] = useState(false);
+  const cardRef = useRef(null);
+
+  const handleRate = useCallback((questionIndex, val) => {
+    setActiveMood(val);
+
+    // Spawn floating emojis in the card background
+    if (cardRef.current) {
+      spawnFloatingEmojis(cardRef.current, val);
+    }
+    
+    // Trigger confetti burst for 4-5 stars
+    if (val >= 4) {
+      setConfettiBurst(true);
+      setTimeout(() => setConfettiBurst(false), 1200);
+    }
+    
+    onAnswer(questionIndex, val);
+    
+    // Reset mood after emojis finish (3s animation)
+    setTimeout(() => {
+      if (questionIndex < total - 1) {
+        setActiveMood(0);
+      }
+    }, 600);
+  }, [onAnswer, total]);
+
+  // Get current question's answer for persistent mood
+  const currentAnswer = questions[currentQ] ? answers[questions[currentQ].id] || 0 : 0;
+  const displayMood = activeMood || currentAnswer;
+
   return (
-    <div className="rev-card glass-card" id="question-card">
+    <div 
+      ref={cardRef}
+      className={`rev-card glass-card mood-card ${confettiBurst ? 'confetti-active' : ''}`}
+      id="question-card"
+      data-mood={displayMood}
+    >
+      {/* Animated background layers */}
+      <div className="mood-bg-layer" />
+      <div className="mood-particles-layer" />
+      {confettiBurst && <div className="confetti-layer" />}
+
       {/* Progress Header */}
-      <div>
+      <div style={{ position: 'relative', zIndex: 2 }}>
         <div className="q-header">
           <span className="q-step" id="q-step-label">
             {questionsComplete ? 'All done! ✅' : `Question ${currentQ + 1} of ${total}`}
@@ -51,7 +146,7 @@ export default function QuestionSlider({
       </div>
 
       {/* Slides Track */}
-      <div className="slides-overflow">
+      <div className="slides-overflow" style={{ position: 'relative', zIndex: 2 }}>
         <div
           className="slides-track"
           style={{ transform: `translateX(-${currentQ * 100}%)` }}
@@ -65,9 +160,9 @@ export default function QuestionSlider({
               <StarRating
                 questionIndex={i}
                 value={answers[q.id] || 0}
-                onRate={(val) => onAnswer(i, val)}
+                onRate={(val) => handleRate(i, val)}
               />
-              <div className="mood-label" id={`mood-${i}`}>
+              <div className={`mood-label ${answers[q.id] ? 'mood-label--visible' : ''}`} id={`mood-${i}`}>
                 {answers[q.id] ? MOOD_MAP[answers[q.id]] : ''}
               </div>
             </div>
@@ -75,12 +170,14 @@ export default function QuestionSlider({
         </div>
       </div>
 
+
       {/* Generate Button (shown after all questions) */}
       {questionsComplete && (
         <button
           className="btn-generate"
           id="btn-generate"
           onClick={onGenerate}
+          style={{ position: 'relative', zIndex: 2 }}
         >
           ✨ Generate My Review
         </button>

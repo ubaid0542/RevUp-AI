@@ -6,11 +6,15 @@ import './ReviewResult.css';
  * 
  * Shows loading animation while generating, then the review text
  * with copy, regenerate, and Google post buttons.
+ * Includes step-by-step instructions so customers know the flow.
  */
 export default function ReviewResult({
   reviewText,
   isLoading,
+  reviewSource,
   toast,
+  photos,
+  onPhotoChange,
   onRegenerate,
   onCopy,
   onPostGoogle,
@@ -32,6 +36,64 @@ export default function ReviewResult({
           <p className="review-gen-text">{reviewText}</p>
         )}
       </div>
+
+      {/* Auto-copied badge + source */}
+      {!isLoading && reviewText && (
+        <div className="review-meta-row">
+          <div className="auto-copied-badge">
+            ✅ Review auto-copied to clipboard
+          </div>
+          {reviewSource && (
+            <div className="review-source-badge">
+              {reviewSource}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Photo Upload Option */}
+      {!isLoading && reviewText && (
+        <div className="photo-upload-section">
+          <p className="photo-upload-label">📸 Add Photos to your review (Optional)</p>
+          <input
+            type="file"
+            id="photo-upload"
+            multiple
+            accept="image/*"
+            onChange={onPhotoChange}
+            style={{ display: 'none' }}
+          />
+          <label htmlFor="photo-upload" className="btn-upload-photo">
+            Select Photos
+          </label>
+          {photos && photos.length > 0 && (
+            <div className="photo-thumbnails">
+              {photos.map((photo, idx) => (
+                <img key={idx} src={photo} alt={`Upload ${idx}`} className="photo-thumb" />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Step-by-step instructions */}
+      {!isLoading && reviewText && (
+        <div className="post-steps">
+          <div className="post-steps-title">📋 How to post your review:</div>
+          <div className="post-step">
+            <span className="step-num">1</span>
+            <span>Tap <strong>"Post on Google"</strong> below</span>
+          </div>
+          <div className="post-step">
+            <span className="step-num">2</span>
+            <span>Google Reviews will open — <strong>long-press</strong> the text box & tap <strong>Paste</strong></span>
+          </div>
+          <div className="post-step">
+            <span className="step-num">3</span>
+            <span>Select your star rating, <strong>attach your photos</strong>, & hit <strong>Post</strong> ⭐</span>
+          </div>
+        </div>
+      )}
 
       {/* Regenerate */}
       <div className="regen-row">

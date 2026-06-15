@@ -41,6 +41,61 @@
   --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ══════════════════════════════════════════════════════════
+   Dark Theme Override
+   ══════════════════════════════════════════════════════════ */
+body.dark {
+  --bg: #0f0e17;
+  --bg-warm: #1a1830;
+  --surface: rgba(30, 27, 58, 0.92);
+  --surface2: rgba(35, 30, 70, 0.8);
+  --surface3: #1e1b3a;
+  --border: rgba(108, 99, 255, 0.18);
+  --border-light: rgba(255, 255, 255, 0.08);
+  --accent: #8b7cff;
+  --accent2: #b49aff;
+  --accent3: #9da5ff;
+  --accent-soft: rgba(139, 124, 255, 0.12);
+  --gold: #fbbf24;
+  --gold-soft: rgba(251, 191, 36, 0.15);
+  --text: #f1f0ff;
+  --text2: #b0adc4;
+  --text3: #7a7793;
+  --green: #34d399;
+  --green-soft: rgba(52, 211, 153, 0.12);
+  --red: #f87171;
+  --pink: #f472b6;
+  --pink-soft: rgba(244, 114, 182, 0.12);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 24px rgba(139, 124, 255, 0.2);
+}
+
+/* Dark theme animated background */
+body.dark::before {
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 5%, rgba(108, 99, 255, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 85%, rgba(236, 72, 153, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 40%, rgba(99, 102, 241, 0.05) 0%, transparent 65%);
+}
+
+body.dark::after {
+  background: radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, transparent 70%);
+}
+
+/* Dark scrollbar */
+body.dark ::-webkit-scrollbar-thumb {
+  background: rgba(139, 124, 255, 0.25);
+}
+
+/* Dark toast */
+body.dark .global-toast {
+  background: #2d2a54;
+  color: #f1f0ff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -50,10 +105,8 @@ body {
   min-height: 100vh;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
+  margin: 0;
+  padding: 0;
   position: relative;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -102,7 +155,7 @@ body::after {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 430px;
+  min-height: 100vh;
 }
 
 /* ── Animations ── */
@@ -336,4 +389,83 @@ body::after {
 ::-webkit-scrollbar-thumb {
   background: rgba(108, 99, 255, 0.2);
   border-radius: 4px;
+}
+
+/* ── Global Toast ── */
+.global-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--text);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 9999;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  white-space: nowrap;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+/* ── Powered By ── */
+.powered {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text3);
+  padding: 16px 0 8px;
+  letter-spacing: 0.3px;
+}
+
+.powered span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ══════════════════════════════════════════════════════════
+   App Shell — Full Page Layout
+   ══════════════════════════════════════════════════════════ */
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell--narrow {
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 32px;
+}
+
+.app-main--narrow {
+  max-width: 430px;
+  padding: 16px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   Responsive Breakpoints
+   ══════════════════════════════════════════════════════════ */
+
+/* Tablet & below */
+@media (max-width: 768px) {
+  .app-main {
+    padding: 16px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .app-main {
+    padding: 12px;
+  }
 }
