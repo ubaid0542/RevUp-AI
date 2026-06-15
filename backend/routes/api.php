@@ -51,12 +51,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Review history — owner can only see their own business reviews (enforced in controller)
     Route::get('/reviews/history/{businessId}', [ReviewController::class, 'history']);
 
-    // Photo upload — tied to auth session
-    Route::post('/reviews/{review}/photos', [ReviewController::class, 'uploadPhotos']);
-
-    // Save externally-generated review — requires auth
-    Route::post('/reviews/save-external', [ReviewController::class, 'saveExternal']);
-
     // Backend AI review generation (uses DB business ID — owner only)
     Route::post('/reviews/generate',    [ReviewController::class, 'generate']);
     Route::post('/reviews/regenerate',  [ReviewController::class, 'regenerate']);
@@ -83,6 +77,12 @@ Route::middleware('throttle:10,1')->group(function () {
     // Proxy AI generation for customers (no DB business ID needed)
     // Uses server-side AI keys — protected by rate limiting
     Route::post('/reviews/generate-proxy', [ReviewController::class, 'generateProxy']);
+
+    // Save externally-generated review (public for QR scans)
+    Route::post('/reviews/save-external', [ReviewController::class, 'saveExternal']);
+
+    // Photo upload for reviews (public for QR scans)
+    Route::post('/reviews/{review}/photos', [ReviewController::class, 'uploadPhotos']);
 });
 
 // ─── Public Business Registration (standalone/no-login flow) ─────────────────
@@ -90,4 +90,5 @@ Route::middleware('throttle:5,1')->group(function () {
     Route::post('/public/businesses',                    [BusinessController::class, 'storePublic']);
     Route::post('/public/businesses/{business}/logo',    [BusinessController::class, 'uploadLogoPublic']);
 });
+
 

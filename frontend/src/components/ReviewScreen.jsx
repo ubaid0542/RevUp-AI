@@ -206,7 +206,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
 
     // Save externally generated reviews to backend if it's a real DB business
     const isRealDbId = businessData.id && !businessData.id.toString().startsWith('biz_') && !businessData.id.toString().startsWith('demo');
-    if (text && source !== '🔗 Backend API (Laravel)' && isRealDbId && isLoggedIn()) {
+    if (text && source !== '🔗 Backend API (Laravel)' && isRealDbId) {
       const savedReview = await saveExternalReviewAPI(businessData.id, answers, text, source, 'hinglish');
       if (savedReview && savedReview.id) {
         setBackendReviewId(savedReview.id);
@@ -316,7 +316,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
 
     // Save externally generated reviews to backend if it's a real DB business
     const isRealDbId = businessData.id && !businessData.id.toString().startsWith('biz_') && !businessData.id.toString().startsWith('demo');
-    if (text && source !== '🔗 Backend API (Laravel)' && isRealDbId && isLoggedIn()) {
+    if (text && source !== '🔗 Backend API (Laravel)' && isRealDbId) {
       const savedReview = await saveExternalReviewAPI(businessData.id, answers, text, source, 'hinglish');
       if (savedReview && savedReview.id) {
         setBackendReviewId(savedReview.id);
