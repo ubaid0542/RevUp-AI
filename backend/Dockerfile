@@ -1,4 +1,4 @@
-FROM php:8.2-cli-alpine
+FROM php:8.4-cli-alpine
 
 # Install dependencies
 RUN apk add --no-cache postgresql-dev libzip-dev zip unzip git
