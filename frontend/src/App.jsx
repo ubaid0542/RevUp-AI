@@ -10,7 +10,7 @@ import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import { updateFavicon } from './utils/favicon';
 import { trackEvent, EVENT_TYPES } from './services/analyticsService';
-import { isLoggedIn, getUser, logoutUser, fetchMe, createBusinessAPI, updateBusinessAPI, uploadBusinessLogoAPI, createPublicBusinessAPI, uploadPublicBusinessLogoAPI } from './services/authService';
+import { isLoggedIn, getUser, logoutUser, fetchMe, createBusinessAPI, updateBusinessAPI, uploadBusinessLogoAPI, createPublicBusinessAPI, uploadPublicBusinessLogoAPI, fetchPublicBusinessAPI } from './services/authService';
 
 const STORAGE_KEY = 'review_app_business';
 const BUSINESSES_KEY = 'rai_businesses';
@@ -118,8 +118,9 @@ export default function App() {
   const [businessData, setBusinessData] = useState(() => {
     if (bizIdFromUrl) {
       const businesses = loadBusinesses();
-      const found = businesses.find(b => b.id === bizIdFromUrl);
+      const found = businesses.find(b => String(b.id) === String(bizIdFromUrl));
       if (found) return found;
+      return { name: '', type: '', logoUrl: '', logoFile: null, id: bizIdFromUrl };
     }
     return savedBusiness || {
       name: '', type: '', logoUrl: '', logoFile: null, id: null,
@@ -167,8 +168,7 @@ export default function App() {
   // Fetch public business info if customer scans QR code (bizId in URL)
   useEffect(() => {
     if (bizIdFromUrl) {
-      fetch(`/api/public/business/${bizIdFromUrl}`)
-        .then(res => res.json())
+      fetchPublicBusinessAPI(bizIdFromUrl)
         .then(data => {
           if (data.success && data.data) {
             const biz = data.data;

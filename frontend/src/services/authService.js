@@ -458,3 +458,34 @@ export async function generateReviewProxy(businessName, businessType, ratings, l
     return null;
   }
 }
+
+/**
+ * Fetch public business details by ID (without login)
+ */
+export async function fetchPublicBusinessAPI(businessId) {
+  try {
+    const res = await fetch(`${API_BASE}/public/business/${businessId}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("fetchPublicBusinessAPI error:", err);
+    return { success: false, message: 'Server connection error.' };
+  }
+}
+
+/**
+ * Fetch stats & reviews for a single business (logged-in owner)
+ */
+export async function fetchBusinessStatsAPI(businessId) {
+  try {
+    const res = await fetch(`${API_BASE}/businesses/${businessId}`, {
+      headers: authHeaders(),
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("fetchBusinessStatsAPI error:", err);
+    return { success: false, message: 'Server connection error.' };
+  }
+}
+

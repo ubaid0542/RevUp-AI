@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { fetchBusinessStatsAPI } from '../services/authService';
 import './Dashboard.css';
 
 function timeAgo(ts) {
@@ -68,19 +69,13 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
   useEffect(() => {
     if (isRealDbId) {
       setLoading(true);
-      fetch(`/api/businesses/${business.id}`, {
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('rai_auth_token')}`,
-        }
-      })
-      .then(res => res.json())
+      fetchBusinessStatsAPI(business.id)
       .then(resData => {
         if (resData.success && resData.data) {
           setStats(resData.data.stats);
           setRecentReviews(resData.data.recentReviews);
         }
-        setLoading(false)
+        setLoading(false);
       })
       .catch(err => {
         console.error("Failed to fetch business stats:", err);
