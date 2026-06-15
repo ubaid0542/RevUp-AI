@@ -2,7 +2,7 @@
  * Auth Service — handles login, signup, token storage
  */
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api` : '/api';
 const TOKEN_KEY = 'rai_auth_token';
 const USER_KEY = 'rai_auth_user';
 

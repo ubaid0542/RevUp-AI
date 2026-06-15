@@ -8,7 +8,7 @@
  * When the Laravel backend is running, can also call the API.
  */
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api` : '/api';
 
 const ratingLabels = {
   overall: 'Overall Experience',
