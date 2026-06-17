@@ -17,11 +17,7 @@ export default function BusinessCard({ name, type, logoUrl, onEdit }) {
       </div>
       <div className="biz-card-body">
         <div className="biz-logo-wrap">
-          {logoUrl ? (
-            <img src={logoUrl} alt={`${name} logo`} className="biz-logo-img" />
-          ) : (
-            <span className="biz-logo-emoji">{firstLetter}</span>
-          )}
+          <span className="biz-logo-emoji">{firstLetter}</span>
         </div>
         <div className="biz-info">
           <div className="biz-name-disp">{name}</div>
