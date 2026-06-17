@@ -26,9 +26,11 @@ export default function BusinessCard({ name, type, logoUrl, onEdit }) {
             {type}
           </div>
         </div>
-        <button className="edit-btn" onClick={onEdit} id="btn-edit">
-          ✏ Edit
-        </button>
+        {onEdit && (
+          <button className="edit-btn" onClick={onEdit} id="btn-edit">
+            ✏ Edit
+          </button>
+        )}
       </div>
     </div>
   );

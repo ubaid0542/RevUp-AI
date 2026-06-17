@@ -56,7 +56,7 @@ function overlayEmojiOnCanvas(canvas, emoji) {
 /**
  * Dashboard — Stats, QR Code, Review History
  */
-export default function Dashboard({ business, reviews, onPreview, onNewBusiness, onToast }) {
+export default function Dashboard({ business, reviews, onPreview, onNewBusiness, onEdit, onToast }) {
   const qrRef = useRef(null);
   const [qrReady, setQrReady] = useState(false);
   const [stats, setStats] = useState(null);
@@ -273,6 +273,9 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
           </div>
         </div>
         <div className="dash-header-actions">
+          <button className="btn-new-biz" onClick={onEdit}>
+            ✏ Edit Business
+          </button>
           <button className="btn-new-biz" onClick={onNewBusiness}>
             + New Business
           </button>

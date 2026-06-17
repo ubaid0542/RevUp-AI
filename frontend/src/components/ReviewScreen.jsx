@@ -433,7 +433,6 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
           name={businessData.name}
           type={businessData.type}
           logoUrl={businessData.logoUrl}
-          onEdit={onEdit}
         />
 
         {/* Question Slider (hidden when result is shown) */}

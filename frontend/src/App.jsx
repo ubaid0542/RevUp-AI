@@ -469,6 +469,7 @@ export default function App() {
             reviews={reviews}
             onPreview={handlePreview}
             onNewBusiness={handleNewBusiness}
+            onEdit={handleEditRequest}
             onToast={showToast}
           />
         )}
