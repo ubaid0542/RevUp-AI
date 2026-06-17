@@ -56,26 +56,26 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
         <div className="plans-grid">
           <div className="plan-card glass-card" onClick={() => onSelectPlan('Starter')}>
             <div className="plan-name">Starter</div>
-            <div className="plan-price">₹499<span>/month</span></div>
+            <div className="plan-price">₹699<span>/month</span></div>
             <div className="plan-desc">For small businesses</div>
             <ul className="plan-features">
               <li>1 QR Code</li>
-              <li>100 reviews/month</li>
-              <li>Basic AI reviews</li>
+              <li>250 reviews/month</li>
+              <li>Basic AI review</li>
               <li>GMB redirect</li>
             </ul>
           </div>
           <div className="plan-card glass-card popular" onClick={() => onSelectPlan('Growth')}>
             <div className="plan-popular-tag">🔥 Most Popular</div>
             <div className="plan-name">Growth</div>
-            <div className="plan-price">₹999<span>/month</span></div>
+            <div className="plan-price">₹1,399<span>/month</span></div>
             <div className="plan-desc">For growing businesses</div>
             <ul className="plan-features">
               <li>3 QR Codes</li>
-              <li>500 reviews/month</li>
-              <li>Advanced AI reviews</li>
+              <li>750 reviews/month</li>
+              <li>Advanced AI review</li>
+              <li>GMB redirect</li>
               <li>Analytics dashboard</li>
-              <li>Priority support</li>
             </ul>
           </div>
           <div className="plan-card glass-card" onClick={() => onSelectPlan('Pro')}>
