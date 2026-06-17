@@ -224,6 +224,8 @@ export default function AdminPanel({ onBack }) {
             totalQRScans: backendStats.totalQRScans,
             todayScans: backendStats.todayScans,
             weekScans: backendStats.weekScans,
+            totalCopied: backendStats.totalCopied || 0,
+            totalPosted: backendStats.totalPosted || 0,
             sourceBreakdown: backendStats.sourceBreakdown || {},
             dailyReviews: backendStats.dailyReviews || {},
             recentActivity: (backendStats.recentActivity || []).map(a => ({

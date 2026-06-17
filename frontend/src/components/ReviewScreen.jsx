@@ -9,6 +9,7 @@ import {
   generateReviewOpenRouter,
   regenerateReviewAPI,
   logQRScan,
+  logCustomerEvent,
   saveExternalReviewAPI,
   uploadReviewPhotosAPI,
 } from '../services/reviewService';
@@ -353,11 +354,13 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
         bizId: businessData.id,
         businessName: businessData.name,
       });
+      const isRealDbId = businessData.id && !businessData.id.toString().startsWith('biz_') && !businessData.id.toString().startsWith('demo');
+      if (isRealDbId) logCustomerEvent(businessData.id, 'review_copied');
     }
     showToastMsg(copied
       ? '✅ Copied! Paste it on Google Reviews.'
       : '⚠️ Could not copy — please select the text manually.');
-  }, [generatedReview, copyToClipboard]);
+  }, [generatedReview, copyToClipboard, businessData]);
 
   const handlePostGoogle = useCallback(async () => {
     // 1. Copy review to clipboard
@@ -384,6 +387,9 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
       bizId: businessData.id,
       businessName: businessData.name,
     });
+    // Track in backend database
+    const isRealDbId = businessData.id && !businessData.id.toString().startsWith('biz_') && !businessData.id.toString().startsWith('demo');
+    if (isRealDbId) logCustomerEvent(businessData.id, 'review_posted');
 
     // 4. Open GMB link — customer just needs to paste (Ctrl+V / long-press Paste)
     const gmbLink = businessData.gmb || 'https://search.google.com/local/writereview?placeid=ChIJxxxxxxxxx';

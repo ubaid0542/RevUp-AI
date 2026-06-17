@@ -381,6 +381,35 @@ class BusinessController extends Controller
     }
 
     /**
+     * Log a customer analytics event (copy, post)
+     * POST /api/public/business/{business}/event
+     */
+    public function logEvent(Request $request, Business $business): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'event_type' => 'required|string|in:review_copied,review_posted',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        $rawIp = $request->ip();
+        $anonIp = preg_replace('/\\.\\d+$/', '.0', $rawIp);
+
+        $business->analyticsEvents()->create([
+            'event_type' => $request->event_type,
+            'event_data' => $request->event_data ?? null,
+            'ip_address' => $anonIp,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Event tracked.',
+        ]);
+    }
+
+    /**
      * Admin Dashboard Stats — aggregated from database
      * GET /api/admin/stats
      */
@@ -405,6 +434,10 @@ class BusinessController extends Controller
         $totalScans = \App\Models\QrScan::count();
         $todayScans = \App\Models\QrScan::where('created_at', '>=', $todayStart)->count();
         $weekScans = \App\Models\QrScan::where('created_at', '>=', $weekStart)->count();
+
+        // ── Analytics events (copy & post) ──
+        $totalCopied = \App\Models\AnalyticsEvent::where('event_type', 'review_copied')->count();
+        $totalPosted = \App\Models\AnalyticsEvent::where('event_type', 'review_posted')->count();
 
         // ── Source breakdown ──
         $sourceBreakdown = \App\Models\Review::selectRaw('source, count(*) as count')
@@ -481,6 +514,8 @@ class BusinessController extends Controller
                 'totalQRScans' => $totalScans,
                 'todayScans' => $todayScans,
                 'weekScans' => $weekScans,
+                'totalCopied' => $totalCopied,
+                'totalPosted' => $totalPosted,
                 'sourceBreakdown' => $sourceBreakdown,
                 'dailyReviews' => $dailyReviews,
                 'dailyScans' => $dailyScans,
