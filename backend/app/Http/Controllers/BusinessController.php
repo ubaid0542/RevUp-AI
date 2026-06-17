@@ -379,5 +379,114 @@ class BusinessController extends Controller
             ],
         ]);
     }
+
+    /**
+     * Admin Dashboard Stats — aggregated from database
+     * GET /api/admin/stats
+     */
+    public function adminStats(): JsonResponse
+    {
+        $now = now();
+        $todayStart = $now->copy()->startOfDay();
+        $weekStart = $now->copy()->subDays(7)->startOfDay();
+        $monthStart = $now->copy()->subDays(30)->startOfDay();
+
+        // ── Business counts ──
+        $totalBusinesses = Business::count();
+        $todayRegistrations = Business::where('created_at', '>=', $todayStart)->count();
+
+        // ── Review counts ──
+        $totalReviews = \App\Models\Review::count();
+        $todayReviews = \App\Models\Review::where('created_at', '>=', $todayStart)->count();
+        $weekReviews = \App\Models\Review::where('created_at', '>=', $weekStart)->count();
+        $monthReviews = \App\Models\Review::where('created_at', '>=', $monthStart)->count();
+
+        // ── QR Scan counts ──
+        $totalScans = \App\Models\QrScan::count();
+        $todayScans = \App\Models\QrScan::where('created_at', '>=', $todayStart)->count();
+        $weekScans = \App\Models\QrScan::where('created_at', '>=', $weekStart)->count();
+
+        // ── Source breakdown ──
+        $sourceBreakdown = \App\Models\Review::selectRaw('source, count(*) as count')
+            ->groupBy('source')
+            ->pluck('count', 'source')
+            ->toArray();
+
+        // ── Daily reviews (last 7 days) ──
+        $dailyReviews = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = $now->copy()->subDays($i)->toDateString();
+            $dailyReviews[$date] = \App\Models\Review::whereDate('created_at', $date)->count();
+        }
+
+        // ── Daily scans (last 7 days) ──
+        $dailyScans = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = $now->copy()->subDays($i)->toDateString();
+            $dailyScans[$date] = \App\Models\QrScan::whereDate('created_at', $date)->count();
+        }
+
+        // ── Recent activity (last 20 reviews) ──
+        $recentReviews = \App\Models\Review::with('business:id,name,emoji')
+            ->latest()
+            ->limit(20)
+            ->get(['id', 'business_id', 'stars', 'source', 'language', 'created_at'])
+            ->map(function ($r) {
+                return [
+                    'type' => 'review_generated',
+                    'data' => [
+                        'businessName' => $r->business ? $r->business->name : 'Unknown',
+                        'businessEmoji' => $r->business ? $r->business->emoji : '⭐',
+                        'stars' => $r->stars,
+                        'source' => $r->source,
+                    ],
+                    'timestamp' => $r->created_at ? $r->created_at->timestamp * 1000 : null,
+                ];
+            });
+
+        // ── Recent scans (last 20) ──
+        $recentScans = \App\Models\QrScan::with('business:id,name,emoji')
+            ->latest()
+            ->limit(20)
+            ->get(['id', 'business_id', 'device_type', 'created_at'])
+            ->map(function ($s) {
+                return [
+                    'type' => 'qr_scanned',
+                    'data' => [
+                        'businessName' => $s->business ? $s->business->name : 'Unknown',
+                        'businessEmoji' => $s->business ? $s->business->emoji : '⭐',
+                        'deviceType' => $s->device_type,
+                    ],
+                    'timestamp' => $s->created_at ? $s->created_at->timestamp * 1000 : null,
+                ];
+            });
+
+        // Merge and sort recent activity
+        $recentActivity = collect($recentReviews)
+            ->merge($recentScans)
+            ->sortByDesc('timestamp')
+            ->values()
+            ->take(20)
+            ->toArray();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'totalBusinesses' => $totalBusinesses,
+                'todayRegistrations' => $todayRegistrations,
+                'totalReviews' => $totalReviews,
+                'todayReviews' => $todayReviews,
+                'weekReviews' => $weekReviews,
+                'monthReviews' => $monthReviews,
+                'totalQRScans' => $totalScans,
+                'todayScans' => $todayScans,
+                'weekScans' => $weekScans,
+                'sourceBreakdown' => $sourceBreakdown,
+                'dailyReviews' => $dailyReviews,
+                'dailyScans' => $dailyScans,
+                'recentActivity' => $recentActivity,
+            ],
+        ]);
+    }
 }
 

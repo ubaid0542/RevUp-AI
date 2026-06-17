@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getAnalyticsDashboard, getBusinessStats, EVENT_TYPES } from '../services/analyticsService';
-import { isLoggedIn, fetchAdminBusinesses, fetchAdminUsers, getAdminToken, adminDeleteUserAPI } from '../services/authService';
+import { isLoggedIn, fetchAdminBusinesses, fetchAdminUsers, getAdminToken, adminDeleteUserAPI, fetchAdminStats } from '../services/authService';
 import './AdminPanel.css';
 
 const EVENT_LABELS = {
@@ -179,6 +179,17 @@ function exportUsersToCSV(userRows) {
   URL.revokeObjectURL(url);
 }
 
+// ── Time Ago Helper (for backend timestamps) ──
+function getTimeAgoHelper(ts) {
+  if (!ts) return '';
+  const d = Date.now() - ts;
+  if (d < 60000) return 'Just now';
+  if (d < 3600000) return Math.floor(d / 60000) + ' min ago';
+  if (d < 86400000) return Math.floor(d / 3600000) + 'h ago';
+  if (d < 604800000) return Math.floor(d / 86400000) + 'd ago';
+  return new Date(ts).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+}
+
 export default function AdminPanel({ onBack }) {
   const [data, setData] = useState(null);
   const [businesses, setBusinesses] = useState([]);
@@ -190,25 +201,47 @@ export default function AdminPanel({ onBack }) {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    // Load local storage fallback first
+    // Load local storage as initial fallback
     const dashboard = getAnalyticsDashboard();
     const localBiz = getBusinessStats();
 
     setData(dashboard);
     setBusinesses(localBiz);
 
-    // Fetch from backend — getAdminToken() returns non-null if admin just logged in
+    // Fetch real data from backend database
     if (isLoggedIn() || getAdminToken()) {
-      fetchAdminBusinesses().then(backendBiz => {
-        if (backendBiz) {
-          setBusinesses(backendBiz);
-          setData(prev => prev ? {
+      // Fetch admin stats (overview, reviews, scans, funnel)
+      fetchAdminStats().then(backendStats => {
+        if (backendStats) {
+          setData(prev => ({
             ...prev,
-            totalBusinesses: backendBiz.length
-          } : null);
+            totalBusinesses: backendStats.totalBusinesses,
+            todayRegistrations: backendStats.todayRegistrations,
+            totalReviews: backendStats.totalReviews,
+            todayReviews: backendStats.todayReviews,
+            weekReviews: backendStats.weekReviews,
+            monthReviews: backendStats.monthReviews,
+            totalQRScans: backendStats.totalQRScans,
+            todayScans: backendStats.todayScans,
+            weekScans: backendStats.weekScans,
+            sourceBreakdown: backendStats.sourceBreakdown || {},
+            dailyReviews: backendStats.dailyReviews || {},
+            recentActivity: (backendStats.recentActivity || []).map(a => ({
+              ...a,
+              timeAgo: getTimeAgoHelper(a.timestamp),
+            })),
+          }));
         }
       });
 
+      // Fetch businesses list
+      fetchAdminBusinesses().then(backendBiz => {
+        if (backendBiz) {
+          setBusinesses(backendBiz);
+        }
+      });
+
+      // Fetch users list
       fetchAdminUsers().then(backendUsers => {
         if (backendUsers) {
           setUsers(backendUsers);

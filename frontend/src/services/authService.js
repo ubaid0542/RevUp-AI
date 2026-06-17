@@ -489,3 +489,22 @@ export async function fetchBusinessStatsAPI(businessId) {
   }
 }
 
+/**
+ * Fetch admin dashboard stats from database
+ */
+export async function fetchAdminStats() {
+  try {
+    const headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
+    const adminToken = getAdminToken();
+    if (adminToken) headers['Authorization'] = `Bearer ${adminToken}`;
+    const res = await fetch(`${API_BASE}/admin/stats`, { headers });
+    if (res.ok) {
+      const data = await res.json();
+      return data.success ? data.data : null;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+

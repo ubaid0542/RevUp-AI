@@ -61,6 +61,7 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/businesses', [BusinessController::class, 'adminIndex']);
     Route::get('/users',      [AuthController::class, 'adminUsersIndex']);
     Route::delete('/users/{id}', [AuthController::class, 'adminDeleteUser']);
+    Route::get('/stats',         [BusinessController::class, 'adminStats']);
 });
 
 
