@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ReviewResult.css';
 
 /**
@@ -18,10 +18,20 @@ export default function ReviewResult({
   onRegenerate,
   onCopy,
   onPostGoogle,
+  onReviewTextChange,
 }) {
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
     <div className="result-card glass-card" id="result-card">
-      <p className="review-output-label">Your AI Review</p>
+      <div className="review-header-row">
+        <p className="review-output-label">Your AI Review</p>
+        {!isLoading && reviewText && (
+          <button className="edit-review-btn" onClick={() => setIsEditing(!isEditing)}>
+            {isEditing ? '💾 Done' : '✏️ Edit'}
+          </button>
+        )}
+      </div>
 
       {/* Review Box */}
       <div className="review-box" id="review-box">
@@ -32,6 +42,12 @@ export default function ReviewResult({
             </span>
             &nbsp; Crafting your review…
           </p>
+        ) : isEditing ? (
+          <textarea
+            className="review-edit-textarea"
+            value={reviewText}
+            onChange={(e) => onReviewTextChange(e.target.value)}
+          />
         ) : (
           <p className="review-gen-text">{reviewText}</p>
         )}

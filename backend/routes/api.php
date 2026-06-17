@@ -85,6 +85,9 @@ Route::middleware('throttle:10,1')->group(function () {
     // Photo upload for reviews (public for QR scans)
     Route::post('/reviews/{review}/photos', [ReviewController::class, 'uploadPhotos']);
 
+    // Mark review as posted to Google (public for QR scans)
+    Route::post('/reviews/{review}/posted', [ReviewController::class, 'markPosted']);
+
     // Log customer analytics events (copy, post) — public for QR scans
     Route::post('/public/business/{business}/event', [BusinessController::class, 'logEvent']);
 });

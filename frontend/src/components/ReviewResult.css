@@ -296,3 +296,47 @@
   box-shadow: var(--shadow-sm);
   animation: scaleIn 0.3s ease both;
 }
+
+/* ── Review Edit Mode ── */
+.review-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.edit-review-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.25s, transform 0.15s;
+}
+
+.edit-review-btn:hover {
+  background: var(--accent-soft);
+  transform: translateY(-0.5px);
+}
+
+.review-edit-textarea {
+  width: 100%;
+  min-height: 85px;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.75;
+  resize: vertical;
+  outline: none;
+  padding: 0;
+}

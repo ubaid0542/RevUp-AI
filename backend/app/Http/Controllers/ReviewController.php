@@ -308,4 +308,22 @@ class ReviewController extends Controller
             ],
         ]);
     }
+
+    /**
+     * Mark a review as posted to Google
+     * POST /api/reviews/{review}/posted
+     */
+    public function markPosted(Request $request, Review $review): JsonResponse
+    {
+        $review->update([
+            'is_posted' => true,
+            'generated_text' => $request->text ?? $review->generated_text,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Review marked as posted.',
+            'data' => $review,
+        ]);
+    }
 }

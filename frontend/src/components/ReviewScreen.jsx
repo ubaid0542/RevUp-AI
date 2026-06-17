@@ -12,6 +12,7 @@ import {
   logCustomerEvent,
   saveExternalReviewAPI,
   uploadReviewPhotosAPI,
+  markReviewPostedAPI,
 } from '../services/reviewService';
 import { generateReviewProxy, isLoggedIn } from '../services/authService';
 import { trackEvent, EVENT_TYPES } from '../services/analyticsService';
@@ -389,7 +390,12 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     });
     // Track in backend database
     const isRealDbId = businessData.id && !businessData.id.toString().startsWith('biz_') && !businessData.id.toString().startsWith('demo');
-    if (isRealDbId) logCustomerEvent(businessData.id, 'review_posted');
+    if (isRealDbId) {
+      logCustomerEvent(businessData.id, 'review_posted');
+      if (backendReviewId) {
+        markReviewPostedAPI(backendReviewId, generatedReview);
+      }
+    }
 
     // 4. Open GMB link — customer just needs to paste (Ctrl+V / long-press Paste)
     const gmbLink = businessData.gmb || 'https://search.google.com/local/writereview?placeid=ChIJxxxxxxxxx';
@@ -399,7 +405,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     setTimeout(() => {
       window.open(gmbLink, '_blank');
     }, 600);
-  }, [generatedReview, businessData, answers, onSaveReview, copyToClipboard, photos]);
+  }, [generatedReview, businessData, answers, onSaveReview, copyToClipboard, photos, backendReviewId]);
 
   const handlePhotoChange = (e) => {
     const files = Array.from(e.target.files);
@@ -460,6 +466,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
             onRegenerate={handleRegenerate}
             onCopy={handleCopy}
             onPostGoogle={handlePostGoogle}
+            onReviewTextChange={setGeneratedReview}
           />
         )}
 

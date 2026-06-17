@@ -11,12 +11,13 @@ class Review extends Model
     use HasFactory;
 
     protected $fillable = [
-        'business_id', 'ratings', 'generated_text', 'language', 'source', 'stars', 'photos',
+        'business_id', 'ratings', 'generated_text', 'language', 'source', 'stars', 'photos', 'is_posted',
     ];
 
     protected $casts = [
         'ratings' => 'array',
         'photos' => 'array',
+        'is_posted' => 'boolean',
     ];
 
     public function business(): BelongsTo
