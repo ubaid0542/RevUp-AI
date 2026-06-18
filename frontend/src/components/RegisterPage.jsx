@@ -5,54 +5,166 @@ import './RegisterPage.css';
  * Category data with subcategories and dynamic questions
  */
 const categoryData = {
-  'Hospital/Clinic': {
-    sub: ['All', 'Multi-Specialty Hospital', 'General Clinic', 'Dental Clinic', 'Eye Hospital', 'Skin Clinic', 'Orthopaedic', 'Gynecology', 'Pediatric Clinic', 'Diagnostic Centre'],
+  'Restaurant / Cafe': {
+    sub: ['All', 'Fine Dining', 'Street Food / Dhaba', 'Cafe / Coffee Shop', 'Fast Food', 'Buffet', 'Cloud Kitchen', 'Pub / Bar'],
     questions: [
-      { id: 'speciality', label: 'Main Speciality / Department', placeholder: 'e.g. Cardiology, Ortho, General Medicine' },
-      { id: 'facilities', label: 'Any special facilities?', placeholder: 'e.g. ICU, Operation Theatre, Lab, Pharmacy' },
+      { id: 'cuisine', label: 'Cuisine Type', placeholder: 'e.g. North Indian, Chinese, Continental' },
+      { id: 'specialty_dish', label: 'Signature Dish', placeholder: 'e.g. Biryani, Pasta' },
     ],
   },
-  'Restaurant/Cafe': {
-    sub: ['All', 'Fine Dining', 'Street Food / Dhaba', 'Cafe / Coffee Shop', 'Fast Food', 'Buffet', 'Cloud Kitchen', 'Bakery', 'Juice Bar'],
+  'Hotel / Resort': {
+    sub: ['All', 'Budget Hotel', '3-Star Hotel', '5-Star Hotel / Resort', 'Heritage Hotel', 'Guest House / Home Stay'],
     questions: [
-      { id: 'cuisine', label: 'Cuisine Type', placeholder: 'e.g. North Indian, South Indian, Chinese, Continental' },
-      { id: 'specialty_dish', label: 'Signature Dish / Famous Item', placeholder: 'e.g. Biryani, Thali, Pasta' },
+      { id: 'amenities', label: 'Key Amenities', placeholder: 'e.g. Pool, Spa, Free Breakfast' },
+    ],
+  },
+  'Hospital / Clinic': {
+    sub: ['All', 'Multi-Specialty Hospital', 'General Clinic', 'Eye Hospital', 'Skin Clinic', 'Orthopaedic', 'Pediatric Clinic', 'Diagnostic Centre'],
+    questions: [
+      { id: 'speciality', label: 'Main Speciality', placeholder: 'e.g. Cardiology, Ortho' },
+      { id: 'facilities', label: 'Special Facilities?', placeholder: 'e.g. ICU, Lab, Pharmacy' },
+    ],
+  },
+  'Dental Clinic': {
+    sub: ['All', 'General Dentistry', 'Orthodontics (Braces)', 'Cosmetic Dentistry', 'Implantology'],
+    questions: [
+      { id: 'specialty', label: 'Main Treatments', placeholder: 'e.g. Braces, Implants, Root Canal' },
+    ],
+  },
+  'Salon / Spa': {
+    sub: ['All', 'Unisex Salon', 'Ladies Salon', 'Gents Salon', 'Luxury Spa', 'Nail Art Studio', 'Bridal Studio'],
+    questions: [
+      { id: 'services', label: 'Popular Services', placeholder: 'e.g. Hair Color, Facial, Massage' },
+    ],
+  },
+  'Gym / Fitness Center': {
+    sub: ['All', 'Unisex Gym', 'CrossFit Studio', 'Yoga Studio', 'Zumba/Dance Fitness', 'Martial Arts'],
+    questions: [
+      { id: 'facilities', label: 'Facilities', placeholder: 'e.g. Cardio, Free Weights, Steam Room' },
+    ],
+  },
+  'School / Coaching': {
+    sub: ['All', 'Pre-School / Nursery', 'Primary School', 'High School', 'Coaching Institute', 'Tuition Centre'],
+    questions: [
+      { id: 'subjects', label: 'Main Subjects / Courses', placeholder: 'e.g. Maths, IIT-JEE, NEET' },
+    ],
+  },
+  'College / Institute': {
+    sub: ['All', 'Engineering College', 'Medical College', 'Degree College', 'Management Institute', 'Polytechnic'],
+    questions: [
+      { id: 'courses', label: 'Top Courses', placeholder: 'e.g. B.Tech, MBA, MBBS' },
     ],
   },
   'Jewellery Shop': {
-    sub: ['All', 'Gold Jewellery', 'Diamond Jewellery', 'Silver Jewellery', 'Imitation / Fashion Jewellery', 'Bridal Jewellery', 'Antique Jewellery'],
+    sub: ['All', 'Gold Jewellery', 'Diamond Jewellery', 'Silver Jewellery', 'Imitation Jewellery', 'Antique Jewellery'],
     questions: [
-      { id: 'specialty', label: 'What do you specialize in?', placeholder: 'e.g. Bridal sets, Custom design, Repair' },
+      { id: 'specialty', label: 'Specialization?', placeholder: 'e.g. Bridal sets, Custom design' },
     ],
   },
-  'Hotel/Restro': {
-    sub: ['All', 'Budget Hotel', '3-Star Hotel', '4-Star Hotel', '5-Star Hotel / Resort', 'Heritage Hotel', 'Guest House / Home Stay'],
+  'Clothing Store / Boutique': {
+    sub: ['All', "Men's Wear", "Women's Wear", "Kids Wear", 'Ethnic Wear', 'Western Wear', 'Boutique', 'Wedding Collection'],
     questions: [
-      { id: 'amenities', label: 'Key Amenities', placeholder: 'e.g. Swimming Pool, Restaurant, Conference Room, Spa' },
+      { id: 'collection', label: 'Special Collection / Brands', placeholder: 'e.g. Wedding collections, Levis' },
     ],
   },
-  'Salon/Spa': {
-    sub: ['All', 'Unisex Salon', 'Ladies Salon', 'Gents Salon', 'Luxury Spa', 'Hair Studio', 'Nail Art Studio', 'Mehndi / Bridal'],
+  'Supermarket / Grocery': {
+    sub: ['All', 'Supermarket', 'Hypermarket', 'Local Grocery', 'Organic Store', 'Convenience Store'],
     questions: [
-      { id: 'services', label: 'Popular Services', placeholder: 'e.g. Hair Color, Facial, Waxing, Keratin, Massage' },
-    ],
+      { id: 'specialty', label: 'Key Offerings', placeholder: 'e.g. Fresh Produce, Imported Goods' },
+    ]
   },
-  'School/Coaching': {
-    sub: ['All', 'Pre-School / Nursery', 'Primary School (1-5)', 'Middle School (6-8)', 'High School (9-12)', 'Coaching Institute', 'College / University', 'Skill Training', 'Tuition Centre'],
+  'Medical Store / Pharmacy': {
+    sub: ['All', 'General Pharmacy', 'Ayurvedic Store', 'Homeopathic Store', '24/7 Pharmacy', 'Surgical Supply'],
     questions: [
-      { id: 'subjects', label: 'Main Subjects / Courses', placeholder: 'e.g. Maths, Science, IIT-JEE, NEET, English' },
-      { id: 'board', label: 'Board / Affiliation', placeholder: 'e.g. CBSE, ICSE, UP Board, State Board' },
-    ],
+      { id: 'services', label: 'Special Services', placeholder: 'e.g. Home Delivery, 24/7 Open' },
+    ]
   },
-  'Clothing Store': {
-    sub: ['All', "Men's Wear", "Women's Wear", "Kids Wear", 'Ethnic Wear', 'Western Wear', 'Casual Wear', 'Formal Wear'],
+  'Pet Shop / Pet Clinic': {
+    sub: ['All', 'Pet Food & Supplies', 'Pet Clinic', 'Pet Grooming', 'Pet Boarding / Daycare', 'Aquarium Shop'],
     questions: [
-      { id: 'collection', label: 'Special Collection / Brands', placeholder: 'e.g. Wedding collections, Casual wear, Levis, Zara' },
-      { id: 'discounts', label: 'Offers / Discounts?', placeholder: 'e.g. Seasonal sales, Flat 20% off' }
-    ],
+      { id: 'services', label: 'Services / Products', placeholder: 'e.g. Dog Grooming, Vaccinations' },
+    ]
+  },
+  'Car Showroom': {
+    sub: ['All', 'New Car Dealer', 'Used Car Dealer', 'Two-Wheeler Showroom', 'Commercial Vehicles', 'Electric Vehicles'],
+    questions: [
+      { id: 'brands', label: 'Brands Available', placeholder: 'e.g. Maruti, Hyundai, Tata' },
+    ]
+  },
+  'Auto Repair / Garage': {
+    sub: ['All', 'General Service', 'Denting & Painting', 'Tyre Shop', 'Car Wash & Detailing', 'Bike Repair', 'AC Repair'],
+    questions: [
+      { id: 'specialty', label: 'Specialized Services', placeholder: 'e.g. Engine Overhaul, Ceramic Coating' },
+    ]
+  },
+  'Real Estate Agency': {
+    sub: ['All', 'Residential Broker', 'Commercial Real Estate', 'Property Management', 'Builders & Developers', 'PG/Hostel'],
+    questions: [
+      { id: 'focus', label: 'Area of Focus', placeholder: 'e.g. Luxury Apartments, Office Spaces' },
+    ]
+  },
+  'IT Company / Software Agency': {
+    sub: ['All', 'Web Development', 'App Development', 'Digital Marketing', 'IT Support', 'UI/UX Design', 'Cloud Services'],
+    questions: [
+      { id: 'services', label: 'Core Services', placeholder: 'e.g. E-commerce Websites, SEO' },
+    ]
+  },
+  'Photography Studio': {
+    sub: ['All', 'Wedding Photography', 'Portrait Studio', 'Commercial Photography', 'Event Photography', 'Photo Printing'],
+    questions: [
+      { id: 'specialty', label: 'Specialization', placeholder: 'e.g. Candid Weddings, Fashion' },
+    ]
+  },
+  'Event Planner': {
+    sub: ['All', 'Wedding Planner', 'Corporate Events', 'Birthday Parties', 'Caterer', 'Decoration Services'],
+    questions: [
+      { id: 'services', label: 'Key Services', placeholder: 'e.g. Full Wedding Management, Catering' },
+    ]
+  },
+  'Travel Agency': {
+    sub: ['All', 'Domestic Tours', 'International Tours', 'Flight Booking', 'Visa Assistance', 'Corporate Travel'],
+    questions: [
+      { id: 'packages', label: 'Popular Packages', placeholder: 'e.g. Dubai Trips, Kerala Tour' },
+    ]
+  },
+  'Mobile & Electronics Store': {
+    sub: ['All', 'Mobile Phones', 'Laptops & Computers', 'Home Appliances', 'Mobile Repair', 'Accessories'],
+    questions: [
+      { id: 'brands', label: 'Brands / Products', placeholder: 'e.g. Apple, Samsung, Smart TVs' },
+    ]
+  },
+  'Furniture Store': {
+    sub: ['All', 'Home Furniture', 'Office Furniture', 'Custom Furniture', 'Mattress Store', 'Outdoor Furniture'],
+    questions: [
+      { id: 'specialty', label: 'Specialty', placeholder: 'e.g. Teak Wood, Modular Kitchens' },
+    ]
+  },
+  'Construction / Interior Designer': {
+    sub: ['All', 'Interior Designer', 'Architect', 'Building Contractor', 'Modular Kitchens', 'Painting Services'],
+    questions: [
+      { id: 'focus', label: 'Specialization', placeholder: 'e.g. Residential Interiors, Turnkey Projects' },
+    ]
+  },
+  'Bakery / Sweet Shop': {
+    sub: ['All', 'Custom Cakes', 'Traditional Sweets (Mithai)', 'Patisserie', 'Namkeen/Snacks', 'Dessert Parlour'],
+    questions: [
+      { id: 'specialty', label: 'Signature Items', placeholder: 'e.g. Rasmalai, Fondant Cakes' },
+    ]
+  },
+  'Optical Store': {
+    sub: ['All', 'Spectacles & Frames', 'Sunglasses', 'Contact Lenses', 'Eye Testing', 'Computer Glasses'],
+    questions: [
+      { id: 'brands', label: 'Brands / Services', placeholder: 'e.g. Ray-Ban, Free Eye Test' },
+    ]
+  },
+  'Tour & Travels': {
+    sub: ['All', 'Cab Services', 'Bus Booking', 'Tempo Traveller', 'Self-Drive Cars', 'Pilgrimage Tours'],
+    questions: [
+      { id: 'vehicles', label: 'Vehicles / Services', placeholder: 'e.g. Innova Rentals, Chardham Yatra' },
+    ]
   },
   'Other': {
-    sub: ['All', 'Service Business', 'Manufacturing', 'Freelance / Consultant', 'NGO / Non-Profit', 'Event Management', 'Real Estate', 'Travel Agency'],
+    sub: ['All', 'Service Business', 'Manufacturing', 'Freelance / Consultant', 'NGO / Non-Profit', 'Logistics'],
     questions: [
       { id: 'description', label: 'Tell us about your business', placeholder: 'What you do, how you do it...' },
     ],
@@ -159,14 +271,33 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
           <label>Business Category *</label>
           <select value={category} onChange={(e) => { setCategory(e.target.value); setSubcategory(''); setExtras({}); }}>
             <option value="">— Select Category —</option>
-            <option value="Hospital/Clinic">Hospital / Clinic</option>
-            <option value="Restaurant/Cafe">Restaurant / Cafe</option>
-            <option value="Jewellery Shop">Jewellery Shop</option>
-            <option value="Hotel/Restro">Hotel / Restro</option>
-            <option value="Salon/Spa">Salon / Spa</option>
-            <option value="School/Coaching">School / Coaching</option>
-            <option value="Clothing Store">Clothing Store</option>
-            <option value="Other">Other</option>
+            <option value="Restaurant / Cafe">🍴 Restaurant / Cafe</option>
+            <option value="Hotel / Resort">🏨 Hotel / Resort</option>
+            <option value="Hospital / Clinic">🏥 Hospital / Clinic</option>
+            <option value="Dental Clinic">🦷 Dental Clinic</option>
+            <option value="Salon / Spa">💇 Salon / Spa</option>
+            <option value="Gym / Fitness Center">💪 Gym / Fitness Center</option>
+            <option value="School / Coaching">🏫 School / Coaching</option>
+            <option value="College / Institute">🎓 College / Institute</option>
+            <option value="Jewellery Shop">💍 Jewellery Shop</option>
+            <option value="Clothing Store / Boutique">👕 Clothing Store / Boutique</option>
+            <option value="Supermarket / Grocery">🛒 Supermarket / Grocery</option>
+            <option value="Medical Store / Pharmacy">💊 Medical Store / Pharmacy</option>
+            <option value="Pet Shop / Pet Clinic">🐶 Pet Shop / Pet Clinic</option>
+            <option value="Car Showroom">🚗 Car Showroom</option>
+            <option value="Auto Repair / Garage">🔧 Auto Repair / Garage</option>
+            <option value="Real Estate Agency">🏠 Real Estate Agency</option>
+            <option value="IT Company / Software Agency">💼 IT Company / Software Agency</option>
+            <option value="Photography Studio">📸 Photography Studio</option>
+            <option value="Event Planner">💐 Event Planner</option>
+            <option value="Travel Agency">🏢 Travel Agency</option>
+            <option value="Mobile & Electronics Store">📱 Mobile & Electronics Store</option>
+            <option value="Furniture Store">🛋️ Furniture Store</option>
+            <option value="Construction / Interior Designer">🏗️ Construction / Interior Designer</option>
+            <option value="Bakery / Sweet Shop">🍰 Bakery / Sweet Shop</option>
+            <option value="Optical Store">👓 Optical Store</option>
+            <option value="Tour & Travels">✈️ Tour & Travels</option>
+            <option value="Other">📦 Other</option>
           </select>
         </div>
 

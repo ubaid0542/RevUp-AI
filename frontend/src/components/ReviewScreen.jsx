@@ -22,19 +22,61 @@ import './ReviewScreen.css';
  * Category-specific questions — 5 questions tailored to each business type
  */
 const CATEGORY_QUESTIONS = {
-  'Hospital/Clinic': [
-    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall visit at the hospital/clinic?' },
+  'Hospital / Clinic': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall visit?' },
     { id: 'doctors',     label: 'Doctor consultation?',      sub: 'Was the doctor attentive and helpful?' },
     { id: 'staff',       label: 'Staff & reception?',        sub: 'Were the staff polite and cooperative?' },
     { id: 'cleanliness', label: 'Cleanliness & hygiene?',    sub: 'How clean and hygienic was the facility?' },
     { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this to family or friends?' },
   ],
-  'Restaurant/Cafe': [
+  'Dental Clinic': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall visit?' },
+    { id: 'treatment',   label: 'Treatment quality?',        sub: 'Was the treatment painless and effective?' },
+    { id: 'staff',       label: 'Staff & reception?',        sub: 'Were the staff polite and cooperative?' },
+    { id: 'cleanliness', label: 'Cleanliness & hygiene?',    sub: 'How clean and hygienic was the clinic?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this clinic to others?' },
+  ],
+  'Restaurant / Cafe': [
     { id: 'overall',   label: 'Overall experience?',         sub: 'How was your dining experience?' },
     { id: 'food',      label: 'Food quality & taste?',       sub: 'How was the taste and freshness of the food?' },
     { id: 'service',   label: 'Service & staff?',            sub: 'Were the waiters friendly and prompt?' },
     { id: 'ambience',  label: 'Ambience & vibe?',            sub: 'How was the restaurant atmosphere?' },
     { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this to a friend?' },
+  ],
+  'Hotel / Resort': [
+    { id: 'overall',   label: 'Overall stay?',               sub: 'How was your overall hotel experience?' },
+    { id: 'rooms',     label: 'Room quality?',               sub: 'Was the room clean and comfortable?' },
+    { id: 'food',      label: 'Food & dining?',              sub: 'How was the hotel food?' },
+    { id: 'service',   label: 'Service & hospitality?',      sub: 'Was the staff welcoming and helpful?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this hotel to others?' },
+  ],
+  'Salon / Spa': [
+    { id: 'overall',   label: 'Overall experience?',         sub: 'How was your salon/spa visit?' },
+    { id: 'service',   label: 'Service quality?',            sub: 'Was the treatment done professionally?' },
+    { id: 'hygiene',   label: 'Hygiene & cleanliness?',      sub: 'Were the tools and space clean?' },
+    { id: 'staff',     label: 'Staff expertise?',            sub: 'Was the stylist/therapist skilled?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this salon to others?' },
+  ],
+  'Gym / Fitness Center': [
+    { id: 'overall',   label: 'Overall experience?',         sub: 'How is your overall gym experience?' },
+    { id: 'equipment', label: 'Equipment & machines?',       sub: 'Are the machines well-maintained?' },
+    { id: 'trainers',  label: 'Trainers & coaching?',        sub: 'Are the trainers helpful and knowledgeable?' },
+    { id: 'cleanliness',label: 'Hygiene & cleanliness?',    sub: 'Are the gym and locker rooms clean?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this gym to others?' },
+  ],
+  'School / Coaching': [
+    { id: 'overall',   label: 'Overall experience?',         sub: 'How was the overall learning experience?' },
+    { id: 'teaching',  label: 'Teaching quality?',           sub: 'Were the teachers/faculty good?' },
+    { id: 'facility',  label: 'Facilities & infrastructure?',sub: 'How were the classrooms and facilities?' },
+    { id: 'results',   label: 'Results & performance?',      sub: 'Are you satisfied with the academic support?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this institute to others?' },
+  ],
+  'College / Institute': [
+    { id: 'overall',   label: 'Overall experience?',         sub: 'How is the overall college experience?' },
+    { id: 'faculty',   label: 'Faculty & teaching?',         sub: 'Are the professors knowledgeable?' },
+    { id: 'campus',    label: 'Campus & facilities?',        sub: 'How is the campus infrastructure?' },
+    { id: 'placement', label: 'Placements & support?',       sub: 'How is the career support?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this college to others?' },
   ],
   'Jewellery Shop': [
     { id: 'overall',   label: 'Overall experience?',         sub: 'How was your shopping experience?' },
@@ -43,33 +85,47 @@ const CATEGORY_QUESTIONS = {
     { id: 'staff',     label: 'Staff behaviour?',            sub: 'Was the staff helpful in choosing?' },
     { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this shop to others?' },
   ],
-  'Hotel/Restro': [
-    { id: 'overall',   label: 'Overall stay?',               sub: 'How was your overall hotel experience?' },
-    { id: 'rooms',     label: 'Room quality?',               sub: 'Was the room clean and comfortable?' },
-    { id: 'food',      label: 'Food & dining?',              sub: 'How was the hotel restaurant food?' },
-    { id: 'service',   label: 'Service & hospitality?',      sub: 'Was the staff welcoming and helpful?' },
-    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this hotel to others?' },
-  ],
-  'Salon/Spa': [
-    { id: 'overall',   label: 'Overall experience?',         sub: 'How was your salon/spa visit?' },
-    { id: 'service',   label: 'Service quality?',            sub: 'Was the treatment done professionally?' },
-    { id: 'hygiene',   label: 'Hygiene & cleanliness?',      sub: 'Were the tools and space clean?' },
-    { id: 'staff',     label: 'Staff expertise?',            sub: 'Was the stylist/therapist skilled?' },
-    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this salon to others?' },
-  ],
-  'School/Coaching': [
-    { id: 'overall',   label: 'Overall experience?',         sub: 'How was the overall learning experience?' },
-    { id: 'teaching',  label: 'Teaching quality?',           sub: 'Were the teachers/faculty good?' },
-    { id: 'facility',  label: 'Facilities & infrastructure?',sub: 'How were the classrooms and facilities?' },
-    { id: 'results',   label: 'Results & performance?',      sub: 'Are you satisfied with the academic results?' },
-    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this institute to others?' },
-  ],
-  'Clothing Store': [
+  'Clothing Store / Boutique': [
     { id: 'overall',     label: 'Overall experience?',       sub: 'How was your shopping experience at the store?' },
-    { id: 'collection',  label: 'Collection & variety?',     sub: 'Did you find enough designs, sizes, and options?' },
+    { id: 'collection',  label: 'Collection & variety?',     sub: 'Did you find enough designs and options?' },
     { id: 'staff',       label: 'Staff & assistance?',       sub: 'Was the staff helpful and cooperative?' },
-    { id: 'quality',     label: 'Fabric & quality?',         sub: 'Are you satisfied with the fabric, fit, and quality?' },
-    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this store to family or friends?' },
+    { id: 'quality',     label: 'Fabric & quality?',         sub: 'Are you satisfied with the quality?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this store to friends?' },
+  ],
+  'Supermarket / Grocery': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your shopping experience?' },
+    { id: 'availability',label: 'Product availability?',     sub: 'Did you find everything you needed?' },
+    { id: 'freshness',   label: 'Quality & freshness?',      sub: 'Were the products fresh and of good quality?' },
+    { id: 'pricing',     label: 'Pricing & offers?',         sub: 'Were the prices reasonable?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this store to others?' },
+  ],
+  'Car Showroom': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your visit to the showroom?' },
+    { id: 'staff',       label: 'Staff knowledge?',          sub: 'Did the sales team explain features well?' },
+    { id: 'process',     label: 'Buying process?',           sub: 'Was the paperwork and delivery smooth?' },
+    { id: 'testdrive',   label: 'Test drive experience?',    sub: 'How was the test drive and demonstration?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this showroom to others?' },
+  ],
+  'Auto Repair / Garage': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your service experience?' },
+    { id: 'quality',     label: 'Service quality?',          sub: 'Was the repair/service done properly?' },
+    { id: 'transparency',label: 'Pricing transparency?',     sub: 'Were the charges clear and fair?' },
+    { id: 'timeliness',  label: 'Delivery time?',            sub: 'Was the vehicle delivered on time?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this garage to others?' },
+  ],
+  'Real Estate Agency': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your experience with the agency?' },
+    { id: 'professional',label: 'Professionalism?',          sub: 'Was the agent professional and helpful?' },
+    { id: 'options',     label: 'Property options?',         sub: 'Did they show good properties matching your needs?' },
+    { id: 'transparency',label: 'Transparency?',             sub: 'Were the deals clear and fair?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this agency to others?' },
+  ],
+  'Event Planner': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was the overall event execution?' },
+    { id: 'creativity',  label: 'Creativity & design?',      sub: 'How were the decorations and arrangements?' },
+    { id: 'management',  label: 'Event management?',         sub: 'Was everything managed smoothly on time?' },
+    { id: 'staff',       label: 'Staff & coordination?',     sub: 'Was the team cooperative and helpful?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest them to others?' },
   ],
 };
 
