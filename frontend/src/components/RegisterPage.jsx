@@ -248,24 +248,40 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
           />
         </div>
 
-        {/* Plan Selector */}
+        {/* Plan Selector — same as Home page */}
         <div className="field">
           <label>Choose Your Plan *</label>
-          <div className="plan-selector">
-            {[
-              { key: 'Starter', label: 'Starter', price: '₹499/mo' },
-              { key: 'Growth', label: 'Growth 🔥', price: '₹999/mo' },
-              { key: 'Pro', label: 'Pro', price: '₹1,999/mo' },
-            ].map((p) => (
-              <div
-                key={p.key}
-                className={`plan-opt ${plan === p.key ? 'selected' : ''}`}
-                onClick={() => setPlan(p.key)}
-              >
-                <div className="plan-opt-name">{p.label}</div>
-                <div className="plan-opt-price">{p.price}</div>
-              </div>
-            ))}
+          <div className="reg-plans-grid">
+            <div
+              className={`reg-plan-card glass-card ${plan === 'Starter' ? 'selected' : ''}`}
+              onClick={() => setPlan('Starter')}
+            >
+              <div className="reg-plan-name">Starter</div>
+              <div className="reg-plan-price">₹699<span>/month</span></div>
+              <div className="reg-plan-desc">For small businesses</div>
+              <ul className="reg-plan-features">
+                <li>1 QR Code</li>
+                <li>250 reviews/month</li>
+                <li>Basic AI review</li>
+                <li>GMB redirect</li>
+              </ul>
+            </div>
+            <div
+              className={`reg-plan-card glass-card popular ${plan === 'Growth' ? 'selected' : ''}`}
+              onClick={() => setPlan('Growth')}
+            >
+              <div className="reg-plan-popular-tag">🔥 Most Popular</div>
+              <div className="reg-plan-name">Growth</div>
+              <div className="reg-plan-price">₹1,399<span>/month</span></div>
+              <div className="reg-plan-desc">For growing businesses</div>
+              <ul className="reg-plan-features">
+                <li>3 QR Codes</li>
+                <li>750 reviews/month</li>
+                <li>Advanced AI review</li>
+                <li>GMB redirect</li>
+                <li>Analytics dashboard</li>
+              </ul>
+            </div>
           </div>
         </div>
 

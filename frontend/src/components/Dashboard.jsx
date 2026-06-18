@@ -298,31 +298,43 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
         ))}
       </div>
 
-      {/* QR Section */}
-      <div className="qr-section glass-card">
-        <div className="qr-section-title">📱 Your QR Code</div>
-        <div className="qr-section-sub">
-          Print this QR code and place it at your counter — customers scan it, answer quick questions, and get a ready-to-post Google review!
+      {/* QR Section — Premium */}
+      <div className="qr-section qr-section--premium glass-card">
+        <div className="qr-premium-header">
+          <div className="qr-premium-icon">📱</div>
+          <div>
+            <div className="qr-section-title">Your QR Code</div>
+            <div className="qr-section-sub">
+              Print this QR &amp; place at your counter — customers scan, rate &amp; post on Google!
+            </div>
+          </div>
         </div>
-        <div className="qr-box">
-          <div className="qr-code-wrap">
+
+        <div className="qr-box qr-box--premium">
+          <div className="qr-code-wrap qr-code-wrap--premium">
+            <div className="qr-glow-ring" />
             <div ref={qrRef} id="qr-code" />
+            <div className="qr-scan-badge">Scan Me ✨</div>
           </div>
           <div className="qr-info">
-            <div className="qr-info-label">Review Page Link:</div>
+            <div className="qr-info-label">🔗 Review Page Link</div>
             <div className="qr-link">{reviewPageUrl}</div>
             {gmbLink && (
               <>
-                <div className="qr-info-label" style={{ marginTop: 10 }}>Google Review Link:</div>
+                <div className="qr-info-label" style={{ marginTop: 10 }}>🌐 Google Review Link</div>
                 <div className="qr-link">{gmbLink}</div>
               </>
             )}
-            <div className="qr-actions">
-              <button className="qr-btn primary" onClick={downloadQR}>⬇️ Download QR</button>
+            <div className="qr-actions qr-actions--premium">
+              <button className="qr-btn primary qr-btn--glow" onClick={downloadQR}>⬇️ Download QR</button>
               <button className="qr-btn" onClick={copyLink}>📋 Copy Link</button>
               <button className="qr-btn" onClick={onPreview}>👁️ Preview</button>
             </div>
           </div>
+        </div>
+
+        <div className="qr-tip-banner">
+          💡 <strong>Pro Tip:</strong> Laminate the QR and place it near billing — 3x more scans!
         </div>
       </div>
 
