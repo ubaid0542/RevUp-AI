@@ -49,7 +49,7 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
         </div>
       </div>
 
-      {/* Pricing */}
+      {/* Pricing Plans & Features */}
       <div className="pricing-section">
         <h2 className="section-heading gradient-text">Plans & Pricing</h2>
         <p className="section-sub">Choose the right plan for your business</p>
