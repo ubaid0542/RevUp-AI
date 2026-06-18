@@ -172,12 +172,12 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     let source = '';
 
     // 1. Try OpenRouter API first
-    text = await generateReviewOpenRouter(businessData.name, businessData.type, answers, null, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city });
+    text = await generateReviewOpenRouter(businessData.name, businessData.type, answers, null, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: businessData.keywords });
     if (text) source = '🤖 OpenRouter API';
 
     // 2. Try Backend Proxy (works for all businesses, API keys stay server-side)
     if (!text) {
-      text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city });
+      text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: businessData.keywords });
       if (text) source = '🔗 Backend Proxy';
     }
 
@@ -196,7 +196,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
 
     // 3. Fallback to Gemini API if both fail
     if (!text) {
-      text = await generateReviewGeminiFrontend(businessData.name, businessData.type, answers, businessData.geminiApiKey, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city });
+      text = await generateReviewGeminiFrontend(businessData.name, businessData.type, answers, businessData.geminiApiKey, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: businessData.keywords });
       if (text) source = '✨ Gemini API';
     }
 
@@ -262,6 +262,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
         variationSeed: `${Date.now()}-${Math.random()}`,
         businessSubcategory: businessData.subcategory,
         city: businessData.city,
+        customerKeywords: businessData.keywords,
       }
     );
     if (text) source = '🤖 OpenRouter API';
@@ -271,6 +272,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
       text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', {
         businessSubcategory: businessData.subcategory,
         city: businessData.city,
+        customerKeywords: businessData.keywords,
         regenerate: true,
         previousText: generatedReview,
         variationSeed: `${Date.now()}-${Math.random()}`,
@@ -305,6 +307,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
           variationSeed: `${Date.now()}-${Math.random()}`,
           businessSubcategory: businessData.subcategory,
           city: businessData.city,
+          customerKeywords: businessData.keywords,
         }
       );
       if (text) source = '✨ Gemini API';

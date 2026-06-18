@@ -13,7 +13,7 @@ class Business extends Model
 
     protected $fillable = [
         'user_id', 'name', 'type', 'logo_path', 'google_place_id',
-        'gmb_link', 'emoji', 'subcategory', 'plan', 'extras', 'city',
+        'gmb_link', 'emoji', 'subcategory', 'plan', 'extras', 'city', 'keywords',
     ];
 
     protected $casts = [

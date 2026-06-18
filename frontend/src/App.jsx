@@ -46,6 +46,7 @@ function saveBusiness(data) {
       extras: data.extras,
       plan: data.plan,
       city: data.city,
+      keywords: data.keywords,
     }));
   } catch { /* ignore */ }
 }
@@ -147,6 +148,7 @@ export default function App() {
               subcategory: biz.subcategory,
               plan: biz.plan,
               city: biz.city,
+              keywords: biz.keywords || '',
               logoUrl: biz.logo_path ? `/storage/${biz.logo_path}` : (loadSavedBusiness()?.logoUrl || ''),
               extras: biz.extras ? (typeof biz.extras === 'string' ? JSON.parse(biz.extras) : biz.extras) : {},
             };
@@ -180,6 +182,7 @@ export default function App() {
               gmb: biz.gmb_link,
               subcategory: biz.subcategory,
               city: biz.city,
+              keywords: biz.keywords || '',
               logoUrl: biz.logo_url ? biz.logo_url : '',
               plan: biz.plan || 'Starter',
             };
@@ -254,6 +257,7 @@ export default function App() {
           subcategory: biz.subcategory,
           plan: biz.plan,
           city: biz.city,
+          keywords: biz.keywords || '',
           logoUrl: biz.logo_path ? `/storage/${biz.logo_path}` : (loadSavedBusiness()?.logoUrl || ''),
           extras: biz.extras ? (typeof biz.extras === 'string' ? JSON.parse(biz.extras) : biz.extras) : {},
         };

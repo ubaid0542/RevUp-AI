@@ -44,6 +44,7 @@ class BusinessController extends Controller
             'plan'            => 'nullable|string|max:20',
             'extras'          => 'nullable|json',
             'city'            => 'nullable|string|max:100',
+            'keywords'        => 'nullable|string|max:500',
         ]);
 
         if ($validator->fails()) {
@@ -63,6 +64,7 @@ class BusinessController extends Controller
             'plan'            => $request->plan ?? 'Free',
             'extras'          => $request->extras,
             'city'            => $request->city,
+            'keywords'        => $request->keywords,
         ]);
 
         return response()->json([
@@ -104,6 +106,7 @@ class BusinessController extends Controller
             'plan' => $business->plan,
             'extras' => $business->extras,
             'city' => $business->city,
+            'keywords' => $business->keywords,
         ];
 
         return response()->json([
@@ -145,6 +148,7 @@ class BusinessController extends Controller
             'plan'            => 'nullable|string|max:20',
             'extras'          => 'nullable|json',
             'city'            => 'nullable|string|max:100',
+            'keywords'        => 'nullable|string|max:500',
         ]);
 
         if ($validator->fails()) {
@@ -156,7 +160,7 @@ class BusinessController extends Controller
 
         $business->update($request->only([
             'name', 'type', 'google_place_id', 'gmb_link',
-            'emoji', 'subcategory', 'plan', 'extras', 'city',
+            'emoji', 'subcategory', 'plan', 'extras', 'city', 'keywords',
         ]));
 
         return response()->json([
@@ -215,6 +219,7 @@ class BusinessController extends Controller
                 'gmb_link'    => $business->gmb_link,
                 'subcategory' => $business->subcategory,
                 'city'        => $business->city,
+                'keywords'    => $business->keywords,
                 'logo_url'    => $business->logo_path
                     ? Storage::url($business->logo_path)
                     : null,
@@ -308,6 +313,7 @@ class BusinessController extends Controller
             'plan'            => 'nullable|string|max:20',
             'extras'          => 'nullable|json',
             'city'            => 'nullable|string|max:100',
+            'keywords'        => 'nullable|string|max:500',
         ]);
 
         if ($validator->fails()) {
@@ -328,6 +334,7 @@ class BusinessController extends Controller
             'plan'            => $request->plan ?? 'Free',
             'extras'          => $request->extras,
             'city'            => $request->city,
+            'keywords'        => $request->keywords,
         ]);
 
         // Issue a short-lived ownership token (valid 30 mins) for logo upload

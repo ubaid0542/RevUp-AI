@@ -195,6 +195,7 @@ export async function createBusinessAPI(businessData) {
         plan:            businessData.plan || 'Free',
         extras:          JSON.stringify(businessData.extras || {}),
         city:            businessData.city || null,
+        keywords:        businessData.keywords || null,
       }),
     });
 
@@ -231,6 +232,7 @@ export async function updateBusinessAPI(businessId, businessData) {
         plan:            businessData.plan || 'Free',
         extras:          JSON.stringify(businessData.extras || {}),
         city:            businessData.city || null,
+        keywords:        businessData.keywords || null,
       }),
     });
 
@@ -346,6 +348,7 @@ export async function createPublicBusinessAPI(businessData) {
         plan:            businessData.plan || 'Free',
         extras:          JSON.stringify(businessData.extras || {}),
         city:            businessData.city || null,
+        keywords:        businessData.keywords || null,
       }),
     });
 
@@ -443,9 +446,10 @@ export async function generateReviewProxy(businessName, businessType, ratings, l
         language,
         subcategory: options.businessSubcategory || '',
         options: {
-          regenerate:     options.regenerate || false,
-          previous_text:  options.previousText || '',
-          variation_seed: options.variationSeed || '',
+          regenerate:       options.regenerate || false,
+          previous_text:    options.previousText || '',
+          variation_seed:   options.variationSeed || '',
+          customerKeywords: options.customerKeywords || '',
         },
       }),
     });

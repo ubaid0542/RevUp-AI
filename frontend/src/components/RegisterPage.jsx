@@ -76,6 +76,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
   const [extras, setExtras] = useState(initialData?.extras || {});
   const [logoUrl, setLogoUrl] = useState(initialData?.logoUrl || '');
   const [logoFile, setLogoFile] = useState(null);
+  const [keywords, setKeywords] = useState(initialData?.keywords || '');
   const fileInputRef = useRef(null);
 
   const catData = categoryData[category];
@@ -111,6 +112,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
       plan,
       logoUrl,
       logoFile,
+      keywords: keywords.trim(),
       createdAt: isEditing ? initialData.createdAt : Date.now(),
     });
   };
@@ -216,6 +218,19 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
             onChange={(e) => setGmb(e.target.value)}
           />
           <div className="form-hint">💡 Go to GMB dashboard → "Get more reviews" → Copy the link</div>
+        </div>
+
+        {/* Keywords */}
+        <div className="field">
+          <label>Keywords (for review generation)</label>
+          <input
+            type="text"
+            placeholder="e.g. best doctor, affordable, friendly staff, tasty food"
+            maxLength={500}
+            value={keywords}
+            onChange={(e) => setKeywords(e.target.value)}
+          />
+          <div className="form-hint">💡 Ye keywords AI review mein naturally use honge — comma se alag likho</div>
         </div>
 
 
