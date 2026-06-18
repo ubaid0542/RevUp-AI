@@ -248,7 +248,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
           />
         </div>
 
-        {/* Plan Selector — same as Home page */}
+        {/* Plan Selector */}
         <div className="field">
           <label>Choose Your Plan *</label>
           <div className="reg-plans-grid">
@@ -257,8 +257,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
               onClick={() => setPlan('Starter')}
             >
               <div className="reg-plan-name">Starter</div>
-              <div className="reg-plan-price">₹699<span>/month</span></div>
-              <div className="reg-plan-desc">For small businesses</div>
+              <div className="reg-plan-price">₹699<span>/mo</span></div>
               <ul className="reg-plan-features">
                 <li>1 QR Code</li>
                 <li>250 reviews/month</li>
@@ -270,16 +269,29 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
               className={`reg-plan-card glass-card popular ${plan === 'Growth' ? 'selected' : ''}`}
               onClick={() => setPlan('Growth')}
             >
-              <div className="reg-plan-popular-tag">🔥 Most Popular</div>
+              <div className="reg-plan-popular-tag">🔥 Popular</div>
               <div className="reg-plan-name">Growth</div>
-              <div className="reg-plan-price">₹1,399<span>/month</span></div>
-              <div className="reg-plan-desc">For growing businesses</div>
+              <div className="reg-plan-price">₹1,399<span>/mo</span></div>
               <ul className="reg-plan-features">
                 <li>3 QR Codes</li>
                 <li>750 reviews/month</li>
                 <li>Advanced AI review</li>
                 <li>GMB redirect</li>
                 <li>Analytics dashboard</li>
+              </ul>
+            </div>
+            <div
+              className={`reg-plan-card glass-card ${plan === 'Pro' ? 'selected' : ''}`}
+              onClick={() => setPlan('Pro')}
+            >
+              <div className="reg-plan-name">Pro</div>
+              <div className="reg-plan-price">₹1,999<span>/mo</span></div>
+              <ul className="reg-plan-features">
+                <li>Unlimited QR Codes</li>
+                <li>Unlimited reviews</li>
+                <li>Premium AI reviews</li>
+                <li>White-label option</li>
+                <li>API access</li>
               </ul>
             </div>
           </div>
