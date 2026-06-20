@@ -35,39 +35,52 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $user = new User([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'phone'    => $request->phone,
-            'password' => Hash::make($request->password),
-        ]);
-        $user->role = 'owner';
-        $user->save();
-
-        // Create OTP for email verification
-        $otp = sprintf("%06d", mt_rand(100000, 999999));
-        UserOtp::updateOrCreate(
-            ['email' => $request->email, 'type' => 'email_verification'],
-            ['otp' => $otp, 'expires_at' => Carbon::now()->addMinutes(15)]
-        );
-
         try {
-            Mail::to($request->email)->send(new EmailVerificationMail($otp));
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Mail sending failed: ' . $e->getMessage());
+            \Illuminate\Support\Facades\DB::beginTransaction();
+
+            $user = new User([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'phone'    => $request->phone,
+                'password' => Hash::make($request->password),
+            ]);
+            $user->role = 'owner';
+            $user->save();
+
+            // Create OTP for email verification
+            $otp = sprintf("%06d", mt_rand(100000, 999999));
+            UserOtp::updateOrCreate(
+                ['email' => $request->email, 'type' => 'email_verification'],
+                ['otp' => $otp, 'expires_at' => Carbon::now()->addMinutes(15)]
+            );
+
+            // Create Sanctum token
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            \Illuminate\Support\Facades\DB::commit();
+
+            try {
+                Mail::to($request->email)->send(new EmailVerificationMail($otp));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Mail sending failed: ' . $e->getMessage());
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Registration successful! Verification OTP sent to your email. 🎉',
+                'data'    => [
+                    'user'  => $user,
+                    'token' => $token,
+                ],
+            ], 201);
+
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage(),
+            ], 500);
         }
-
-        // Create Sanctum token
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Registration successful! Verification OTP sent to your email. 🎉',
-            'data'    => [
-                'user'  => $user,
-                'token' => $token,
-            ],
-        ], 201);
     }
 
     /**
