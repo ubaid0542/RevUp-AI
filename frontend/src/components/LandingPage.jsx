@@ -98,6 +98,9 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
         <div className="footer-brand">
           <div className="footer-logo">🚀 RevUp AI</div>
           <div className="footer-tagline">Review That Help You Grow</div>
+          <div className="footer-legal-links" style={{ marginTop: '15px' }}>
+            <button onClick={() => onNavigate('legal')} style={{ background: 'none', border: 'none', color: 'var(--text2)', cursor: 'pointer', fontSize: '14px', padding: 0 }}>Terms & Privacy</button>
+          </div>
         </div>
         <div className="footer-contact">
           <div className="footer-contact-title">📞 Contact Us</div>

@@ -8,6 +8,8 @@ import AdminPanel from './components/AdminPanel';
 import AdminLogin from './components/AdminLogin';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
+import ForgotPasswordPage from './components/ForgotPasswordPage';
+import { LegalPages } from './components/LegalPages';
 import { updateFavicon } from './utils/favicon';
 import { trackEvent, EVENT_TYPES } from './services/analyticsService';
 import { isLoggedIn, getUser, logoutUser, fetchMe, createBusinessAPI, updateBusinessAPI, uploadBusinessLogoAPI, createPublicBusinessAPI, uploadPublicBusinessLogoAPI, fetchPublicBusinessAPI } from './services/authService';
@@ -492,8 +494,21 @@ export default function App() {
           <LoginPage
             onLoginSuccess={handleLoginSuccess}
             onGoToSignup={() => setPage('signup')}
+            onGoToForgot={() => setPage('forgot-password')}
             onToast={showToast}
           />
+        )}
+
+        {/* Forgot Password Page */}
+        {page === 'forgot-password' && (
+          <ForgotPasswordPage
+            onGoToLogin={() => setPage('login')}
+          />
+        )}
+
+        {/* Legal Pages */}
+        {page === 'legal' && (
+          <LegalPages />
         )}
 
         {/* SignupPage */}

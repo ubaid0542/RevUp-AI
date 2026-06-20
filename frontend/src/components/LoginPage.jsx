@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { loginUser } from '../services/authService';
 import './AuthPages.css';
 
-export default function LoginPage({ onLoginSuccess, onGoToSignup, onToast }) {
+export default function LoginPage({ onLoginSuccess, onGoToSignup, onGoToForgot, onToast }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -64,6 +64,11 @@ export default function LoginPage({ onLoginSuccess, onGoToSignup, onToast }) {
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
+            <div style={{ textAlign: 'right', marginTop: '8px' }}>
+              <button type="button" className="auth-link" style={{ fontSize: '12px' }} onClick={onGoToForgot}>
+                Forgot Password?
               </button>
             </div>
           </div>

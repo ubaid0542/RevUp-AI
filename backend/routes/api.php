@@ -23,6 +23,9 @@ Route::prefix('auth')->middleware('throttle:20,1')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login',    [AuthController::class, 'login']);
 
+    // Email Verification
+    Route::post('/verify-email',     [AuthController::class, 'verifyEmail']);
+
     // Forgot Password
     Route::post('/forgot-password', [\App\Http\Controllers\PasswordResetController::class, 'sendResetLink']);
     Route::post('/verify-otp',      [\App\Http\Controllers\PasswordResetController::class, 'verifyOtp']);

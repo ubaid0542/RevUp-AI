@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserOtp;
+use App\Mail\EmailVerificationMail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -40,17 +44,73 @@ class AuthController extends Controller
         $user->role = 'owner';
         $user->save();
 
+        // Create OTP for email verification
+        $otp = sprintf("%06d", mt_rand(100000, 999999));
+        UserOtp::updateOrCreate(
+            ['email' => $request->email, 'type' => 'email_verification'],
+            ['otp' => $otp, 'expires_at' => Carbon::now()->addMinutes(15)]
+        );
+
+        try {
+            Mail::to($request->email)->send(new EmailVerificationMail($otp));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Mail sending failed: ' . $e->getMessage());
+        }
+
         // Create Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'success' => true,
-            'message' => 'Registration successful! 🎉',
+            'message' => 'Registration successful! Verification OTP sent to your email. 🎉',
             'data'    => [
                 'user'  => $user,
                 'token' => $token,
             ],
         ], 201);
+    }
+
+    /**
+     * Verify User Email
+     * POST /api/auth/verify-email
+     */
+    public function verifyEmail(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'otp'   => 'required|digits:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
+        $userOtp = UserOtp::where('email', $request->email)
+            ->where('otp', $request->otp)
+            ->where('type', 'email_verification')
+            ->first();
+
+        if (!$userOtp || $userOtp->expires_at < Carbon::now()) {
+            return response()->json(['success' => false, 'message' => 'Invalid or expired OTP.'], 400);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $user->email_verified_at = now();
+            $user->save();
+        }
+
+        $userOtp->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Email verified successfully! ✅',
+            'user'    => $user,
+        ]);
     }
 
     /**
