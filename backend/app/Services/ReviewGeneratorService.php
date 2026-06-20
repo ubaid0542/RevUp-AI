@@ -173,14 +173,12 @@ class ReviewGeneratorService
         // Paid models first (best quality), free models as fallback
         $models = [
             // — Paid (uses OpenRouter credit balance) —
-            'google/gemini-2.5-flash',           // ~$0.15/1M tokens, fast & great quality
-            'openai/gpt-4.1-mini',               // ~$0.40/1M tokens, excellent quality
+            'google/gemini-2.0-flash-001',       // High quality, fast, native Hinglish support
+            'openai/gpt-4o-mini',                // Very reliable, extremely smart
+            'anthropic/claude-3-haiku',          // Excellent natural conversational tone
             // — Free fallback —
-            'openai/gpt-oss-20b:free',
             'meta-llama/llama-3.3-70b-instruct:free',
-            'google/gemma-4-31b-it:free',
-            'deepseek/deepseek-v4-flash:free',
-            'meta-llama/llama-3.2-3b-instruct:free',
+            'google/gemini-2.0-flash-lite-preview-02-05:free',
         ];
 
         foreach ($models as $model) {

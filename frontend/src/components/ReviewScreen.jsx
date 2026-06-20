@@ -227,17 +227,26 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     let text = null;
     let source = '';
 
+    // Pick a random keyword from the business keywords if available
+    let randomKeyword = '';
+    if (businessData.keywords) {
+      const kwArr = businessData.keywords.split(',').map(k => k.trim()).filter(k => k);
+      if (kwArr.length > 0) {
+        randomKeyword = kwArr[Math.floor(Math.random() * kwArr.length)];
+      }
+    }
+
     // 1. Try OpenRouter API first
-    text = await generateReviewOpenRouter(businessData.name, businessData.type, answers, null, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: businessData.keywords });
+    text = await generateReviewOpenRouter(businessData.name, businessData.type, answers, null, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: randomKeyword });
     if (text) source = '🤖 OpenRouter API';
 
     // 2. Try Backend Proxy (works for all businesses, API keys stay server-side)
     if (!text) {
-      text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: businessData.keywords });
+      text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: randomKeyword });
       if (text) source = '🔗 Backend Proxy';
     }
 
-    // 2. Fallback to Backend API (Laravel) if OpenRouter fails
+    // 3. Fallback to Backend API (Laravel) if OpenRouter fails
     if (!text) {
       const isRealDbId = businessData.id && !businessData.id.toString().startsWith('biz_') && !businessData.id.toString().startsWith('demo');
       if (isRealDbId) {
@@ -250,13 +259,13 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
       }
     }
 
-    // 3. Fallback to Gemini API if both fail
+    // 4. Fallback to Gemini API if both fail
     if (!text) {
-      text = await generateReviewGeminiFrontend(businessData.name, businessData.type, answers, businessData.geminiApiKey, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: businessData.keywords });
+      text = await generateReviewGeminiFrontend(businessData.name, businessData.type, answers, businessData.geminiApiKey, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: randomKeyword });
       if (text) source = '✨ Gemini API';
     }
 
-    // 4. Fallback to Local Templates
+    // 5. Fallback to Local Templates
     if (!text) {
       text = generateReviewLocal(businessData.name, businessData.type, answers);
       source = '📝 Local Templates';
@@ -305,6 +314,14 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     let text = null;
     let source = '';
 
+    let randomKeyword = '';
+    if (businessData.keywords) {
+      const kwArr = businessData.keywords.split(',').map(k => k.trim()).filter(k => k);
+      if (kwArr.length > 0) {
+        randomKeyword = kwArr[Math.floor(Math.random() * kwArr.length)];
+      }
+    }
+
     // 1. Try OpenRouter API first
     text = await generateReviewOpenRouter(
       businessData.name,
@@ -318,7 +335,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
         variationSeed: `${Date.now()}-${Math.random()}`,
         businessSubcategory: businessData.subcategory,
         city: businessData.city,
-        customerKeywords: businessData.keywords,
+        customerKeywords: randomKeyword,
       }
     );
     if (text) source = '🤖 OpenRouter API';
@@ -328,7 +345,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
       text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', {
         businessSubcategory: businessData.subcategory,
         city: businessData.city,
-        customerKeywords: businessData.keywords,
+        customerKeywords: randomKeyword,
         regenerate: true,
         previousText: generatedReview,
         variationSeed: `${Date.now()}-${Math.random()}`,
@@ -363,7 +380,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
           variationSeed: `${Date.now()}-${Math.random()}`,
           businessSubcategory: businessData.subcategory,
           city: businessData.city,
-          customerKeywords: businessData.keywords,
+          customerKeywords: randomKeyword,
         }
       );
       if (text) source = '✨ Gemini API';
