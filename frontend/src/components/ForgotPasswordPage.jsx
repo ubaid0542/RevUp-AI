@@ -72,11 +72,12 @@ export default function ForgotPasswordPage({ onGoToLogin }) {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card glass-card">
+    <div className="auth-page screen">
+      <div className="auth-container glass-card">
         <div className="auth-header">
-          <h2>Reset Password</h2>
-          <p>Recover access to your RevUp AI account</p>
+          <div className="auth-icon">🔑</div>
+          <h2 className="auth-title gradient-text">Reset Password</h2>
+          <p className="auth-sub">Recover access to your RevUp AI account</p>
         </div>
 
         {message.text && (
@@ -87,60 +88,51 @@ export default function ForgotPasswordPage({ onGoToLogin }) {
 
         {step === 1 ? (
           <form className="auth-form" onSubmit={handleSendOtp}>
-            <div className="form-group">
+            <div className="field">
               <label>Email Address</label>
-              <div className="input-with-icon">
-                <span className="input-icon">✉️</span>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your registered email"
-                  required
-                />
-              </div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your registered email"
+                required
+              />
             </div>
             
-            <button type="submit" className="btn-primary" disabled={isLoading}>
+            <button type="submit" className="btn-primary auth-btn" disabled={isLoading}>
               {isLoading ? 'Sending OTP...' : 'Send Reset OTP'}
             </button>
           </form>
         ) : (
           <form className="auth-form" onSubmit={handleResetPassword}>
-            <div className="form-group">
+            <div className="field">
               <label>Enter 6-digit OTP</label>
-              <div className="input-with-icon">
-                <span className="input-icon">🔢</span>
-                <input
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  placeholder="Enter OTP from email"
-                  maxLength={6}
-                  required
-                />
-              </div>
+              <input
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                placeholder="Enter OTP from email"
+                maxLength={6}
+                required
+              />
             </div>
 
-            <div className="form-group">
+            <div className="field">
               <label>New Password</label>
-              <div className="input-with-icon">
-                <span className="input-icon">🔒</span>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Create new password"
-                  required
-                />
-              </div>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Create new password"
+                required
+              />
             </div>
             
-            <button type="submit" className="btn-primary" disabled={isLoading}>
+            <button type="submit" className="btn-primary auth-btn" disabled={isLoading}>
               {isLoading ? 'Resetting...' : 'Reset Password'}
             </button>
             <div className="text-center mt-3">
-              <button type="button" className="btn-link" onClick={() => setStep(1)}>
+              <button type="button" className="auth-link" onClick={() => setStep(1)}>
                 Change Email
               </button>
             </div>
@@ -148,7 +140,12 @@ export default function ForgotPasswordPage({ onGoToLogin }) {
         )}
 
         <div className="auth-footer">
-          Remember your password? <button type="button" className="auth-link" onClick={onGoToLogin}>Login here</button>
+          <p>
+            Remember your password?{' '}
+            <button type="button" className="auth-link" onClick={onGoToLogin}>
+              Login here
+            </button>
+          </p>
         </div>
       </div>
     </div>
