@@ -37,6 +37,9 @@ function saveAuth(token, user) {
 export function clearAuth() {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
+  localStorage.removeItem('review_app_business');
+  localStorage.removeItem('rai_businesses');
+  localStorage.removeItem('rai_reviews');
 }
 
 /**
