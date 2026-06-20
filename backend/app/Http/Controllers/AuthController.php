@@ -61,7 +61,7 @@ class AuthController extends Controller
 
             try {
                 Mail::to($request->email)->send(new EmailVerificationMail($otp));
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::error('Mail sending failed: ' . $e->getMessage());
             }
 
