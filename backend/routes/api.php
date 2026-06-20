@@ -22,6 +22,11 @@ use App\Http\Controllers\ReviewController;
 Route::prefix('auth')->middleware('throttle:20,1')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login',    [AuthController::class, 'login']);
+
+    // Forgot Password
+    Route::post('/forgot-password', [\App\Http\Controllers\PasswordResetController::class, 'sendResetLink']);
+    Route::post('/verify-otp',      [\App\Http\Controllers\PasswordResetController::class, 'verifyOtp']);
+    Route::post('/reset-password',  [\App\Http\Controllers\PasswordResetController::class, 'resetPassword']);
 });
 
 // ─── Admin Login (rate-limited) ──────────────────────────────────────────────

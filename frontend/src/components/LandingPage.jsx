@@ -104,7 +104,7 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
           <div className="footer-contact-items">
             <a href="tel:8726367492" className="footer-link">📱 8726367492</a>
             <a href="tel:8090507639" className="footer-link">📱 8090507639</a>
-            <a href="mailto:mu0430218@gmail.com" className="footer-link">✉️ mu0430218@gmail.com</a>
+            <a href="mailto:growengers@gmail.com" className="footer-link">✉️ growengers@gmail.com</a>
           </div>
         </div>
         <div className="footer-copy">
