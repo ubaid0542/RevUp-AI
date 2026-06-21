@@ -236,39 +236,17 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
       }
     }
 
-    // 1. Try OpenRouter API first
-    text = await generateReviewOpenRouter(businessData.name, businessData.type, answers, null, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: randomKeyword });
-    if (text) source = '🤖 OpenRouter API';
+    // Generate review via Backend Proxy (OpenRouter — API keys stay server-side)
+    text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: randomKeyword });
+    if (text) source = '🔗 Backend Proxy';
 
-    // 2. Try Backend Proxy (works for all businesses, API keys stay server-side)
+    // If Backend Proxy failed, show error to user
     if (!text) {
-      text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: randomKeyword });
-      if (text) source = '🔗 Backend Proxy';
-    }
-
-    // 3. Fallback to Backend API (Laravel) if OpenRouter fails
-    if (!text) {
-      const isRealDbId = businessData.id && !businessData.id.toString().startsWith('biz_') && !businessData.id.toString().startsWith('demo');
-      if (isRealDbId) {
-        const res = await generateReviewAPI(businessData.id, answers);
-        if (res && res.text) {
-          text = res.text;
-          setBackendReviewId(res.id);
-          source = '🔗 Backend API (Laravel)';
-        }
-      }
-    }
-
-    // 4. Fallback to Gemini API if both fail
-    if (!text) {
-      text = await generateReviewGeminiFrontend(businessData.name, businessData.type, answers, businessData.geminiApiKey, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: randomKeyword });
-      if (text) source = '✨ Gemini API';
-    }
-
-    // 5. Fallback to Local Templates
-    if (!text) {
-      text = generateReviewLocal(businessData.name, businessData.type, answers);
-      source = '📝 Local Templates';
+      setGeneratedReview('');
+      setReviewSource('');
+      setIsLoading(false);
+      showToastMsg('⚠️ Review generate nahi ho paya. Please thodi der baad try karein.');
+      return;
     }
 
     // Save externally generated reviews to backend if it's a real DB business
@@ -322,74 +300,24 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
       }
     }
 
-    // 1. Try OpenRouter API first
-    text = await generateReviewOpenRouter(
-      businessData.name,
-      businessData.type,
-      answers,
-      null,
-      'hinglish',
-      {
-        regenerate: true,
-        previousText: generatedReview,
-        variationSeed: `${Date.now()}-${Math.random()}`,
-        businessSubcategory: businessData.subcategory,
-        city: businessData.city,
-        customerKeywords: randomKeyword,
-      }
-    );
-    if (text) source = '🤖 OpenRouter API';
+    // Regenerate review via Backend Proxy (OpenRouter — API keys stay server-side)
+    text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', {
+      businessSubcategory: businessData.subcategory,
+      city: businessData.city,
+      customerKeywords: randomKeyword,
+      regenerate: true,
+      previousText: generatedReview,
+      variationSeed: `${Date.now()}-${Math.random()}`,
+    });
+    if (text) source = '🔗 Backend Proxy';
 
-    // 2. Try Backend Proxy
+    // If Backend Proxy failed, show error to user
     if (!text) {
-      text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', {
-        businessSubcategory: businessData.subcategory,
-        city: businessData.city,
-        customerKeywords: randomKeyword,
-        regenerate: true,
-        previousText: generatedReview,
-        variationSeed: `${Date.now()}-${Math.random()}`,
-      });
-      if (text) source = '🔗 Backend Proxy';
-    }
-
-    // 2. Fallback to Backend API (Laravel) if OpenRouter fails
-    if (!text) {
-      const isRealDbId = businessData.id && !businessData.id.toString().startsWith('biz_') && !businessData.id.toString().startsWith('demo');
-      if (isRealDbId) {
-        const res = await regenerateReviewAPI(businessData.id, answers, generatedReview);
-        if (res && res.text) {
-          text = res.text;
-          setBackendReviewId(res.id);
-          source = '🔗 Backend API (Laravel)';
-        }
-      }
-    }
-
-    // 3. Fallback to Gemini API if both fail
-    if (!text) {
-      text = await generateReviewGeminiFrontend(
-        businessData.name,
-        businessData.type,
-        answers,
-        businessData.geminiApiKey,
-        'hinglish',
-        {
-          regenerate: true,
-          previousText: generatedReview,
-          variationSeed: `${Date.now()}-${Math.random()}`,
-          businessSubcategory: businessData.subcategory,
-          city: businessData.city,
-          customerKeywords: randomKeyword,
-        }
-      );
-      if (text) source = '✨ Gemini API';
-    }
-
-    // 4. Fallback to Local Templates
-    if (!text) {
-      text = generateReviewLocal(businessData.name, businessData.type, answers);
-      source = '📝 Local Templates';
+      setGeneratedReview('');
+      setReviewSource('');
+      setIsLoading(false);
+      showToastMsg('⚠️ Review generate nahi ho paya. Please thodi der baad try karein.');
+      return;
     }
 
     // Save externally generated reviews to backend if it's a real DB business

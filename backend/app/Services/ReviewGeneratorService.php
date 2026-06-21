@@ -52,12 +52,9 @@ class ReviewGeneratorService
             }
         }
 
-        // 2nd Priority: Local Templates (fallback)
-        if ($language === 'english') {
-            return $this->generateEnglish($businessName, $businessType, $ratings);
-        }
-
-        return $this->generateHinglish($businessName, $businessType, $ratings);
+        // OpenRouter failed or key missing — return empty (no local template fallback)
+        Log::warning('OpenRouter review generation failed. No local template fallback. Business: ' . $businessName);
+        return '';
     }
 
     /**
