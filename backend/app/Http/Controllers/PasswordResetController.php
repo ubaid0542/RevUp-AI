@@ -32,7 +32,8 @@ class PasswordResetController extends Controller
 
         try {
             Mail::to($request->email)->send(new PasswordResetMail($otp));
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Password reset mail failed: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Failed to send email. Please check SMTP settings.'], 500);
         }
 
