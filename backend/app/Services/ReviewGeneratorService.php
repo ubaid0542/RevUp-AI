@@ -170,8 +170,8 @@ class ReviewGeneratorService
         // Paid models first (best quality), free models as fallback
         $models = [
             // — Paid (uses OpenRouter credit balance) —
-            'google/gemini-2.0-flash-001',       // High quality, fast, native Hinglish support
-            'openai/gpt-4o-mini',                // Very reliable, extremely smart
+            'openai/gpt-4o-mini',                // Very reliable, extremely smart, fast
+            'google/gemini-2.5-flash',           // High quality, fast, native Hinglish support
             'anthropic/claude-3-haiku',          // Excellent natural conversational tone
             // — Free fallback —
             'meta-llama/llama-3.3-70b-instruct:free',
