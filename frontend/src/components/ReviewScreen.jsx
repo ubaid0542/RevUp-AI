@@ -479,7 +479,10 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     }
 
     // 4. Open GMB link — customer just needs to paste (Ctrl+V / long-press Paste)
-    const gmbLink = businessData.gmb || 'https://search.google.com/local/writereview?placeid=ChIJxxxxxxxxx';
+    const searchQuery = encodeURIComponent(`${businessData.name} ${businessData.city || ''}`.trim());
+    const fallbackLink = `https://www.google.com/search?q=${searchQuery}`;
+    const gmbLink = businessData.gmb || fallbackLink;
+    
     showToastMsg('✅ Review copied — opening Google Reviews… Just paste & post!');
 
     // Small delay so toast is visible before redirect
