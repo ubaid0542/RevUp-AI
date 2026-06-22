@@ -142,13 +142,60 @@ export default function SetupScreen({ initialData, onComplete }) {
             onChange={(e) => setType(e.target.value)}
           >
             <option value="">— Select Business Type —</option>
-            <option value="Hospital/Clinic">Hospital / Clinic</option>
-            <option value="Restaurant/Cafe">Restaurant / Cafe</option>
-            <option value="Jewellery Shop">Jewellery Shop</option>
-            <option value="Hotel/Restro">Hotel / Restro</option>
-            <option value="Salon/Spa">Salon / Spa</option>
-            <option value="School/Coaching">School / Coaching</option>
-            <option value="Other">Other</option>
+            <option value="Restaurant">🍽️ Restaurant</option>
+            <option value="Cafe">☕ Cafe</option>
+            <option value="Hotel">🏨 Hotel</option>
+            <option value="Resort">🏖️ Resort</option>
+            <option value="Hospital">🏥 Hospital</option>
+            <option value="Clinic">🩺 Clinic</option>
+            <option value="Dental Clinic">🦷 Dental Clinic</option>
+            <option value="Medical Store">💊 Medical Store</option>
+            <option value="Pharmacy">⚕️ Pharmacy</option>
+            <option value="Salon">💇 Salon</option>
+            <option value="Spa">🧖 Spa</option>
+            <option value="Gym">🏋️ Gym</option>
+            <option value="Fitness Center">💪 Fitness Center</option>
+            <option value="School">🏫 School</option>
+            <option value="Coaching Center">📚 Coaching Center</option>
+            <option value="College">🎓 College</option>
+            <option value="Institute">🏛️ Institute</option>
+            <option value="Jewellery Shop">💍 Jewellery Shop</option>
+            <option value="Clothing Store">👕 Clothing Store</option>
+            <option value="Boutique">🛍️ Boutique</option>
+            <option value="Supermarket">🛒 Supermarket</option>
+            <option value="Grocery Store">🥬 Grocery Store</option>
+            <option value="Mobile Shop">📱 Mobile Shop</option>
+            <option value="Laptop Store">💻 Laptop Store</option>
+            <option value="Electronics Store">📷 Electronics Store</option>
+            <option value="Book Store">📖 Book Store</option>
+            <option value="Bakery">🎂 Bakery</option>
+            <option value="Sweet Shop">🍬 Sweet Shop</option>
+            <option value="Ice Cream Shop">🍦 Ice Cream Shop</option>
+            <option value="Pet Shop">🐾 Pet Shop</option>
+            <option value="Veterinary Clinic">🐕 Veterinary Clinic</option>
+            <option value="Car Showroom">🚗 Car Showroom</option>
+            <option value="Auto Repair">🔧 Auto Repair</option>
+            <option value="Garage">🛠️ Garage</option>
+            <option value="Real Estate Agency">🏠 Real Estate Agency</option>
+            <option value="Interior Designer">🎨 Interior Designer</option>
+            <option value="Hardware Store">🔨 Hardware Store</option>
+            <option value="Electrician">⚡ Electrician</option>
+            <option value="Photographer">📸 Photographer</option>
+            <option value="Wedding Planner">💒 Wedding Planner</option>
+            <option value="Event Planner">📅 Event Planner</option>
+            <option value="Travel Agency">✈️ Travel Agency</option>
+            <option value="Lawyer">⚖️ Lawyer</option>
+            <option value="Insurance Agency">🛡️ Insurance Agency</option>
+            <option value="Courier Service">🚚 Courier Service</option>
+            <option value="Diagnostic Center">🔬 Diagnostic Center</option>
+            <option value="IT Company">💻 IT Company</option>
+            <option value="Software Agency">🚀 Software Agency</option>
+            <option value="Digital Marketing Agency">📢 Digital Marketing Agency</option>
+            <option value="Printing Press">🖨️ Printing Press</option>
+            <option value="Cinema Hall">🎬 Cinema Hall</option>
+            <option value="Banquet Hall">🏛️ Banquet Hall</option>
+            <option value="E-commerce Store">🛒 E-commerce Store</option>
+            <option value="Other">📦 Other</option>
           </select>
         </div>
 
