@@ -22,12 +22,47 @@ import './ReviewScreen.css';
  * Category-specific questions — 5 questions tailored to each business type
  */
 const CATEGORY_QUESTIONS = {
-  'Hospital / Clinic': [
+  'Restaurant': [
+    { id: 'overall',   label: 'Overall experience?',         sub: 'How was your dining experience?' },
+    { id: 'food',      label: 'Food quality & taste?',       sub: 'How was the taste and freshness of the food?' },
+    { id: 'service',   label: 'Service & staff?',            sub: 'Were the waiters friendly and prompt?' },
+    { id: 'ambience',  label: 'Ambience & vibe?',            sub: 'How was the restaurant atmosphere?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this to a friend?' },
+  ],
+  'Cafe': [
+    { id: 'overall',   label: 'Overall experience?',         sub: 'How was your cafe visit?' },
+    { id: 'beverages', label: 'Coffee / Beverages?',         sub: 'How was the taste of coffee and drinks?' },
+    { id: 'food',      label: 'Food & snacks?',              sub: 'How were the snacks and food items?' },
+    { id: 'ambience',  label: 'Ambience & vibe?',            sub: 'How was the cafe atmosphere and decor?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this cafe to friends?' },
+  ],
+  'Hotel': [
+    { id: 'overall',   label: 'Overall stay?',               sub: 'How was your overall hotel experience?' },
+    { id: 'rooms',     label: 'Room quality?',               sub: 'Was the room clean and comfortable?' },
+    { id: 'food',      label: 'Food & dining?',              sub: 'How was the hotel food?' },
+    { id: 'service',   label: 'Service & hospitality?',      sub: 'Was the staff welcoming and helpful?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this hotel to others?' },
+  ],
+  'Resort': [
+    { id: 'overall',     label: 'Overall stay?',             sub: 'How was your overall resort experience?' },
+    { id: 'rooms',       label: 'Room & amenities?',         sub: 'Was the room and amenities up to mark?' },
+    { id: 'activities',  label: 'Activities & recreation?',  sub: 'How were the activities and entertainment?' },
+    { id: 'food',        label: 'Food & service?',           sub: 'How was the food and staff service?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this resort to others?' },
+  ],
+  'Hospital': [
     { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall visit?' },
     { id: 'doctors',     label: 'Doctor consultation?',      sub: 'Was the doctor attentive and helpful?' },
     { id: 'staff',       label: 'Staff & reception?',        sub: 'Were the staff polite and cooperative?' },
     { id: 'cleanliness', label: 'Cleanliness & hygiene?',    sub: 'How clean and hygienic was the facility?' },
     { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this to family or friends?' },
+  ],
+  'Clinic': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall visit to the clinic?' },
+    { id: 'doctor',      label: 'Doctor consultation?',      sub: 'Was the doctor knowledgeable and caring?' },
+    { id: 'staff',       label: 'Staff behaviour?',          sub: 'Were the staff polite and helpful?' },
+    { id: 'cleanliness', label: 'Cleanliness?',              sub: 'Was the clinic clean and hygienic?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this clinic to others?' },
   ],
   'Dental Clinic': [
     { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall visit?' },
@@ -36,47 +71,75 @@ const CATEGORY_QUESTIONS = {
     { id: 'cleanliness', label: 'Cleanliness & hygiene?',    sub: 'How clean and hygienic was the clinic?' },
     { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this clinic to others?' },
   ],
-  'Restaurant / Cafe': [
-    { id: 'overall',   label: 'Overall experience?',         sub: 'How was your dining experience?' },
-    { id: 'food',      label: 'Food quality & taste?',       sub: 'How was the taste and freshness of the food?' },
-    { id: 'service',   label: 'Service & staff?',            sub: 'Were the waiters friendly and prompt?' },
-    { id: 'ambience',  label: 'Ambience & vibe?',            sub: 'How was the restaurant atmosphere?' },
-    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this to a friend?' },
+  'Medical Store': [
+    { id: 'overall',       label: 'Overall experience?',     sub: 'How was your overall experience?' },
+    { id: 'availability',  label: 'Medicine availability?',  sub: 'Did you find all the medicines you needed?' },
+    { id: 'staff',         label: 'Staff behaviour?',        sub: 'Was the pharmacist helpful and knowledgeable?' },
+    { id: 'pricing',       label: 'Pricing & offers?',       sub: 'Were the prices fair and competitive?' },
+    { id: 'recommend',     label: 'Would you recommend?',    sub: 'Would you suggest this store to others?' },
   ],
-  'Hotel / Resort': [
-    { id: 'overall',   label: 'Overall stay?',               sub: 'How was your overall hotel experience?' },
-    { id: 'rooms',     label: 'Room quality?',               sub: 'Was the room clean and comfortable?' },
-    { id: 'food',      label: 'Food & dining?',              sub: 'How was the hotel food?' },
-    { id: 'service',   label: 'Service & hospitality?',      sub: 'Was the staff welcoming and helpful?' },
-    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this hotel to others?' },
+  'Pharmacy': [
+    { id: 'overall',       label: 'Overall experience?',     sub: 'How was your overall experience at the pharmacy?' },
+    { id: 'availability',  label: 'Medicine availability?',  sub: 'Were all required medicines available?' },
+    { id: 'staff',         label: 'Pharmacist knowledge?',   sub: 'Was the pharmacist knowledgeable and helpful?' },
+    { id: 'pricing',       label: 'Pricing?',                sub: 'Were the prices reasonable?' },
+    { id: 'recommend',     label: 'Would you recommend?',    sub: 'Would you suggest this pharmacy to others?' },
   ],
-  'Salon / Spa': [
-    { id: 'overall',   label: 'Overall experience?',         sub: 'How was your salon/spa visit?' },
+  'Salon': [
+    { id: 'overall',   label: 'Overall experience?',         sub: 'How was your salon visit?' },
     { id: 'service',   label: 'Service quality?',            sub: 'Was the treatment done professionally?' },
     { id: 'hygiene',   label: 'Hygiene & cleanliness?',      sub: 'Were the tools and space clean?' },
-    { id: 'staff',     label: 'Staff expertise?',            sub: 'Was the stylist/therapist skilled?' },
+    { id: 'staff',     label: 'Staff expertise?',            sub: 'Was the stylist skilled and attentive?' },
     { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this salon to others?' },
   ],
-  'Gym / Fitness Center': [
+  'Spa': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your spa experience?' },
+    { id: 'treatment',   label: 'Treatment quality?',        sub: 'Was the therapy relaxing and effective?' },
+    { id: 'ambience',    label: 'Ambience & relaxation?',    sub: 'Was the spa ambience calm and soothing?' },
+    { id: 'therapist',   label: 'Therapist expertise?',      sub: 'Was the therapist skilled and professional?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this spa to others?' },
+  ],
+  'Gym': [
     { id: 'overall',   label: 'Overall experience?',         sub: 'How is your overall gym experience?' },
     { id: 'equipment', label: 'Equipment & machines?',       sub: 'Are the machines well-maintained?' },
     { id: 'trainers',  label: 'Trainers & coaching?',        sub: 'Are the trainers helpful and knowledgeable?' },
-    { id: 'cleanliness',label: 'Hygiene & cleanliness?',    sub: 'Are the gym and locker rooms clean?' },
+    { id: 'cleanliness',label: 'Hygiene & cleanliness?',     sub: 'Are the gym and locker rooms clean?' },
     { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this gym to others?' },
   ],
-  'School / Coaching': [
-    { id: 'overall',   label: 'Overall experience?',         sub: 'How was the overall learning experience?' },
-    { id: 'teaching',  label: 'Teaching quality?',           sub: 'Were the teachers/faculty good?' },
+  'Fitness Center': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How is your overall fitness experience?' },
+    { id: 'training',    label: 'Training quality?',         sub: 'Were the classes well-structured and effective?' },
+    { id: 'trainer',     label: 'Trainer expertise?',        sub: 'Was the trainer skilled and motivating?' },
+    { id: 'facilities',  label: 'Facilities?',               sub: 'Were the facilities clean and well-maintained?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this center to others?' },
+  ],
+  'School': [
+    { id: 'overall',   label: 'Overall experience?',         sub: 'How was the overall school experience?' },
+    { id: 'teaching',  label: 'Teaching quality?',           sub: 'Were the teachers knowledgeable and caring?' },
     { id: 'facility',  label: 'Facilities & infrastructure?',sub: 'How were the classrooms and facilities?' },
     { id: 'results',   label: 'Results & performance?',      sub: 'Are you satisfied with the academic support?' },
-    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this institute to others?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this school to others?' },
   ],
-  'College / Institute': [
+  'Coaching Center': [
+    { id: 'overall',   label: 'Overall experience?',         sub: 'How was the overall coaching experience?' },
+    { id: 'faculty',   label: 'Faculty & teaching?',         sub: 'Were the teachers effective and knowledgeable?' },
+    { id: 'material',  label: 'Study material?',             sub: 'Was the study material comprehensive and helpful?' },
+    { id: 'results',   label: 'Results?',                    sub: 'Are you satisfied with the exam preparation?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this center to others?' },
+  ],
+  'College': [
     { id: 'overall',   label: 'Overall experience?',         sub: 'How is the overall college experience?' },
     { id: 'faculty',   label: 'Faculty & teaching?',         sub: 'Are the professors knowledgeable?' },
     { id: 'campus',    label: 'Campus & facilities?',        sub: 'How is the campus infrastructure?' },
     { id: 'placement', label: 'Placements & support?',       sub: 'How is the career support?' },
     { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this college to others?' },
+  ],
+  'Institute': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How is the overall institute experience?' },
+    { id: 'course',      label: 'Course quality?',           sub: 'Was the course content relevant and updated?' },
+    { id: 'faculty',     label: 'Faculty?',                  sub: 'Were the instructors experienced?' },
+    { id: 'infrastructure',label: 'Infrastructure?',         sub: 'Were the labs and classrooms well-equipped?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this institute to others?' },
   ],
   'Jewellery Shop': [
     { id: 'overall',   label: 'Overall experience?',         sub: 'How was your shopping experience?' },
@@ -85,19 +148,96 @@ const CATEGORY_QUESTIONS = {
     { id: 'staff',     label: 'Staff behaviour?',            sub: 'Was the staff helpful in choosing?' },
     { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this shop to others?' },
   ],
-  'Clothing Store / Boutique': [
-    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your shopping experience at the store?' },
+  'Clothing Store': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your shopping experience?' },
     { id: 'collection',  label: 'Collection & variety?',     sub: 'Did you find enough designs and options?' },
     { id: 'staff',       label: 'Staff & assistance?',       sub: 'Was the staff helpful and cooperative?' },
     { id: 'quality',     label: 'Fabric & quality?',         sub: 'Are you satisfied with the quality?' },
     { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this store to friends?' },
   ],
-  'Supermarket / Grocery': [
+  'Boutique': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your boutique experience?' },
+    { id: 'design',      label: 'Design & creativity?',      sub: 'Were the designs unique and trendy?' },
+    { id: 'quality',     label: 'Fabric & quality?',         sub: 'Was the fabric and stitching quality good?' },
+    { id: 'fitting',     label: 'Custom fitting?',           sub: 'Was the fitting and tailoring done well?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this boutique to others?' },
+  ],
+  'Supermarket': [
+    { id: 'overall',      label: 'Overall experience?',      sub: 'How was your shopping experience?' },
+    { id: 'availability', label: 'Product availability?',    sub: 'Did you find everything you needed?' },
+    { id: 'freshness',    label: 'Quality & freshness?',     sub: 'Were the products fresh and of good quality?' },
+    { id: 'pricing',      label: 'Pricing & offers?',        sub: 'Were the prices reasonable?' },
+    { id: 'recommend',    label: 'Would you recommend?',     sub: 'Would you suggest this store to others?' },
+  ],
+  'Grocery Store': [
     { id: 'overall',     label: 'Overall experience?',       sub: 'How was your shopping experience?' },
-    { id: 'availability',label: 'Product availability?',     sub: 'Did you find everything you needed?' },
-    { id: 'freshness',   label: 'Quality & freshness?',      sub: 'Were the products fresh and of good quality?' },
-    { id: 'pricing',     label: 'Pricing & offers?',         sub: 'Were the prices reasonable?' },
+    { id: 'freshness',   label: 'Product freshness?',        sub: 'Were the fruits, vegetables and items fresh?' },
+    { id: 'variety',     label: 'Variety & stock?',           sub: 'Was there enough variety of products?' },
+    { id: 'pricing',     label: 'Pricing?',                  sub: 'Were the prices fair and competitive?' },
     { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this store to others?' },
+  ],
+  'Mobile Shop': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall shopping experience?' },
+    { id: 'variety',     label: 'Product variety?',           sub: 'Did you find the mobile and model you wanted?' },
+    { id: 'staff',       label: 'Staff knowledge?',          sub: 'Did the staff explain features properly?' },
+    { id: 'pricing',     label: 'Pricing & deals?',          sub: 'Were the prices competitive with good offers?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this shop to others?' },
+  ],
+  'Laptop Store': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall shopping experience?' },
+    { id: 'range',       label: 'Product range?',            sub: 'Did you find the laptop/specs you needed?' },
+    { id: 'staff',       label: 'Staff expertise?',          sub: 'Did the staff guide you well on specifications?' },
+    { id: 'aftersales',  label: 'After-sales support?',      sub: 'How was the warranty and support service?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this store to others?' },
+  ],
+  'Electronics Store': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall shopping experience?' },
+    { id: 'variety',     label: 'Product variety?',           sub: 'Did you find enough brands and options?' },
+    { id: 'staff',       label: 'Staff knowledge?',          sub: 'Did the staff explain product features well?' },
+    { id: 'pricing',     label: 'Pricing & warranty?',       sub: 'Were the prices fair with good warranty?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this store to others?' },
+  ],
+  'Book Store': [
+    { id: 'overall',      label: 'Overall experience?',      sub: 'How was your overall shopping experience?' },
+    { id: 'collection',   label: 'Book collection?',         sub: 'Did you find the books you were looking for?' },
+    { id: 'staff',        label: 'Staff assistance?',        sub: 'Was the staff helpful in finding books?' },
+    { id: 'pricing',      label: 'Pricing & offers?',        sub: 'Were the prices reasonable with good discounts?' },
+    { id: 'recommend',    label: 'Would you recommend?',     sub: 'Would you suggest this store to others?' },
+  ],
+  'Bakery': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall experience?' },
+    { id: 'taste',       label: 'Taste & freshness?',        sub: 'How was the taste and freshness of items?' },
+    { id: 'variety',     label: 'Variety & options?',         sub: 'Were there enough choices available?' },
+    { id: 'hygiene',     label: 'Hygiene & packaging?',      sub: 'Was the shop clean and packaging good?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this bakery to others?' },
+  ],
+  'Sweet Shop': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall experience?' },
+    { id: 'taste',       label: 'Taste & freshness?',        sub: 'How was the taste and freshness of sweets?' },
+    { id: 'variety',     label: 'Variety?',                   sub: 'Were there enough varieties of sweets?' },
+    { id: 'hygiene',     label: 'Hygiene & packaging?',      sub: 'Was the shop clean and packaging attractive?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this shop to others?' },
+  ],
+  'Ice Cream Shop': [
+    { id: 'overall',   label: 'Overall experience?',         sub: 'How was your overall visit?' },
+    { id: 'taste',     label: 'Taste & flavors?',            sub: 'How was the taste and variety of flavors?' },
+    { id: 'freshness', label: 'Freshness & quality?',        sub: 'Was the ice cream fresh and creamy?' },
+    { id: 'hygiene',   label: 'Hygiene & cleanliness?',      sub: 'Was the shop clean and hygienic?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this shop to friends?' },
+  ],
+  'Pet Shop': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall experience?' },
+    { id: 'variety',     label: 'Product variety?',           sub: 'Was there good variety of pet products?' },
+    { id: 'staff',       label: 'Staff & handling?',         sub: 'Did the staff handle pets gently and well?' },
+    { id: 'pricing',     label: 'Pricing?',                  sub: 'Were the prices reasonable?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this shop to pet owners?' },
+  ],
+  'Veterinary Clinic': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall experience?' },
+    { id: 'doctor',      label: 'Doctor & treatment?',       sub: 'Was the vet doctor skilled and caring?' },
+    { id: 'staff',       label: 'Staff & handling?',         sub: 'Did the staff handle your pet gently?' },
+    { id: 'cleanliness', label: 'Cleanliness?',              sub: 'Was the clinic clean and hygienic?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this clinic to pet owners?' },
   ],
   'Car Showroom': [
     { id: 'overall',     label: 'Overall experience?',       sub: 'How was your visit to the showroom?' },
@@ -106,11 +246,18 @@ const CATEGORY_QUESTIONS = {
     { id: 'testdrive',   label: 'Test drive experience?',    sub: 'How was the test drive and demonstration?' },
     { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this showroom to others?' },
   ],
-  'Auto Repair / Garage': [
+  'Auto Repair': [
     { id: 'overall',     label: 'Overall experience?',       sub: 'How was your service experience?' },
     { id: 'quality',     label: 'Service quality?',          sub: 'Was the repair/service done properly?' },
     { id: 'transparency',label: 'Pricing transparency?',     sub: 'Were the charges clear and fair?' },
     { id: 'timeliness',  label: 'Delivery time?',            sub: 'Was the vehicle delivered on time?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this service to others?' },
+  ],
+  'Garage': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your repair experience?' },
+    { id: 'quality',     label: 'Repair quality?',           sub: 'Was the repair work done properly?' },
+    { id: 'pricing',     label: 'Pricing?',                  sub: 'Were the charges fair and transparent?' },
+    { id: 'timeliness',  label: 'Timeliness?',               sub: 'Was the vehicle ready on time?' },
     { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this garage to others?' },
   ],
   'Real Estate Agency': [
@@ -120,103 +267,12 @@ const CATEGORY_QUESTIONS = {
     { id: 'transparency',label: 'Transparency?',             sub: 'Were the deals clear and fair?' },
     { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this agency to others?' },
   ],
-  'Event Planner': [
-    { id: 'overall',     label: 'Overall experience?',       sub: 'How was the overall event execution?' },
-    { id: 'creativity',  label: 'Creativity & design?',      sub: 'How were the decorations and arrangements?' },
-    { id: 'management',  label: 'Event management?',         sub: 'Was everything managed smoothly on time?' },
-    { id: 'staff',       label: 'Staff & coordination?',     sub: 'Was the team cooperative and helpful?' },
-    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest them to others?' },
-  ],
-  'Medical Store / Pharmacy': [
-    { id: 'overall',       label: 'Overall experience?',     sub: 'How was your overall experience at the pharmacy?' },
-    { id: 'availability',  label: 'Medicine availability?',  sub: 'Did you find all the medicines you needed?' },
-    { id: 'staff',         label: 'Staff behaviour?',        sub: 'Was the pharmacist helpful and knowledgeable?' },
-    { id: 'pricing',       label: 'Pricing & offers?',       sub: 'Were the prices fair and competitive?' },
-    { id: 'recommend',     label: 'Would you recommend?',    sub: 'Would you suggest this pharmacy to others?' },
-  ],
-  'Pet Shop / Pet Clinic': [
-    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall experience?' },
-    { id: 'care',        label: 'Pet care quality?',         sub: 'Was the treatment or grooming done well?' },
-    { id: 'staff',       label: 'Staff & handling?',         sub: 'Did the staff handle your pet gently and well?' },
-    { id: 'products',    label: 'Products & variety?',       sub: 'Was there good variety of pet products?' },
-    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this place to other pet owners?' },
-  ],
-  'IT Company / Software Agency': [
-    { id: 'overall',       label: 'Overall experience?',     sub: 'How was your overall experience with the company?' },
-    { id: 'quality',       label: 'Work quality?',           sub: 'Was the delivered work of good quality?' },
-    { id: 'communication', label: 'Communication?',          sub: 'Was the team responsive and clear in communication?' },
-    { id: 'delivery',      label: 'On-time delivery?',       sub: 'Was the project delivered on time?' },
-    { id: 'recommend',     label: 'Would you recommend?',    sub: 'Would you suggest this company to others?' },
-  ],
-  'Photography Studio': [
-    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall photography experience?' },
-    { id: 'quality',     label: 'Photo/Video quality?',      sub: 'Were you happy with the final photos/videos?' },
-    { id: 'creativity',  label: 'Creativity & ideas?',       sub: 'Did the photographer bring creative ideas?' },
-    { id: 'timeliness',  label: 'Delivery time?',            sub: 'Were the photos/videos delivered on time?' },
-    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this studio to others?' },
-  ],
-  'Travel Agency': [
-    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall travel experience?' },
-    { id: 'planning',    label: 'Trip planning?',            sub: 'Was the itinerary well-planned and organized?' },
-    { id: 'value',       label: 'Value for money?',          sub: 'Was the package worth the price?' },
-    { id: 'support',     label: 'Support during trip?',      sub: 'Was the team responsive during the trip?' },
-    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this agency to others?' },
-  ],
-  'Mobile & Electronics Store': [
-    { id: 'overall',       label: 'Overall experience?',     sub: 'How was your overall shopping experience?' },
-    { id: 'variety',       label: 'Product variety?',        sub: 'Did you find enough options and brands?' },
-    { id: 'staff',         label: 'Staff knowledge?',        sub: 'Did the staff explain features properly?' },
-    { id: 'pricing',       label: 'Pricing & deals?',        sub: 'Were the prices competitive with good offers?' },
-    { id: 'recommend',     label: 'Would you recommend?',    sub: 'Would you suggest this store to others?' },
-  ],
-  'Furniture Store': [
-    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall shopping experience?' },
-    { id: 'quality',     label: 'Build quality?',            sub: 'Was the furniture sturdy and well-made?' },
-    { id: 'designs',     label: 'Designs & variety?',        sub: 'Were there enough designs and options?' },
-    { id: 'delivery',    label: 'Delivery & assembly?',      sub: 'Was the delivery and setup done properly?' },
-    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this store to others?' },
-  ],
-  'Construction / Interior Designer': [
+  'Interior Designer': [
     { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall project experience?' },
     { id: 'design',      label: 'Design quality?',           sub: 'Were you happy with the designs and ideas?' },
-    { id: 'execution',   label: 'Work execution?',           sub: 'Was the construction/work done properly?' },
+    { id: 'execution',   label: 'Work execution?',           sub: 'Was the work done properly and neatly?' },
     { id: 'timeliness',  label: 'On-time completion?',       sub: 'Was the project completed on time?' },
     { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest them to others?' },
-  ],
-  'Bakery / Sweet Shop': [
-    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall experience?' },
-    { id: 'taste',       label: 'Taste & freshness?',        sub: 'How was the taste and freshness of items?' },
-    { id: 'variety',     label: 'Variety & options?',         sub: 'Were there enough choices available?' },
-    { id: 'hygiene',     label: 'Hygiene & packaging?',      sub: 'Was the shop clean and packaging good?' },
-    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this shop to others?' },
-  ],
-  'Optical Store': [
-    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall experience?' },
-    { id: 'eyetest',     label: 'Eye testing?',              sub: 'Was the eye test accurate and professional?' },
-    { id: 'collection',  label: 'Frame collection?',         sub: 'Were there enough frame styles and brands?' },
-    { id: 'staff',       label: 'Staff assistance?',         sub: 'Did the staff help you choose well?' },
-    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this store to others?' },
-  ],
-  'Tour & Travels': [
-    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall travel experience?' },
-    { id: 'vehicle',     label: 'Vehicle condition?',        sub: 'Was the vehicle clean and comfortable?' },
-    { id: 'driver',      label: 'Driver behaviour?',         sub: 'Was the driver polite and drove safely?' },
-    { id: 'punctuality', label: 'Punctuality?',              sub: 'Was the pickup and drop on time?' },
-    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this service to others?' },
-  ],
-  'Ice Cream Shop': [
-    { id: 'overall',   label: 'Overall experience?',         sub: 'How was your overall visit?' },
-    { id: 'taste',     label: 'Taste & flavors?',            sub: 'How was the taste and variety of flavors?' },
-    { id: 'freshness', label: 'Freshness & quality?',        sub: 'Was the ice cream fresh and creamy?' },
-    { id: 'hygiene',   label: 'Hygiene & cleanliness?',      sub: 'Was the shop clean and hygienic?' },
-    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this shop to friends?' },
-  ],
-  'Book Store': [
-    { id: 'overall',      label: 'Overall experience?',      sub: 'How was your overall shopping experience?' },
-    { id: 'collection',   label: 'Book collection?',         sub: 'Did you find the books you were looking for?' },
-    { id: 'staff',        label: 'Staff assistance?',        sub: 'Was the staff helpful in finding books?' },
-    { id: 'pricing',      label: 'Pricing & offers?',        sub: 'Were the prices reasonable with good discounts?' },
-    { id: 'recommend',    label: 'Would you recommend?',     sub: 'Would you suggest this store to others?' },
   ],
   'Hardware Store': [
     { id: 'overall',       label: 'Overall experience?',     sub: 'How was your overall shopping experience?' },
@@ -232,12 +288,33 @@ const CATEGORY_QUESTIONS = {
     { id: 'pricing',       label: 'Pricing & transparency?', sub: 'Were the charges fair and clearly communicated?' },
     { id: 'recommend',     label: 'Would you recommend?',    sub: 'Would you suggest this electrician to others?' },
   ],
+  'Photographer': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall photography experience?' },
+    { id: 'quality',     label: 'Photo/Video quality?',      sub: 'Were you happy with the final photos/videos?' },
+    { id: 'creativity',  label: 'Creativity & ideas?',       sub: 'Did the photographer bring creative ideas?' },
+    { id: 'timeliness',  label: 'Delivery time?',            sub: 'Were the photos/videos delivered on time?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this photographer to others?' },
+  ],
   'Wedding Planner': [
     { id: 'overall',     label: 'Overall experience?',       sub: 'How was the overall wedding planning experience?' },
     { id: 'creativity',  label: 'Creativity & decoration?',  sub: 'Were the decorations and themes beautiful?' },
     { id: 'management',  label: 'Event management?',         sub: 'Was everything managed smoothly on the day?' },
     { id: 'budget',      label: 'Budget management?',        sub: 'Did they stay within the agreed budget?' },
     { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this planner to others?' },
+  ],
+  'Event Planner': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was the overall event execution?' },
+    { id: 'creativity',  label: 'Creativity & design?',      sub: 'How were the decorations and arrangements?' },
+    { id: 'management',  label: 'Event management?',         sub: 'Was everything managed smoothly on time?' },
+    { id: 'staff',       label: 'Staff & coordination?',     sub: 'Was the team cooperative and helpful?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest them to others?' },
+  ],
+  'Travel Agency': [
+    { id: 'overall',     label: 'Overall experience?',       sub: 'How was your overall travel experience?' },
+    { id: 'planning',    label: 'Trip planning?',            sub: 'Was the itinerary well-planned and organized?' },
+    { id: 'value',       label: 'Value for money?',          sub: 'Was the package worth the price?' },
+    { id: 'support',     label: 'Support during trip?',      sub: 'Was the team responsive during the trip?' },
+    { id: 'recommend',   label: 'Would you recommend?',      sub: 'Would you suggest this agency to others?' },
   ],
   'Lawyer': [
     { id: 'overall',        label: 'Overall experience?',    sub: 'How was your overall experience with the lawyer?' },
@@ -266,6 +343,20 @@ const CATEGORY_QUESTIONS = {
     { id: 'staff',         label: 'Staff behaviour?',        sub: 'Was the staff professional and gentle?' },
     { id: 'timeliness',    label: 'Report delivery time?',   sub: 'Were the reports delivered on time?' },
     { id: 'recommend',     label: 'Would you recommend?',    sub: 'Would you suggest this center to others?' },
+  ],
+  'IT Company': [
+    { id: 'overall',       label: 'Overall experience?',     sub: 'How was your overall experience with the company?' },
+    { id: 'quality',       label: 'Work quality?',           sub: 'Was the delivered work of good quality?' },
+    { id: 'communication', label: 'Communication?',          sub: 'Was the team responsive and clear?' },
+    { id: 'delivery',      label: 'On-time delivery?',       sub: 'Was the project delivered on time?' },
+    { id: 'recommend',     label: 'Would you recommend?',    sub: 'Would you suggest this company to others?' },
+  ],
+  'Software Agency': [
+    { id: 'overall',       label: 'Overall experience?',     sub: 'How was your overall experience with the agency?' },
+    { id: 'quality',       label: 'Code / product quality?', sub: 'Was the software well-built and bug-free?' },
+    { id: 'management',    label: 'Project management?',     sub: 'Was the project managed well with regular updates?' },
+    { id: 'support',       label: 'Support & maintenance?',  sub: 'Is the post-delivery support good?' },
+    { id: 'recommend',     label: 'Would you recommend?',    sub: 'Would you suggest this agency to others?' },
   ],
   'Digital Marketing Agency': [
     { id: 'overall',       label: 'Overall experience?',     sub: 'How was your overall experience with the agency?' },
@@ -304,6 +395,32 @@ const CATEGORY_QUESTIONS = {
   ],
 };
 
+// Backward compatibility: Map old combined category names to new individual ones
+const LEGACY_CATEGORY_MAP = {
+  'Restaurant / Cafe': 'Restaurant',
+  'Hotel / Resort': 'Hotel',
+  'Hospital / Clinic': 'Hospital',
+  'Salon / Spa': 'Salon',
+  'Gym / Fitness Center': 'Gym',
+  'School / Coaching': 'School',
+  'College / Institute': 'College',
+  'Clothing Store / Boutique': 'Clothing Store',
+  'Supermarket / Grocery': 'Supermarket',
+  'Medical Store / Pharmacy': 'Medical Store',
+  'Pet Shop / Pet Clinic': 'Pet Shop',
+  'Auto Repair / Garage': 'Auto Repair',
+  'IT Company / Software Agency': 'IT Company',
+  'Photography Studio': 'Photographer',
+  'Construction / Interior Designer': 'Interior Designer',
+  'Bakery / Sweet Shop': 'Bakery',
+  'Mobile & Electronics Store': 'Mobile Shop',
+  'Furniture Store': 'Electronics Store',
+  'Travel Agency': 'Travel Agency',
+  'Tour & Travels': 'Travel Agency',
+};
+
+
+
 const DEFAULT_QUESTIONS = [
   { id: 'overall',   label: 'Overall experience?',   sub: 'How was your overall experience?' },
   { id: 'quality',   label: 'Product / service quality?', sub: 'Rate the quality of what you received.' },
@@ -311,9 +428,9 @@ const DEFAULT_QUESTIONS = [
   { id: 'value',     label: 'Value for money?',      sub: 'Was it worth the price?' },
   { id: 'recommend', label: 'Would you recommend?',  sub: 'Would you suggest this to a friend?' },
 ];
-
 function getQuestions(businessType) {
-  return CATEGORY_QUESTIONS[businessType] || DEFAULT_QUESTIONS;
+  const mappedType = LEGACY_CATEGORY_MAP[businessType] || businessType;
+  return CATEGORY_QUESTIONS[mappedType] || DEFAULT_QUESTIONS;
 }
 
 

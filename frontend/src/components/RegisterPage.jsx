@@ -5,54 +5,108 @@ import './RegisterPage.css';
  * Category data with subcategories and dynamic questions
  */
 const categoryData = {
-  'Restaurant / Cafe': {
-    sub: ['All', 'Fine Dining', 'Street Food / Dhaba', 'Cafe / Coffee Shop', 'Fast Food', 'Buffet', 'Cloud Kitchen', 'Pub / Bar'],
+  'Restaurant': {
+    sub: ['All', 'Fine Dining', 'Casual Dining', 'Street Food / Dhaba', 'Fast Food', 'Buffet', 'Cloud Kitchen', 'Pub / Bar'],
     questions: [
       { id: 'cuisine', label: 'Cuisine Type', placeholder: 'e.g. North Indian, Chinese, Continental' },
-      { id: 'specialty_dish', label: 'Signature Dish', placeholder: 'e.g. Biryani, Pasta' },
+      { id: 'specialty_dish', label: 'Signature Dish', placeholder: 'e.g. Biryani, Pasta, Thali' },
     ],
   },
-  'Hotel / Resort': {
-    sub: ['All', 'Budget Hotel', '3-Star Hotel', '5-Star Hotel / Resort', 'Heritage Hotel', 'Guest House / Home Stay'],
+  'Cafe': {
+    sub: ['All', 'Coffee Shop', 'Tea House', 'Bakery Cafe', 'Rooftop Cafe', 'Theme Cafe', 'Hookah Cafe'],
+    questions: [
+      { id: 'specialty', label: 'Specialty', placeholder: 'e.g. Cold Brew, Waffles, Shakes' },
+    ],
+  },
+  'Hotel': {
+    sub: ['All', 'Budget Hotel', '3-Star Hotel', '5-Star Hotel', 'Heritage Hotel', 'Guest House / Home Stay'],
     questions: [
       { id: 'amenities', label: 'Key Amenities', placeholder: 'e.g. Pool, Spa, Free Breakfast' },
     ],
   },
-  'Hospital / Clinic': {
-    sub: ['All', 'Multi-Specialty Hospital', 'General Clinic', 'Eye Hospital', 'Skin Clinic', 'Orthopaedic', 'Pediatric Clinic', 'Diagnostic Centre'],
+  'Resort': {
+    sub: ['All', 'Beach Resort', 'Hill Station Resort', 'Luxury Resort', 'Eco Resort', 'Wellness Resort'],
     questions: [
-      { id: 'speciality', label: 'Main Speciality', placeholder: 'e.g. Cardiology, Ortho' },
-      { id: 'facilities', label: 'Special Facilities?', placeholder: 'e.g. ICU, Lab, Pharmacy' },
+      { id: 'amenities', label: 'Key Amenities', placeholder: 'e.g. Pool, Adventure Sports, Spa' },
+    ],
+  },
+  'Hospital': {
+    sub: ['All', 'Multi-Specialty Hospital', 'General Hospital', 'Eye Hospital', 'Children Hospital', 'Maternity Hospital'],
+    questions: [
+      { id: 'speciality', label: 'Main Speciality', placeholder: 'e.g. Cardiology, Ortho, Neuro' },
+      { id: 'facilities', label: 'Special Facilities?', placeholder: 'e.g. ICU, Lab, Emergency' },
+    ],
+  },
+  'Clinic': {
+    sub: ['All', 'General Clinic', 'Skin Clinic', 'ENT Clinic', 'Orthopaedic Clinic', 'Physiotherapy Clinic'],
+    questions: [
+      { id: 'speciality', label: 'Main Speciality', placeholder: 'e.g. Skin Care, ENT, Ortho' },
     ],
   },
   'Dental Clinic': {
-    sub: ['All', 'General Dentistry', 'Orthodontics (Braces)', 'Cosmetic Dentistry', 'Implantology'],
+    sub: ['All', 'General Dentistry', 'Orthodontics (Braces)', 'Cosmetic Dentistry', 'Implantology', 'Pediatric Dentistry'],
     questions: [
       { id: 'specialty', label: 'Main Treatments', placeholder: 'e.g. Braces, Implants, Root Canal' },
     ],
   },
-  'Salon / Spa': {
-    sub: ['All', 'Unisex Salon', 'Ladies Salon', 'Gents Salon', 'Luxury Spa', 'Nail Art Studio', 'Bridal Studio'],
+  'Medical Store': {
+    sub: ['All', 'General Medical Store', 'Ayurvedic Store', 'Homeopathic Store', 'Surgical Supply', 'Online Medicine'],
     questions: [
-      { id: 'services', label: 'Popular Services', placeholder: 'e.g. Hair Color, Facial, Massage' },
+      { id: 'services', label: 'Special Services', placeholder: 'e.g. Home Delivery, 24/7 Open' },
     ],
   },
-  'Gym / Fitness Center': {
-    sub: ['All', 'Unisex Gym', 'CrossFit Studio', 'Yoga Studio', 'Zumba/Dance Fitness', 'Martial Arts'],
+  'Pharmacy': {
+    sub: ['All', '24/7 Pharmacy', 'Hospital Pharmacy', 'Online Pharmacy', 'Compounding Pharmacy', 'Wellness Pharmacy'],
+    questions: [
+      { id: 'services', label: 'Special Services', placeholder: 'e.g. Home Delivery, Health Checkup' },
+    ],
+  },
+  'Salon': {
+    sub: ['All', 'Unisex Salon', 'Ladies Salon', 'Gents Salon', 'Bridal Studio', 'Nail Art Studio'],
+    questions: [
+      { id: 'services', label: 'Popular Services', placeholder: 'e.g. Hair Color, Facial, Haircut' },
+    ],
+  },
+  'Spa': {
+    sub: ['All', 'Luxury Spa', 'Ayurvedic Spa', 'Thai Spa', 'Wellness Center', 'Body Massage Center'],
+    questions: [
+      { id: 'services', label: 'Popular Therapies', placeholder: 'e.g. Swedish Massage, Aromatherapy' },
+    ],
+  },
+  'Gym': {
+    sub: ['All', 'Unisex Gym', 'Ladies Gym', 'CrossFit Studio', 'Bodybuilding Gym', 'Personal Training'],
     questions: [
       { id: 'facilities', label: 'Facilities', placeholder: 'e.g. Cardio, Free Weights, Steam Room' },
     ],
   },
-  'School / Coaching': {
-    sub: ['All', 'Pre-School / Nursery', 'Primary School', 'High School', 'Coaching Institute', 'Tuition Centre'],
+  'Fitness Center': {
+    sub: ['All', 'Yoga Studio', 'Zumba / Dance Fitness', 'Martial Arts', 'Aerobics Center', 'Pilates Studio'],
     questions: [
-      { id: 'subjects', label: 'Main Subjects / Courses', placeholder: 'e.g. Maths, IIT-JEE, NEET' },
+      { id: 'programs', label: 'Programs Offered', placeholder: 'e.g. Power Yoga, Kickboxing, Zumba' },
     ],
   },
-  'College / Institute': {
-    sub: ['All', 'Engineering College', 'Medical College', 'Degree College', 'Management Institute', 'Polytechnic'],
+  'School': {
+    sub: ['All', 'Pre-School / Nursery', 'Primary School', 'High School', 'CBSE School', 'ICSE School'],
     questions: [
-      { id: 'courses', label: 'Top Courses', placeholder: 'e.g. B.Tech, MBA, MBBS' },
+      { id: 'subjects', label: 'Special Programs', placeholder: 'e.g. Sports, Robotics, Arts' },
+    ],
+  },
+  'Coaching Center': {
+    sub: ['All', 'IIT-JEE Coaching', 'NEET Coaching', 'Competitive Exams', 'Language Classes', 'Tuition Centre'],
+    questions: [
+      { id: 'subjects', label: 'Main Subjects / Exams', placeholder: 'e.g. Maths, Physics, UPSC' },
+    ],
+  },
+  'College': {
+    sub: ['All', 'Engineering College', 'Medical College', 'Degree College', 'Polytechnic', 'Arts College'],
+    questions: [
+      { id: 'courses', label: 'Top Courses', placeholder: 'e.g. B.Tech, MBBS, B.Com' },
+    ],
+  },
+  'Institute': {
+    sub: ['All', 'Management Institute', 'Computer Institute', 'Design Institute', 'Law Institute', 'Vocational Training'],
+    questions: [
+      { id: 'courses', label: 'Top Courses', placeholder: 'e.g. MBA, BCA, Fashion Design' },
     ],
   },
   'Jewellery Shop': {
@@ -61,191 +115,215 @@ const categoryData = {
       { id: 'specialty', label: 'Specialization?', placeholder: 'e.g. Bridal sets, Custom design' },
     ],
   },
-  'Clothing Store / Boutique': {
-    sub: ['All', "Men's Wear", "Women's Wear", "Kids Wear", 'Ethnic Wear', 'Western Wear', 'Boutique', 'Wedding Collection'],
+  'Clothing Store': {
+    sub: ['All', "Men's Wear", "Women's Wear", "Kids Wear", 'Ethnic Wear', 'Western Wear'],
     questions: [
       { id: 'collection', label: 'Special Collection / Brands', placeholder: 'e.g. Wedding collections, Levis' },
     ],
   },
-  'Supermarket / Grocery': {
-    sub: ['All', 'Supermarket', 'Hypermarket', 'Local Grocery', 'Organic Store', 'Convenience Store'],
+  'Boutique': {
+    sub: ['All', 'Designer Boutique', 'Bridal Boutique', 'Ethnic Boutique', 'Fashion Boutique', 'Custom Tailoring'],
+    questions: [
+      { id: 'specialty', label: 'Specialty', placeholder: 'e.g. Bridal Lehengas, Custom Suits' },
+    ],
+  },
+  'Supermarket': {
+    sub: ['All', 'General Supermarket', 'Hypermarket', 'Departmental Store', 'Wholesale Store', 'Mini Mart'],
     questions: [
       { id: 'specialty', label: 'Key Offerings', placeholder: 'e.g. Fresh Produce, Imported Goods' },
-    ]
+    ],
   },
-  'Medical Store / Pharmacy': {
-    sub: ['All', 'General Pharmacy', 'Ayurvedic Store', 'Homeopathic Store', '24/7 Pharmacy', 'Surgical Supply'],
+  'Grocery Store': {
+    sub: ['All', 'Local Grocery', 'Organic Store', 'Online Grocery', 'Fruits & Vegetables', 'Dry Fruits & Spices'],
     questions: [
-      { id: 'services', label: 'Special Services', placeholder: 'e.g. Home Delivery, 24/7 Open' },
-    ]
+      { id: 'specialty', label: 'Key Offerings', placeholder: 'e.g. Organic Products, Home Delivery' },
+    ],
   },
-  'Pet Shop / Pet Clinic': {
-    sub: ['All', 'Pet Food & Supplies', 'Pet Clinic', 'Pet Grooming', 'Pet Boarding / Daycare', 'Aquarium Shop'],
+  'Mobile Shop': {
+    sub: ['All', 'New Mobiles', 'Second-Hand Mobiles', 'Mobile Accessories', 'Mobile Repair', 'SIM & Recharge'],
     questions: [
-      { id: 'services', label: 'Services / Products', placeholder: 'e.g. Dog Grooming, Vaccinations' },
-    ]
+      { id: 'brands', label: 'Brands Available', placeholder: 'e.g. Samsung, Apple, Vivo' },
+    ],
   },
-  'Car Showroom': {
-    sub: ['All', 'New Car Dealer', 'Used Car Dealer', 'Two-Wheeler Showroom', 'Commercial Vehicles', 'Electric Vehicles'],
+  'Laptop Store': {
+    sub: ['All', 'New Laptops', 'Refurbished Laptops', 'Gaming Laptops', 'Laptop Repair', 'Computer Accessories'],
     questions: [
-      { id: 'brands', label: 'Brands Available', placeholder: 'e.g. Maruti, Hyundai, Tata' },
-    ]
+      { id: 'brands', label: 'Brands Available', placeholder: 'e.g. HP, Dell, Lenovo, Apple' },
+    ],
   },
-  'Auto Repair / Garage': {
-    sub: ['All', 'General Service', 'Denting & Painting', 'Tyre Shop', 'Car Wash & Detailing', 'Bike Repair', 'AC Repair'],
+  'Electronics Store': {
+    sub: ['All', 'Home Appliances', 'Smart TVs', 'Audio Systems', 'Kitchen Appliances', 'Smart Home Devices'],
     questions: [
-      { id: 'specialty', label: 'Specialized Services', placeholder: 'e.g. Engine Overhaul, Ceramic Coating' },
-    ]
+      { id: 'brands', label: 'Brands / Products', placeholder: 'e.g. LG, Samsung, Philips' },
+    ],
   },
-  'Real Estate Agency': {
-    sub: ['All', 'Residential Broker', 'Commercial Real Estate', 'Property Management', 'Builders & Developers', 'PG/Hostel'],
+  'Book Store': {
+    sub: ['All', 'General Books', 'Academic Books', 'Stationery & Books', 'Second-Hand Books', 'Online Book Store'],
     questions: [
-      { id: 'focus', label: 'Area of Focus', placeholder: 'e.g. Luxury Apartments, Office Spaces' },
-    ]
+      { id: 'specialty', label: 'Specialization', placeholder: 'e.g. Competitive Exams, Fiction, Children Books' },
+    ],
   },
-  'IT Company / Software Agency': {
-    sub: ['All', 'Web Development', 'App Development', 'Digital Marketing', 'IT Support', 'UI/UX Design', 'Cloud Services'],
+  'Bakery': {
+    sub: ['All', 'Custom Cakes', 'Bread & Pastry', 'Patisserie', 'Home Bakery', 'Cake Shop'],
     questions: [
-      { id: 'services', label: 'Core Services', placeholder: 'e.g. E-commerce Websites, SEO' },
-    ]
+      { id: 'specialty', label: 'Signature Items', placeholder: 'e.g. Fondant Cakes, Brownies, Cookies' },
+    ],
   },
-  'Photography Studio': {
-    sub: ['All', 'Wedding Photography', 'Portrait Studio', 'Commercial Photography', 'Event Photography', 'Photo Printing'],
+  'Sweet Shop': {
+    sub: ['All', 'Traditional Sweets (Mithai)', 'Namkeen & Snacks', 'Dry Fruit Sweets', 'Bengali Sweets', 'Gift Packing'],
     questions: [
-      { id: 'specialty', label: 'Specialization', placeholder: 'e.g. Candid Weddings, Fashion' },
-    ]
-  },
-  'Event Planner': {
-    sub: ['All', 'Wedding Planner', 'Corporate Events', 'Birthday Parties', 'Caterer', 'Decoration Services'],
-    questions: [
-      { id: 'services', label: 'Key Services', placeholder: 'e.g. Full Wedding Management, Catering' },
-    ]
-  },
-  'Travel Agency': {
-    sub: ['All', 'Domestic Tours', 'International Tours', 'Flight Booking', 'Visa Assistance', 'Corporate Travel'],
-    questions: [
-      { id: 'packages', label: 'Popular Packages', placeholder: 'e.g. Dubai Trips, Kerala Tour' },
-    ]
-  },
-  'Mobile & Electronics Store': {
-    sub: ['All', 'Mobile Phones', 'Laptops & Computers', 'Home Appliances', 'Mobile Repair', 'Accessories'],
-    questions: [
-      { id: 'brands', label: 'Brands / Products', placeholder: 'e.g. Apple, Samsung, Smart TVs' },
-    ]
-  },
-  'Furniture Store': {
-    sub: ['All', 'Home Furniture', 'Office Furniture', 'Custom Furniture', 'Mattress Store', 'Outdoor Furniture'],
-    questions: [
-      { id: 'specialty', label: 'Specialty', placeholder: 'e.g. Teak Wood, Modular Kitchens' },
-    ]
-  },
-  'Construction / Interior Designer': {
-    sub: ['All', 'Interior Designer', 'Architect', 'Building Contractor', 'Modular Kitchens', 'Painting Services'],
-    questions: [
-      { id: 'focus', label: 'Specialization', placeholder: 'e.g. Residential Interiors, Turnkey Projects' },
-    ]
-  },
-  'Bakery / Sweet Shop': {
-    sub: ['All', 'Custom Cakes', 'Traditional Sweets (Mithai)', 'Patisserie', 'Namkeen/Snacks', 'Dessert Parlour'],
-    questions: [
-      { id: 'specialty', label: 'Signature Items', placeholder: 'e.g. Rasmalai, Fondant Cakes' },
-    ]
-  },
-  'Optical Store': {
-    sub: ['All', 'Spectacles & Frames', 'Sunglasses', 'Contact Lenses', 'Eye Testing', 'Computer Glasses'],
-    questions: [
-      { id: 'brands', label: 'Brands / Services', placeholder: 'e.g. Ray-Ban, Free Eye Test' },
-    ]
-  },
-  'Tour & Travels': {
-    sub: ['All', 'Cab Services', 'Bus Booking', 'Tempo Traveller', 'Self-Drive Cars', 'Pilgrimage Tours'],
-    questions: [
-      { id: 'vehicles', label: 'Vehicles / Services', placeholder: 'e.g. Innova Rentals, Chardham Yatra' },
-    ]
+      { id: 'specialty', label: 'Signature Items', placeholder: 'e.g. Rasmalai, Kaju Katli, Laddu' },
+    ],
   },
   'Ice Cream Shop': {
     sub: ['All', 'Ice Cream Parlour', 'Gelato Shop', 'Frozen Yogurt', 'Kulfi Shop', 'Shake & Smoothie Bar'],
     questions: [
       { id: 'specialty', label: 'Signature Flavors', placeholder: 'e.g. Belgian Chocolate, Mango Dolly' },
-    ]
+    ],
   },
-  'Book Store': {
-    sub: ['All', 'General Book Store', 'Academic Books', 'Stationery & Books', 'Second-Hand Books', 'Online Book Store'],
+  'Pet Shop': {
+    sub: ['All', 'Pet Food & Supplies', 'Pet Grooming', 'Pet Boarding / Daycare', 'Aquarium Shop', 'Pet Accessories'],
     questions: [
-      { id: 'specialty', label: 'Specialization', placeholder: 'e.g. Competitive Exams, Fiction, Children Books' },
-    ]
+      { id: 'services', label: 'Services / Products', placeholder: 'e.g. Dog Food, Cat Toys, Fish Tanks' },
+    ],
+  },
+  'Veterinary Clinic': {
+    sub: ['All', 'General Vet Clinic', 'Pet Hospital', 'Pet Vaccination', 'Pet Surgery', 'Emergency Vet'],
+    questions: [
+      { id: 'services', label: 'Services', placeholder: 'e.g. Vaccination, Surgery, Health Checkup' },
+    ],
+  },
+  'Car Showroom': {
+    sub: ['All', 'New Car Dealer', 'Used Car Dealer', 'Luxury Cars', 'Electric Vehicles', 'Commercial Vehicles'],
+    questions: [
+      { id: 'brands', label: 'Brands Available', placeholder: 'e.g. Maruti, Hyundai, Tata' },
+    ],
+  },
+  'Auto Repair': {
+    sub: ['All', 'General Service Center', 'Denting & Painting', 'Car Wash & Detailing', 'Tyre Shop', 'AC Repair'],
+    questions: [
+      { id: 'specialty', label: 'Specialized Services', placeholder: 'e.g. Engine Overhaul, Ceramic Coating' },
+    ],
+  },
+  'Garage': {
+    sub: ['All', 'Bike Repair', 'Truck / Commercial Vehicle', 'Engine Specialist', 'Electrical Repair', 'Roadside Assistance'],
+    questions: [
+      { id: 'specialty', label: 'Specialized Services', placeholder: 'e.g. Bike Servicing, Engine Tuning' },
+    ],
+  },
+  'Real Estate Agency': {
+    sub: ['All', 'Residential Broker', 'Commercial Real Estate', 'Property Management', 'Builders & Developers', 'PG / Hostel'],
+    questions: [
+      { id: 'focus', label: 'Area of Focus', placeholder: 'e.g. Luxury Apartments, Office Spaces' },
+    ],
+  },
+  'Interior Designer': {
+    sub: ['All', 'Residential Interior', 'Commercial Interior', 'Modular Kitchen', 'Office Interior', 'Turnkey Projects'],
+    questions: [
+      { id: 'focus', label: 'Specialization', placeholder: 'e.g. Residential Interiors, Modular Kitchens' },
+    ],
   },
   'Hardware Store': {
     sub: ['All', 'Building Materials', 'Plumbing Supplies', 'Electrical Supplies', 'Paints & Tools', 'Sanitary Ware'],
     questions: [
       { id: 'products', label: 'Key Products', placeholder: 'e.g. Cement, Pipes, Power Tools' },
-    ]
+    ],
   },
   'Electrician': {
     sub: ['All', 'Home Electrician', 'Commercial Electrician', 'AC Repair & Installation', 'CCTV & Security', 'Solar Panel Installation'],
     questions: [
       { id: 'services', label: 'Main Services', placeholder: 'e.g. Wiring, AC Repair, Smart Home Setup' },
-    ]
+    ],
+  },
+  'Photographer': {
+    sub: ['All', 'Wedding Photography', 'Portrait Studio', 'Commercial Photography', 'Event Photography', 'Photo Printing'],
+    questions: [
+      { id: 'specialty', label: 'Specialization', placeholder: 'e.g. Candid Weddings, Fashion Shoots' },
+    ],
   },
   'Wedding Planner': {
-    sub: ['All', 'Full Wedding Management', 'Destination Wedding', 'Wedding Decoration', 'Wedding Photography', 'Mehendi & Makeup Artist'],
+    sub: ['All', 'Full Wedding Management', 'Destination Wedding', 'Wedding Decoration', 'Wedding Photography', 'Mehendi & Makeup'],
     questions: [
       { id: 'services', label: 'Key Services', placeholder: 'e.g. Venue Booking, Catering, DJ' },
-    ]
+    ],
+  },
+  'Event Planner': {
+    sub: ['All', 'Corporate Events', 'Birthday Parties', 'Caterer', 'Decoration Services', 'Sound & DJ'],
+    questions: [
+      { id: 'services', label: 'Key Services', placeholder: 'e.g. Full Event Management, Catering' },
+    ],
+  },
+  'Travel Agency': {
+    sub: ['All', 'Domestic Tours', 'International Tours', 'Flight Booking', 'Visa Assistance', 'Corporate Travel'],
+    questions: [
+      { id: 'packages', label: 'Popular Packages', placeholder: 'e.g. Dubai Trips, Kerala Tour' },
+    ],
   },
   'Lawyer': {
     sub: ['All', 'Criminal Lawyer', 'Civil Lawyer', 'Family / Divorce Lawyer', 'Property Lawyer', 'Corporate Lawyer', 'Tax Consultant'],
     questions: [
       { id: 'specialization', label: 'Area of Practice', placeholder: 'e.g. Property Disputes, Criminal Cases' },
-    ]
+    ],
   },
   'Insurance Agency': {
     sub: ['All', 'Life Insurance', 'Health Insurance', 'Motor Insurance', 'General Insurance', 'Corporate Insurance'],
     questions: [
       { id: 'companies', label: 'Companies / Products', placeholder: 'e.g. LIC, Star Health, HDFC Ergo' },
-    ]
+    ],
   },
   'Courier Service': {
     sub: ['All', 'Domestic Courier', 'International Courier', 'Same-Day Delivery', 'Bulk Shipping', 'Document Delivery'],
     questions: [
       { id: 'services', label: 'Service Highlights', placeholder: 'e.g. Same-Day Delivery, Cash on Delivery' },
-    ]
+    ],
   },
   'Diagnostic Center': {
     sub: ['All', 'Pathology Lab', 'Radiology / X-Ray / MRI', 'Full Body Checkup', 'Home Sample Collection', 'DNA / Genetic Testing'],
     questions: [
       { id: 'tests', label: 'Popular Tests', placeholder: 'e.g. Blood Test, CT Scan, Health Packages' },
-    ]
+    ],
+  },
+  'IT Company': {
+    sub: ['All', 'Web Development', 'App Development', 'IT Support', 'Cloud Services', 'ERP Solutions'],
+    questions: [
+      { id: 'services', label: 'Core Services', placeholder: 'e.g. E-commerce Websites, App Development' },
+    ],
+  },
+  'Software Agency': {
+    sub: ['All', 'Custom Software', 'SaaS Products', 'UI/UX Design', 'QA & Testing', 'AI / ML Solutions'],
+    questions: [
+      { id: 'services', label: 'Core Services', placeholder: 'e.g. CRM Software, Mobile Apps, AI Bots' },
+    ],
   },
   'Digital Marketing Agency': {
     sub: ['All', 'SEO Agency', 'Social Media Marketing', 'PPC / Google Ads', 'Content Marketing', 'Branding Agency'],
     questions: [
       { id: 'services', label: 'Core Services', placeholder: 'e.g. Instagram Marketing, Google Ads, SEO' },
-    ]
+    ],
   },
   'Printing Press': {
     sub: ['All', 'Offset Printing', 'Digital Printing', 'Flex / Banner Printing', 'Visiting Card / Stationery', 'T-Shirt / Mug Printing'],
     questions: [
       { id: 'products', label: 'Key Products', placeholder: 'e.g. Wedding Cards, Brochures, Banners' },
-    ]
+    ],
   },
   'Cinema Hall': {
     sub: ['All', 'Single Screen', 'Multiplex', 'IMAX / 4DX', 'Drive-In Theatre', 'Mini Theatre'],
     questions: [
       { id: 'features', label: 'Special Features', placeholder: 'e.g. Dolby Atmos, Recliner Seats, Food Court' },
-    ]
+    ],
   },
   'Banquet Hall': {
     sub: ['All', 'Wedding Venue', 'Conference Hall', 'Party Hall', 'Farmhouse / Lawn', 'Rooftop Venue'],
     questions: [
       { id: 'capacity', label: 'Capacity & Features', placeholder: 'e.g. 500 guests, AC Hall, Valet Parking' },
-    ]
+    ],
   },
   'E-commerce Store': {
     sub: ['All', 'Fashion & Clothing', 'Electronics', 'Grocery Delivery', 'Handmade / Handicraft', 'Multi-Category Store'],
     questions: [
       { id: 'products', label: 'Product Categories', placeholder: 'e.g. Ethnic Wear, Gadgets, Organic Food' },
-    ]
+    ],
   },
   'Other': {
     sub: ['All', 'Service Business', 'Manufacturing', 'Freelance / Consultant', 'NGO / Non-Profit', 'Logistics'],
@@ -254,6 +332,7 @@ const categoryData = {
     ],
   },
 };
+
 
 /**
  * RegisterPage — Business registration with category, subcategory, GMB link, plan
