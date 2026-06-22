@@ -163,6 +163,90 @@ const categoryData = {
       { id: 'vehicles', label: 'Vehicles / Services', placeholder: 'e.g. Innova Rentals, Chardham Yatra' },
     ]
   },
+  'Ice Cream Shop': {
+    sub: ['All', 'Ice Cream Parlour', 'Gelato Shop', 'Frozen Yogurt', 'Kulfi Shop', 'Shake & Smoothie Bar'],
+    questions: [
+      { id: 'specialty', label: 'Signature Flavors', placeholder: 'e.g. Belgian Chocolate, Mango Dolly' },
+    ]
+  },
+  'Book Store': {
+    sub: ['All', 'General Book Store', 'Academic Books', 'Stationery & Books', 'Second-Hand Books', 'Online Book Store'],
+    questions: [
+      { id: 'specialty', label: 'Specialization', placeholder: 'e.g. Competitive Exams, Fiction, Children Books' },
+    ]
+  },
+  'Hardware Store': {
+    sub: ['All', 'Building Materials', 'Plumbing Supplies', 'Electrical Supplies', 'Paints & Tools', 'Sanitary Ware'],
+    questions: [
+      { id: 'products', label: 'Key Products', placeholder: 'e.g. Cement, Pipes, Power Tools' },
+    ]
+  },
+  'Electrician': {
+    sub: ['All', 'Home Electrician', 'Commercial Electrician', 'AC Repair & Installation', 'CCTV & Security', 'Solar Panel Installation'],
+    questions: [
+      { id: 'services', label: 'Main Services', placeholder: 'e.g. Wiring, AC Repair, Smart Home Setup' },
+    ]
+  },
+  'Wedding Planner': {
+    sub: ['All', 'Full Wedding Management', 'Destination Wedding', 'Wedding Decoration', 'Wedding Photography', 'Mehendi & Makeup Artist'],
+    questions: [
+      { id: 'services', label: 'Key Services', placeholder: 'e.g. Venue Booking, Catering, DJ' },
+    ]
+  },
+  'Lawyer': {
+    sub: ['All', 'Criminal Lawyer', 'Civil Lawyer', 'Family / Divorce Lawyer', 'Property Lawyer', 'Corporate Lawyer', 'Tax Consultant'],
+    questions: [
+      { id: 'specialization', label: 'Area of Practice', placeholder: 'e.g. Property Disputes, Criminal Cases' },
+    ]
+  },
+  'Insurance Agency': {
+    sub: ['All', 'Life Insurance', 'Health Insurance', 'Motor Insurance', 'General Insurance', 'Corporate Insurance'],
+    questions: [
+      { id: 'companies', label: 'Companies / Products', placeholder: 'e.g. LIC, Star Health, HDFC Ergo' },
+    ]
+  },
+  'Courier Service': {
+    sub: ['All', 'Domestic Courier', 'International Courier', 'Same-Day Delivery', 'Bulk Shipping', 'Document Delivery'],
+    questions: [
+      { id: 'services', label: 'Service Highlights', placeholder: 'e.g. Same-Day Delivery, Cash on Delivery' },
+    ]
+  },
+  'Diagnostic Center': {
+    sub: ['All', 'Pathology Lab', 'Radiology / X-Ray / MRI', 'Full Body Checkup', 'Home Sample Collection', 'DNA / Genetic Testing'],
+    questions: [
+      { id: 'tests', label: 'Popular Tests', placeholder: 'e.g. Blood Test, CT Scan, Health Packages' },
+    ]
+  },
+  'Digital Marketing Agency': {
+    sub: ['All', 'SEO Agency', 'Social Media Marketing', 'PPC / Google Ads', 'Content Marketing', 'Branding Agency'],
+    questions: [
+      { id: 'services', label: 'Core Services', placeholder: 'e.g. Instagram Marketing, Google Ads, SEO' },
+    ]
+  },
+  'Printing Press': {
+    sub: ['All', 'Offset Printing', 'Digital Printing', 'Flex / Banner Printing', 'Visiting Card / Stationery', 'T-Shirt / Mug Printing'],
+    questions: [
+      { id: 'products', label: 'Key Products', placeholder: 'e.g. Wedding Cards, Brochures, Banners' },
+    ]
+  },
+  'Cinema Hall': {
+    sub: ['All', 'Single Screen', 'Multiplex', 'IMAX / 4DX', 'Drive-In Theatre', 'Mini Theatre'],
+    questions: [
+      { id: 'features', label: 'Special Features', placeholder: 'e.g. Dolby Atmos, Recliner Seats, Food Court' },
+    ]
+  },
+  'Banquet Hall': {
+    sub: ['All', 'Wedding Venue', 'Conference Hall', 'Party Hall', 'Farmhouse / Lawn', 'Rooftop Venue'],
+    questions: [
+      { id: 'capacity', label: 'Capacity & Features', placeholder: 'e.g. 500 guests, AC Hall, Valet Parking' },
+    ]
+  },
+  'E-commerce Store': {
+    sub: ['All', 'Fashion & Clothing', 'Electronics', 'Grocery Delivery', 'Handmade / Handicraft', 'Multi-Category Store'],
+    questions: [
+      { id: 'products', label: 'Product Categories', placeholder: 'e.g. Ethnic Wear, Gadgets, Organic Food' },
+    ]
+  },
   'Other': {
     sub: ['All', 'Service Business', 'Manufacturing', 'Freelance / Consultant', 'NGO / Non-Profit', 'Logistics'],
     questions: [
