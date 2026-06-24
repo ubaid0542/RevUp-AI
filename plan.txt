@@ -1,3 +1,6 @@
 Gmail- mu0430218@gmail.com
 App name : RevUp AI
 PWS: hsew mupw adcw fsou
+
+Brevo pr maine account banaya hai Email verification ka liya
+API Key : (stored in Render environment variables - do not commit here)

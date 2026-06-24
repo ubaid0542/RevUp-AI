@@ -13,7 +13,7 @@ const categoryData = {
     ],
   },
   'Cafe': {
-    sub: ['All', 'Coffee Shop', 'Tea House', 'Bakery Cafe', 'Rooftop Cafe', 'Theme Cafe', 'Hookah Cafe'],
+    sub: ['All', 'Coffee Shop', 'Tea House', 'Bakery Cafe', 'Rooftop Cafe', 'Theme Cafe', 'Hookah Cafe', 'Fast Food', 'Catering Service'],
     questions: [
       { id: 'specialty', label: 'Specialty', placeholder: 'e.g. Cold Brew, Waffles, Shakes' },
     ],
@@ -38,7 +38,7 @@ const categoryData = {
     ],
   },
   'Clinic': {
-    sub: ['All', 'General Clinic', 'Skin Clinic', 'ENT Clinic', 'Orthopaedic Clinic', 'Physiotherapy Clinic'],
+    sub: ['All', 'General Clinic', 'Dental Clinic', 'Eye Clinic', 'Skin Clinic', 'ENT Clinic', 'Orthopaedic Clinic', 'Physiotherapy Clinic', 'Blood Bank', 'Nursing Home', 'Veterinary Clinic'],
     questions: [
       { id: 'speciality', label: 'Main Speciality', placeholder: 'e.g. Skin Care, ENT, Ortho' },
     ],
@@ -325,6 +325,12 @@ const categoryData = {
       { id: 'products', label: 'Product Categories', placeholder: 'e.g. Ethnic Wear, Gadgets, Organic Food' },
     ],
   },
+  'Retail & Shopping': {
+    sub: ['All', 'Clothing Store', 'Saree Shop', 'Footwear Store', 'Jewellery Shop', 'Gift Shop', 'Grocery Store', 'Electronics Store', 'Mobile Store', 'Furniture Store', 'Toy Store', 'Book Store', 'Cosmetics Store'],
+    questions: [
+      { id: 'products', label: 'Key Products', placeholder: 'e.g. Ethnic Wear, Footwear, Jewellery' },
+    ],
+  },
   'Other': {
     sub: ['All', 'Service Business', 'Manufacturing', 'Freelance / Consultant', 'NGO / Non-Profit', 'Logistics'],
     questions: [
@@ -487,6 +493,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
             <option value="Cinema Hall">🎬 Cinema Hall</option>
             <option value="Banquet Hall">🏛️ Banquet Hall</option>
             <option value="E-commerce Store">🛒 E-commerce Store</option>
+            <option value="Retail & Shopping">🛍️ Retail & Shopping</option>
             <option value="Other">📦 Other</option>
           </select>
         </div>
