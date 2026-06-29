@@ -67,6 +67,12 @@ const categoryData = {
       { id: 'services', label: 'Popular Services', placeholder: 'e.g. Hair Color, Facial, Haircut' },
     ],
   },
+  'Hair cutting Shop': {
+    sub: ['All', "Men's Haircut", "Women's Haircut", 'Kids Haircut', 'Hair Styling', 'Beard Grooming'],
+    questions: [
+      { id: 'services', label: 'Popular Services', placeholder: 'e.g. Haircut, Styling, Beard Trimming' },
+    ],
+  },
   'Spa': {
     sub: ['All', 'Luxury Spa', 'Ayurvedic Spa', 'Thai Spa', 'Wellness Center', 'Body Massage Center'],
     questions: [
@@ -450,6 +456,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
             <option value="Medical Store">💊 Medical Store</option>
             <option value="Pharmacy">⚕️ Pharmacy</option>
             <option value="Salon">💇 Salon</option>
+            <option value="Hair cutting Shop">✂️ Hair cutting Shop</option>
             <option value="Spa">🧖 Spa</option>
             <option value="Gym">🏋️ Gym</option>
             <option value="Fitness Center">💪 Fitness Center</option>

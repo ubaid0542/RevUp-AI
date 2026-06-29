@@ -92,6 +92,13 @@ const CATEGORY_QUESTIONS = {
     { id: 'staff',     label: 'Staff expertise?',            sub: 'Was the stylist skilled and attentive?' },
     { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this salon to others?' },
   ],
+  'Hair cutting Shop': [
+    { id: 'overall',   label: 'Overall experience?',         sub: 'How was your visit?' },
+    { id: 'service',   label: 'Haircut & styling?',          sub: 'Were you happy with the haircut/styling?' },
+    { id: 'hygiene',   label: 'Hygiene & cleanliness?',      sub: 'Were the tools and space clean?' },
+    { id: 'staff',     label: 'Staff behaviour?',            sub: 'Was the barber/stylist polite and skilled?' },
+    { id: 'recommend', label: 'Would you recommend?',        sub: 'Would you suggest this shop to others?' },
+  ],
   'Spa': [
     { id: 'overall',     label: 'Overall experience?',       sub: 'How was your spa experience?' },
     { id: 'treatment',   label: 'Treatment quality?',        sub: 'Was the therapy relaxing and effective?' },
