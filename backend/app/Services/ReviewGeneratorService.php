@@ -43,7 +43,7 @@ class ReviewGeneratorService
         string $language = 'hinglish',
         array $options = []
     ): string {
-        // 1st Priority: OpenRouter API
+        // 1st Priority: OpenRouter API (Gemini 2.5 Pro → Claude 4 Sonnet → GPT-4.1)
         $openRouterKey = env('OPENROUTER_API_KEY');
         if (!empty($openRouterKey)) {
             $apiResult = $this->generateWithOpenRouter($openRouterKey, $businessName, $businessType, $ratings, $language, $options);
@@ -52,8 +52,17 @@ class ReviewGeneratorService
             }
         }
 
-        // OpenRouter failed or key missing — return empty (no local template fallback)
-        Log::warning('OpenRouter review generation failed. No local template fallback. Business: ' . $businessName);
+        // 2nd Priority: Direct Gemini API (if OpenRouter fails)
+        $geminiKey = env('GEMINI_API_KEY');
+        if (!empty($geminiKey)) {
+            $geminiResult = $this->generateWithGemini($geminiKey, $businessName, $businessType, $ratings, $language, $options);
+            if ($geminiResult) {
+                return $geminiResult;
+            }
+        }
+
+        // All AI models failed — return empty
+        Log::warning('All AI review generation failed. Business: ' . $businessName);
         return '';
     }
 
@@ -167,15 +176,18 @@ class ReviewGeneratorService
         $prompt = $this->buildReviewPrompt($businessName, $businessType, $ratings, $language, $options);
         $temperature = !empty($options['regenerate']) ? 1.0 : 0.75;
 
-        // Paid models first (best quality), free models as fallback
+        // Model priority: Gemini 2.5 Pro → Claude 4 Sonnet → GPT-4.1
+        // Never skip a higher-priority model if it is available.
         $models = [
-            // — Paid (uses OpenRouter credit balance) —
-            'openai/gpt-4o-mini',                // Very reliable, extremely smart, fast
-            'google/gemini-2.5-flash',           // High quality, fast, native Hinglish support
-            'anthropic/claude-3-haiku',          // Excellent natural conversational tone
-            // — Free fallback —
+            // 🥇 Priority 1: Gemini 2.5 Pro — highest quality, natural Hinglish, SEO-friendly
+            'google/gemini-2.5-pro',
+            // 🥈 Priority 2: Claude 4 Sonnet — excellent natural conversational tone
+            'anthropic/claude-sonnet-4',
+            // 🥉 Priority 3: GPT-4.1 — reliable, high quality
+            'openai/gpt-4.1',
+            // — Free fallback (if all paid models fail) —
+            'google/gemini-2.5-flash',
             'meta-llama/llama-3.3-70b-instruct:free',
-            'google/gemini-2.0-flash-lite-preview-02-05:free',
         ];
 
         foreach ($models as $model) {
@@ -320,16 +332,22 @@ class ReviewGeneratorService
         $prompt .= "\nDetailed aspect ratings:\n" . implode("\n", $ratingLines) . "\n\n";
 
         $prompt .= "### Core Rules\n";
-        $prompt .= "- Rewrite the review as if a genuine customer is sharing a personal experience.\n";
+        $prompt .= "- Write a 100% human-like, authentic, and believable review as if a genuine customer is sharing a real personal experience.\n";
         $prompt .= "- Keep the review between 25 to 50 words ONLY. Not a single word more.\n";
-        $prompt .= "- Use 80% Hinglish (Roman Hindi — Hindi words written in English script) and 20% English.\n";
-        $prompt .= "- Maintain a simple, conversational, and consistent writing style.\n";
-        $prompt .= "- Vary sentence structure and vocabulary so every review feels fresh and unique.\n";
+        $prompt .= "- Use approximately 80% Hinglish (Roman Hindi — Hindi words written in English script) and 20% English.\n";
+        $prompt .= "- Use natural conversational language with varied vocabulary and sentence structures.\n";
+        $prompt .= "- Avoid robotic wording, AI-like phrases, clichés, and generic templates.\n";
+        $prompt .= "- Every review must clearly reflect the actual services, products, atmosphere, or customer experience related to the selected business category and sub-category.\n";
+        $prompt .= "- Make every review feel like it was written by a different real customer with a unique personality, writing style, and experience.\n";
+        $prompt .= "- Vary sentence openings, endings, emotions, storytelling style, review length, and vocabulary to avoid detectable patterns.\n";
+        $prompt .= "- Keep the review realistic, trustworthy, and Google-friendly.\n";
         $prompt .= "- Keep the original sentiment and selected star rating unchanged.\n";
         $prompt .= "- Return ONLY the final review text without quotes, headings, or explanations.\n\n";
 
         $prompt .= "### Natural SEO Integration\n";
-        $prompt .= "- Naturally include relevant Business Name, Business Category, Business Subcategory, and City keywords where they fit organically in the sentence.\n";
+        $prompt .= "- Naturally include relevant Business Name, Business Category, Business Subcategory, and City keywords ONLY where they fit contextually. Never force keywords or perform keyword stuffing.\n";
+        $prompt .= "- Mention the business name naturally whenever appropriate without making it feel promotional.\n";
+        $prompt .= "- Highlight category-specific services, specialties, or unique selling points whenever relevant.\n";
         if (!empty($city)) {
             $prompt .= "- IMPORTANT (Local SEO): Include the city name \"{$city}\" naturally in the review. Combine it with Business Category or Subcategory for powerful local SEO phrases.\n";
             $prompt .= "  Examples of natural local SEO:\n";
@@ -379,6 +397,7 @@ class ReviewGeneratorService
         $prompt .= "- Do NOT use excessive praise or robotic language.\n";
         $prompt .= "- Do NOT add facts, services, or experiences that are not provided in the input.\n";
         $prompt .= "- Do NOT use repetitive phrases across regenerations.\n";
+        $prompt .= "- Never generate duplicate, templated, or AI-detectable reviews.\n";
         $prompt .= "- Output ONLY the review text, nothing else.\n";
 
         if (!empty($options['regenerate'])) {
