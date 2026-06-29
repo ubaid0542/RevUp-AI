@@ -440,7 +440,7 @@ function getQuestions(businessType) {
  * Contains the business header card, question slider, and result card.
  */
 export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
-  const questions = useMemo(() => getQuestions(businessData.type), [businessData.type]);
+  const questions = useMemo(() => getQuestions(businessData.type).slice(0, 3), [businessData.type]);
 
   const [answers, setAnswers] = useState({});
   const [currentQ, setCurrentQ] = useState(0);
