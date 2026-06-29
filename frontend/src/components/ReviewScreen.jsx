@@ -520,8 +520,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     setReviewSource('');
     setBackendReviewId(null);
 
-    // Simulate API delay
-    await new Promise(r => setTimeout(r, 900 + Math.random() * 500));
+    // No artificial delay — generate as fast as possible
 
     let text = null;
     let source = '';
@@ -586,7 +585,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     setReviewSource('');
     setBackendReviewId(null);
 
-    await new Promise(r => setTimeout(r, 900 + Math.random() * 500));
+    // No artificial delay — regenerate as fast as possible
 
     let text = null;
     let source = '';
