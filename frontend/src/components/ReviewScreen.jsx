@@ -786,6 +786,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
             availableDishes={availableDishes}
             selectedDish={selectedDish}
             onDishSelect={setSelectedDish}
+            businessType={businessData.type}
           />
         )}
 

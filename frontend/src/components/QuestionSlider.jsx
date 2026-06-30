@@ -80,11 +80,41 @@ export default function QuestionSlider({
   availableDishes = [],
   selectedDish = '',
   onDishSelect,
+  businessType = '',
 }) {
   const total = questions.length;
   const hasDishes = availableDishes.length > 0;
   const dishSelected = !!selectedDish;
   const [dishSkipped, setDishSkipped] = useState(false);
+
+  // Dynamic text based on business type
+  const getSelectionText = () => {
+    const type = businessType.toLowerCase();
+    if (type.includes('restaurant') || type.includes('cafe')) {
+      return { title: '✨ What did you try here?', sub: 'Select the dishes you tried' };
+    }
+    if (type.includes('hotel') || type.includes('resort')) {
+      return { title: '✨ What did you experience?', sub: 'Select the amenities you used' };
+    }
+    if (type.includes('hospital') || type.includes('clinic')) {
+      return { title: '✨ What service did you receive?', sub: 'Select the treatment or facility' };
+    }
+    if (type.includes('salon') || type.includes('spa')) {
+      return { title: '✨ What service did you get?', sub: 'Select the service you received' };
+    }
+    if (type.includes('gym') || type.includes('fitness')) {
+      return { title: '✨ What did you experience?', sub: 'Select the facility or program' };
+    }
+    if (type.includes('shop') || type.includes('store') || type.includes('boutique') || type.includes('supermarket')) {
+      return { title: '✨ What did you purchase or explore?', sub: 'Select the products or brands' };
+    }
+    if (type.includes('school') || type.includes('college') || type.includes('institute')) {
+      return { title: '✨ What program are you part of?', sub: 'Select the course or program' };
+    }
+    return { title: '✨ What did you experience here?', sub: 'Select what you tried or used' };
+  };
+
+  const selectionText = getSelectionText();
 
   // Show dish step only when questions are complete and dishes are available
   const showDishStep = questionsComplete && hasDishes && !dishSkipped;
@@ -199,8 +229,8 @@ export default function QuestionSlider({
       {/* Item Selection Step */}
       {showDishStep && (
         <div className="dish-selection" style={{ position: 'relative', zIndex: 2 }}>
-          <p className="dish-title">✨ Aap ne yaha kya try / experience kiya?</p>
-          <p className="dish-subtitle">Select karo jo aapne try kiya</p>
+          <p className="dish-title">{selectionText.title}</p>
+          <p className="dish-subtitle">{selectionText.sub}</p>
           <div className="dish-buttons">
             {availableDishes.map((dish) => (
               <button
@@ -214,7 +244,7 @@ export default function QuestionSlider({
             ))}
           </div>
           <button className="dish-skip-btn" onClick={handleDishSkip}>
-            Skip — Kuch khaas nahi ⏭️
+            Skip — Not really ⏭️
           </button>
         </div>
       )}
