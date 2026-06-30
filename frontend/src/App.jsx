@@ -185,6 +185,7 @@ export default function App() {
               subcategory: biz.subcategory,
               city: biz.city,
               keywords: biz.keywords || '',
+              extras: biz.extras ? (typeof biz.extras === 'string' ? JSON.parse(biz.extras) : biz.extras) : {},
               logoUrl: biz.logo_url ? biz.logo_url : '',
               plan: biz.plan || 'Starter',
             };

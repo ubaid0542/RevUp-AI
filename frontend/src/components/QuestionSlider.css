@@ -494,3 +494,101 @@
   box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.08);
   background: rgba(108, 99, 255, 0.06);
 }
+
+/* ── Dish Selection Step ── */
+.dish-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0 4px;
+  animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dish-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text, #1a1a2e);
+  text-align: center;
+  margin: 0;
+}
+
+.dish-subtitle {
+  font-size: 12px;
+  color: var(--text3, #888);
+  text-align: center;
+  margin: -6px 0 2px;
+}
+
+.dish-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.dish-btn {
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(108, 99, 255, 0.2);
+  background: linear-gradient(135deg, rgba(108, 99, 255, 0.05), rgba(167, 139, 250, 0.08));
+  color: var(--text, #1a1a2e);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.dish-btn:hover {
+  border-color: rgba(108, 99, 255, 0.4);
+  background: linear-gradient(135deg, rgba(108, 99, 255, 0.1), rgba(167, 139, 250, 0.15));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(108, 99, 255, 0.15);
+}
+
+.dish-btn--selected {
+  border-color: rgba(108, 99, 255, 0.6);
+  background: linear-gradient(135deg, #6c63ff, #a78bfa);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(108, 99, 255, 0.35);
+  transform: scale(1.05);
+}
+
+.dish-btn--selected:hover {
+  background: linear-gradient(135deg, #5b54e6, #9678e8);
+  transform: scale(1.05) translateY(-1px);
+  box-shadow: 0 6px 24px rgba(108, 99, 255, 0.4);
+}
+
+.dish-check {
+  font-weight: 800;
+}
+
+.dish-skip-btn {
+  background: none;
+  border: none;
+  color: var(--text3, #888);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  margin-top: 2px;
+}
+
+.dish-skip-btn:hover {
+  color: var(--accent, #6c63ff);
+  background: rgba(108, 99, 255, 0.06);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}

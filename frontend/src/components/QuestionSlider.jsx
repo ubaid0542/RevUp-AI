@@ -67,7 +67,7 @@ function spawnFloatingEmojis(container, mood) {
  * 
  * Displays questions one-at-a-time with a sliding animation.
  * Progress bar tracks completion. Auto-advances on answer.
- * Background animates with colors + floating emojis based on star rating.
+ * After questions, shows dish selection (if available) then generate button.
  */
 export default function QuestionSlider({
   questions,
@@ -77,8 +77,20 @@ export default function QuestionSlider({
   onAnswer,
   onSkip,
   onGenerate,
+  availableDishes = [],
+  selectedDish = '',
+  onDishSelect,
 }) {
   const total = questions.length;
+  const hasDishes = availableDishes.length > 0;
+  const dishSelected = !!selectedDish;
+  const [dishSkipped, setDishSkipped] = useState(false);
+
+  // Show dish step only when questions are complete and dishes are available
+  const showDishStep = questionsComplete && hasDishes && !dishSkipped;
+  // Show generate button: either no dishes, dish selected, or dish skipped
+  const showGenerate = questionsComplete && (!hasDishes || dishSelected || dishSkipped);
+
   const progressPct = questionsComplete
     ? 100
     : (currentQ / total) * 100;
@@ -115,6 +127,17 @@ export default function QuestionSlider({
   const currentAnswer = questions[currentQ] ? answers[questions[currentQ].id] || 0 : 0;
   const displayMood = activeMood || currentAnswer;
 
+  const handleDishTap = useCallback((dish) => {
+    if (onDishSelect) {
+      onDishSelect(dish === selectedDish ? '' : dish); // toggle
+    }
+  }, [onDishSelect, selectedDish]);
+
+  const handleDishSkip = useCallback(() => {
+    setDishSkipped(true);
+    if (onDishSelect) onDishSelect('');
+  }, [onDishSelect]);
+
   return (
     <div 
       ref={cardRef}
@@ -131,7 +154,10 @@ export default function QuestionSlider({
       <div style={{ position: 'relative', zIndex: 2 }}>
         <div className="q-header">
           <span className="q-step" id="q-step-label">
-            {questionsComplete ? 'All done! ✅' : `Question ${currentQ + 1} of ${total}`}
+            {questionsComplete
+              ? (showDishStep ? '🍽️ One more step!' : 'All done! ✅')
+              : `Question ${currentQ + 1} of ${total}`
+            }
           </span>
           {!questionsComplete && (
             <span className="q-skip" onClick={onSkip}>Skip →</span>
@@ -170,9 +196,31 @@ export default function QuestionSlider({
         </div>
       </div>
 
+      {/* Dish Selection Step */}
+      {showDishStep && (
+        <div className="dish-selection" style={{ position: 'relative', zIndex: 2 }}>
+          <p className="dish-title">🍽️ Aap ne yaha kya try kiya?</p>
+          <p className="dish-subtitle">Select karo jo aapne try kiya</p>
+          <div className="dish-buttons">
+            {availableDishes.map((dish) => (
+              <button
+                key={dish}
+                className={`dish-btn ${selectedDish === dish ? 'dish-btn--selected' : ''}`}
+                onClick={() => handleDishTap(dish)}
+              >
+                {selectedDish === dish && <span className="dish-check">✓ </span>}
+                {dish}
+              </button>
+            ))}
+          </div>
+          <button className="dish-skip-btn" onClick={handleDishSkip}>
+            Skip — Kuch khaas nahi ⏭️
+          </button>
+        </div>
+      )}
 
-      {/* Generate Button (shown after all questions) */}
-      {questionsComplete && (
+      {/* Generate Button (shown after all questions + dish selection) */}
+      {showGenerate && (
         <button
           className="btn-generate"
           id="btn-generate"

@@ -220,6 +220,7 @@ class BusinessController extends Controller
                 'subcategory' => $business->subcategory,
                 'city'        => $business->city,
                 'keywords'    => $business->keywords,
+                'extras'      => $business->extras,
                 'logo_url'    => $business->logo_path
                     ? Storage::url($business->logo_path)
                     : null,

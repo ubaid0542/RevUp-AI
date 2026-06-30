@@ -388,6 +388,14 @@ class ReviewGeneratorService
             $prompt .= "The customer mentioned these keywords: \"{$keywords}\". Weave them naturally into the review without forcing them.\n\n";
         }
 
+        $selectedDish = $options['selectedDish'] ?? '';
+        if (!empty($selectedDish)) {
+            $prompt .= "### Dish / Item Tried\n";
+            $prompt .= "The customer specifically tried: \"{$selectedDish}\". MUST mention this dish/item naturally in the review as something the customer ordered or experienced.\n";
+            $prompt .= "Example: 'maine yaha {$selectedDish} try kiya aur...' or 'unka {$selectedDish} kaafi accha tha' — make it feel like a real mention.\n";
+            $prompt .= "Do NOT just list the dish name — weave it into the customer's story naturally.\n\n";
+        }
+
         $prompt .= "### Strict Prohibitions\n";
         $prompt .= "- Do NOT include any numbers, ratings, or scores like \"4/5\", \"8/10\".\n";
         $prompt .= "- Do NOT mention star ratings in any form.\n";

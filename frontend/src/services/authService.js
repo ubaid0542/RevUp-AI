@@ -453,6 +453,8 @@ export async function generateReviewProxy(businessName, businessType, ratings, l
           previous_text:    options.previousText || '',
           variation_seed:   options.variationSeed || '',
           customerKeywords: options.customerKeywords || '',
+          city:             options.city || '',
+          selectedDish:     options.selectedDish || '',
         },
       }),
     });
