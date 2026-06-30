@@ -196,10 +196,10 @@ export default function QuestionSlider({
         </div>
       </div>
 
-      {/* Dish Selection Step */}
+      {/* Item Selection Step */}
       {showDishStep && (
         <div className="dish-selection" style={{ position: 'relative', zIndex: 2 }}>
-          <p className="dish-title">🍽️ Aap ne yaha kya try kiya?</p>
+          <p className="dish-title">✨ Aap ne yaha kya try / experience kiya?</p>
           <p className="dish-subtitle">Select karo jo aapne try kiya</p>
           <div className="dish-buttons">
             {availableDishes.map((dish) => (

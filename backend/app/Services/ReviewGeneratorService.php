@@ -390,10 +390,16 @@ class ReviewGeneratorService
 
         $selectedDish = $options['selectedDish'] ?? '';
         if (!empty($selectedDish)) {
-            $prompt .= "### Dish / Item Tried\n";
-            $prompt .= "The customer specifically tried: \"{$selectedDish}\". MUST mention this dish/item naturally in the review as something the customer ordered or experienced.\n";
+            $prompt .= "### Dish / Item / Service Tried\n";
+            $prompt .= "The customer specifically tried or experienced: \"{$selectedDish}\". MUST mention this naturally in the review as something they ordered/used.\n";
             $prompt .= "Example: 'maine yaha {$selectedDish} try kiya aur...' or 'unka {$selectedDish} kaafi accha tha' — make it feel like a real mention.\n";
-            $prompt .= "Do NOT just list the dish name — weave it into the customer's story naturally.\n\n";
+            $prompt .= "Do NOT just list the name — weave it into the customer's story naturally.\n\n";
+        }
+
+        $variationSeed = $options['variationSeed'] ?? '';
+        if (!empty($variationSeed)) {
+            $prompt .= "### HIGH VARIATION REQUIRED [Seed: {$variationSeed}]\n";
+            $prompt .= "This is a completely unique generation request. You MUST use completely different sentence structures, different opening phrases, and a different narrative flow than any previous outputs. DO NOT use templated or repetitive patterns.\n\n";
         }
 
         $prompt .= "### Strict Prohibitions\n";

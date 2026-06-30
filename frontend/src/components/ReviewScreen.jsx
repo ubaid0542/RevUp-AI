@@ -461,12 +461,17 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
   const [backendReviewId, setBackendReviewId] = useState(null);
   const [selectedDish, setSelectedDish] = useState('');
 
-  // Extract signature dishes from business extras (specialty_dish or specialty)
+  // Extract all available tags from business extras (specialty_dish, services, brands, etc.)
   const availableDishes = useMemo(() => {
     const extras = businessData.extras || {};
-    const dishStr = extras.specialty_dish || extras.specialty || '';
-    if (!dishStr) return [];
-    return dishStr.split(',').map(d => d.trim()).filter(d => d);
+    let allItems = [];
+    Object.values(extras).forEach(val => {
+      if (typeof val === 'string' && val.trim() !== '') {
+        const parts = val.split(',').map(s => s.trim()).filter(Boolean);
+        allItems.push(...parts);
+      }
+    });
+    return [...new Set(allItems)]; // Return unique items
   }, [businessData.extras]);
 
   // Track QR scan on mount (if opened via ?biz= URL)
@@ -547,7 +552,13 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     const combinedKeywords = [selectedDish, randomKeyword].filter(k => k).join(', ');
 
     // Generate review via Backend Proxy (OpenRouter — API keys stay server-side)
-    text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', { businessSubcategory: businessData.subcategory, city: businessData.city, customerKeywords: combinedKeywords, selectedDish });
+    text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', { 
+      businessSubcategory: businessData.subcategory, 
+      city: businessData.city, 
+      customerKeywords: combinedKeywords, 
+      selectedDish,
+      variationSeed: `${Date.now()}-${Math.random()}`
+    });
     if (text) source = '🔗 Backend Proxy';
 
     // If Backend Proxy failed, show error to user
