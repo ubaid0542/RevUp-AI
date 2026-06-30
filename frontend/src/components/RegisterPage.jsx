@@ -2,6 +2,57 @@ import React, { useState, useRef } from 'react';
 import './RegisterPage.css';
 
 /**
+ * A custom tag input component to handle comma-separated values
+ */
+function TagInput({ value = '', onChange, placeholder }) {
+  const tags = value ? value.split(',').map(t => t.trim()).filter(Boolean) : [];
+  const [inputValue, setInputValue] = useState('');
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const newTag = inputValue.trim();
+      if (newTag && !tags.includes(newTag)) {
+        onChange([...tags, newTag].join(', '));
+        setInputValue('');
+      }
+    } else if (e.key === 'Backspace' && !inputValue && tags.length > 0) {
+      // Remove last tag on backspace if input is empty
+      const newTags = [...tags];
+      newTags.pop();
+      onChange(newTags.join(', '));
+    }
+  };
+
+  const removeTag = (indexToRemove) => {
+    const newTags = tags.filter((_, idx) => idx !== indexToRemove);
+    onChange(newTags.join(', '));
+  };
+
+  return (
+    <div className="tag-input-container">
+      <p className="tag-input-hint">Type and press Enter to add. Click on × to remove.</p>
+      <div className="tag-input-box">
+        {tags.map((tag, idx) => (
+          <span key={idx} className={`tag-item tag-color-${idx % 5}`}>
+            <span className="tag-text">{tag}</span>
+            <button type="button" className="tag-remove" onClick={() => removeTag(idx)}>×</button>
+          </span>
+        ))}
+        <input
+          type="text"
+          className="tag-input-field"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={tags.length === 0 ? placeholder : 'Type and press Enter...'}
+        />
+      </div>
+    </div>
+  );
+}
+
+/**
  * Category data with subcategories and dynamic questions
  */
 const categoryData = {
@@ -534,11 +585,10 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
         {catData && catData.questions.map((q) => (
           <div className="field" key={q.id}>
             <label>{q.label}</label>
-            <input
-              type="text"
+            <TagInput
               placeholder={q.placeholder}
               value={extras[q.id] || ''}
-              onChange={(e) => handleExtraChange(q.id, e.target.value)}
+              onChange={(newVal) => handleExtraChange(q.id, newVal)}
             />
           </div>
         ))}
