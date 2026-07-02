@@ -78,13 +78,13 @@ export default function QuestionSlider({
   onSkip,
   onGenerate,
   availableDishes = [],
-  selectedDish = '',
+  selectedDishes = [],
   onDishSelect,
   businessType = '',
 }) {
   const total = questions.length;
   const hasDishes = availableDishes.length > 0;
-  const dishSelected = !!selectedDish;
+  const dishSelected = selectedDishes.length > 0;
   const [dishSkipped, setDishSkipped] = useState(false);
 
   // Dynamic text based on business type
@@ -159,13 +159,17 @@ export default function QuestionSlider({
 
   const handleDishTap = useCallback((dish) => {
     if (onDishSelect) {
-      onDishSelect(dish === selectedDish ? '' : dish); // toggle
+      onDishSelect(prev => 
+        prev.includes(dish) 
+          ? prev.filter(d => d !== dish)  // remove if already selected
+          : [...prev, dish]               // add if not selected
+      );
     }
-  }, [onDishSelect, selectedDish]);
+  }, [onDishSelect]);
 
   const handleDishSkip = useCallback(() => {
     setDishSkipped(true);
-    if (onDishSelect) onDishSelect('');
+    if (onDishSelect) onDishSelect([]);
   }, [onDishSelect]);
 
   return (
@@ -235,10 +239,10 @@ export default function QuestionSlider({
             {availableDishes.map((dish) => (
               <button
                 key={dish}
-                className={`dish-btn ${selectedDish === dish ? 'dish-btn--selected' : ''}`}
+                className={`dish-btn ${selectedDishes.includes(dish) ? 'dish-btn--selected' : ''}`}
                 onClick={() => handleDishTap(dish)}
               >
-                {selectedDish === dish && <span className="dish-check">✓ </span>}
+                {selectedDishes.includes(dish) && <span className="dish-check">✓ </span>}
                 {dish}
               </button>
             ))}

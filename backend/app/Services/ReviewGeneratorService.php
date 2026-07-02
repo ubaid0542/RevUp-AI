@@ -390,10 +390,18 @@ class ReviewGeneratorService
 
         $selectedDish = $options['selectedDish'] ?? '';
         if (!empty($selectedDish)) {
-            $prompt .= "### Dish / Item / Service Tried\n";
-            $prompt .= "The customer specifically tried or experienced: \"{$selectedDish}\". MUST mention this naturally in the review as something they ordered/used.\n";
-            $prompt .= "Example: 'maine yaha {$selectedDish} try kiya aur...' or 'unka {$selectedDish} kaafi accha tha' — make it feel like a real mention.\n";
-            $prompt .= "Do NOT just list the name — weave it into the customer's story naturally.\n\n";
+            $items = array_map('trim', explode(',', $selectedDish));
+            $itemCount = count($items);
+            $prompt .= "### Items / Services Tried\n";
+            if ($itemCount === 1) {
+                $prompt .= "The customer specifically tried: \"{$items[0]}\". MUST mention this naturally in the review as something they ordered/used.\n";
+                $prompt .= "Example: 'maine yaha {$items[0]} try kiya aur...' or 'unka {$items[0]} kaafi accha tha' — make it feel like a real mention.\n";
+            } else {
+                $itemList = implode(', ', $items);
+                $prompt .= "The customer tried MULTIPLE items: \"{$itemList}\". Mention ALL of them naturally in the review.\n";
+                $prompt .= "Weave each item into the story — don't just list them. Example: 'maine {$items[0]} aur {$items[1]} dono try kiye, dono mein se...' — make it conversational.\n";
+            }
+            $prompt .= "Do NOT just list the names — weave them into the customer's story naturally.\n\n";
         }
 
         $variationSeed = $options['variationSeed'] ?? '';
