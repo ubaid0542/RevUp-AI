@@ -158,7 +158,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     const srcCanvas = qrRef.current?.querySelector('canvas');
     if (!srcCanvas) { onToast('QR is being generated...'); return; }
 
-    const W = 1080, H = 1920;
+    const W = 1080, H = 1620;
     const cx = W / 2; // center X
 
     const dlCanvas = document.createElement('canvas');
@@ -211,21 +211,17 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     });
 
     // ── 3. GOOGLE "G" LOGO ──
-    let curY = 80;
-    // Draw Google G using text (using Product Sans approximation)
+    let curY = 110;
+    // Draw Google G using text
     ctx.save();
-    ctx.font = 'bold 120px "Product Sans", "Google Sans", Arial, sans-serif';
+    ctx.font = 'bold 130px "Product Sans", "Google Sans", Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    // Multi-color G
-    const gY = curY + 70;
-    // Blue part
     ctx.fillStyle = '#4285F4';
-    ctx.fillText('G', cx, gY);
-    // Overlay colored sections using clip (simplified: just blue G works great)
+    ctx.fillText('G', cx, curY);
     ctx.restore();
 
-    curY = gY + 70;
+    curY += 80;
 
     // ── 4. GOLD STARS ──
     ctx.save();
@@ -234,23 +230,23 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.fillStyle = '#FFD700';
     ctx.fillText('★  ★  ★  ★  ★', cx, curY);
     ctx.restore();
-    curY += 50;
+    curY += 55;
 
     // ── 5. "REVIEW US ON" TEXT ──
     ctx.save();
-    ctx.font = 'bold 36px "Inter", "Segoe UI", Arial, sans-serif';
+    ctx.font = 'bold 32px "Inter", "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillStyle = '#ffffff';
     ctx.letterSpacing = '4px';
     ctx.fillText('REVIEW US ON', cx, curY);
     ctx.restore();
-    curY += 15;
+    curY += 55;
 
     // ── 6. "Google" WORD in brand colors ──
     ctx.save();
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = 'bold 80px "Product Sans", "Google Sans", Arial, sans-serif';
+    ctx.font = 'bold 85px "Product Sans", "Google Sans", Arial, sans-serif';
     const googleLetters = [
       { ch: 'G', color: '#4285F4' },
       { ch: 'o', color: '#EA4335' },
@@ -259,38 +255,36 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
       { ch: 'l', color: '#34A853' },
       { ch: 'e', color: '#EA4335' },
     ];
-    const googleY = curY + 55;
-    // Measure total width
     let totalGoogleW = 0;
     googleLetters.forEach(l => { totalGoogleW += ctx.measureText(l.ch).width; });
     let gx = cx - totalGoogleW / 2;
     googleLetters.forEach(l => {
       ctx.fillStyle = l.color;
-      ctx.fillText(l.ch, gx + ctx.measureText(l.ch).width / 2, googleY);
+      ctx.fillText(l.ch, gx + ctx.measureText(l.ch).width / 2, curY);
       gx += ctx.measureText(l.ch).width;
     });
     ctx.restore();
-    curY = googleY + 50;
+    curY += 65;
 
     // ── 7. "YOUR FEEDBACK MATTERS" ──
     ctx.save();
-    ctx.font = '22px "Inter", "Segoe UI", Arial, sans-serif';
+    ctx.font = '20px "Inter", "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(255, 215, 0, 0.6)';
-    // Decorative lines
+    ctx.fillStyle = 'rgba(255, 215, 0, 0.7)';
     const fbText = 'YOUR FEEDBACK MATTERS';
     const fbW = ctx.measureText(fbText).width;
-    ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
-    ctx.fillRect(cx - fbW / 2 - 50, curY + 12, 40, 1.5);
-    ctx.fillRect(cx + fbW / 2 + 10, curY + 12, 40, 1.5);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    // Golden lines
+    ctx.fillStyle = 'rgba(255, 215, 0, 0.4)';
+    ctx.fillRect(cx - fbW / 2 - 50, curY - 5, 35, 1.5);
+    ctx.fillRect(cx + fbW / 2 + 15, curY - 5, 35, 1.5);
+    ctx.fillStyle = '#ffffff';
     ctx.letterSpacing = '3px';
-    ctx.fillText(fbText, cx, curY + 18);
+    ctx.fillText(fbText, cx, curY);
     ctx.restore();
-    curY += 60;
+    curY += 40;
 
     // ── 8. QR CODE SECTION ──
-    const qrContainerSize = 560;
+    const qrContainerSize = 580;
     const qrPadding = 30;
     const qrBorderW = 6;
     const qrBoxX = cx - qrContainerSize / 2;
@@ -395,10 +389,10 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
       ctx.restore();
     }
 
-    curY = qrBoxY + qrContainerSize + 50;
+    curY = qrBoxY + qrContainerSize + 40;
 
     // ── 10. CTA BUTTON: "📱 Scan to Review" ──
-    const btnW = 380, btnH = 64, btnR = 32;
+    const btnW = 380, btnH = 60, btnR = 30;
     const btnX = cx - btnW / 2, btnY = curY;
 
     // Button glow
@@ -420,16 +414,29 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
 
     // Button text
     ctx.save();
-    ctx.font = 'bold 26px "Inter", "Segoe UI", Arial, sans-serif';
+    ctx.font = 'bold 24px "Inter", "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillStyle = '#FFD700';
-    ctx.fillText('📱  Scan to Review', cx, btnY + btnH / 2 + 2);
+    ctx.fillText('📱  SCAN TO REVIEW', cx, btnY + btnH / 2 + 8);
     ctx.restore();
 
-    curY = btnY + btnH + 55;
+    curY = btnY + btnH + 40;
 
-    // ── 11. BUSINESS DETAILS ──
-    // Category emoji map
+    // ── Divider with Gold Heart ──
+    ctx.save();
+    ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
+    ctx.fillRect(cx - 150, curY - 5, 120, 1.5);
+    ctx.fillRect(cx + 30, curY - 5, 120, 1.5);
+    ctx.fillStyle = '#FFD700';
+    ctx.font = '18px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('❤', cx, curY - 4);
+    ctx.restore();
+
+    curY += 35;
+
+    // ── 11. BUSINESS DETAILS (Side-by-side layout) ──
     const catEmojis = {
       'Restaurant': '🍽', 'Cafe': '☕', 'Hotel': '🏨', 'Resort': '🏖',
       'Hospital': '🏥', 'Clinic': '🏥', 'Dental Clinic': '🦷',
@@ -447,77 +454,78 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
       'Cinema Hall': '🎬', 'Banquet Hall': '🏛', 'Printing Press': '🖨',
     };
     const catEmoji = catEmojis[business.type] || bizEmoji;
+    const catCity = [business.type, business.city].filter(Boolean).join('  •  ');
+    let bName = business.name ? business.name.toUpperCase() : 'MY BUSINESS';
 
-    // Logo circle (or emoji) for business info section
-    const infLogoSize = 70;
-    const infoLogoY = curY;
-
+    ctx.save();
+    ctx.font = 'bold 36px "Inter", "Segoe UI", Arial, sans-serif';
+    const nameW = ctx.measureText(bName).width;
+    ctx.font = '22px "Inter", "Segoe UI", Arial, sans-serif';
+    const subW = ctx.measureText(catCity).width;
+    const textBlockW = Math.max(nameW, subW);
+    const iconSize = 80;
+    const gap = 24;
+    const totalBlockW = iconSize + gap + textBlockW;
+    const startX = cx - totalBlockW / 2;
+    
+    // Draw Icon Circle
+    const iconCenterY = curY + iconSize / 2;
+    
     if (logoLoaded && business.logoUrl) {
       const logoImg2 = await loadImg(business.logoUrl);
       if (logoImg2) {
-        // Golden ring
-        ctx.save();
         ctx.beginPath();
-        ctx.arc(cx, infoLogoY + infLogoSize / 2, infLogoSize / 2 + 4, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
+        ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2 + 2, 0, Math.PI * 2);
+        ctx.strokeStyle = '#FFD700';
         ctx.lineWidth = 2;
         ctx.stroke();
-        ctx.restore();
-        // Logo
-        ctx.save();
+        
         ctx.beginPath();
-        ctx.arc(cx, infoLogoY + infLogoSize / 2, infLogoSize / 2, 0, Math.PI * 2);
+        ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2, 0, Math.PI * 2);
         ctx.clip();
-        ctx.drawImage(logoImg2, cx - infLogoSize / 2, infoLogoY, infLogoSize, infLogoSize);
-        ctx.restore();
+        ctx.drawImage(logoImg2, startX, curY, iconSize, iconSize);
       }
     } else {
-      // Emoji circle
-      ctx.save();
       ctx.beginPath();
-      ctx.arc(cx, infoLogoY + infLogoSize / 2, infLogoSize / 2 + 4, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
+      ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2 + 2, 0, Math.PI * 2);
+      ctx.strokeStyle = '#FFD700';
       ctx.lineWidth = 2;
       ctx.stroke();
-      ctx.restore();
-
-      ctx.save();
-      ctx.font = `${infLogoSize * 0.6}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+      
+      ctx.font = `${iconSize * 0.55}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(catEmoji, cx, infoLogoY + infLogoSize / 2 + 2);
-      ctx.restore();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(catEmoji, startX + iconSize / 2, iconCenterY + 4);
     }
-
-    curY = infoLogoY + infLogoSize + 20;
-
-    // Business name
-    ctx.save();
-    ctx.font = 'bold 40px "Inter", "Segoe UI", Arial, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#ffffff';
-    // Truncate if too long
-    let bName = business.name || 'My Business';
-    if (ctx.measureText(bName).width > W - 120) {
-      ctx.font = 'bold 32px "Inter", "Segoe UI", Arial, sans-serif';
-    }
-    ctx.fillText(bName, cx, curY);
     ctx.restore();
-    curY += 38;
 
-    // Category • City
+    // Draw Texts
+    const textX = startX + iconSize + gap;
     ctx.save();
-    ctx.font = '24px "Inter", "Segoe UI", Arial, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
-    const catCity = [business.type, business.city].filter(Boolean).join('  •  ');
-    ctx.fillText(catCity, cx, curY);
+    ctx.textAlign = 'left';
+    
+    // Name
+    ctx.font = 'bold 36px "Inter", "Segoe UI", Arial, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(bName, textX, curY + 35);
+    
+    // Subtext
+    ctx.font = '22px "Inter", "Segoe UI", Arial, sans-serif';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.fillText(catCity, textX, curY + 75);
     ctx.restore();
 
     // ── 12. FOOTER: "Powered by RevUp-AI" ──
-    const footY = H - 60;
+    const footY = H - 50;
+    // Divider line above footer
     ctx.save();
-    ctx.font = '20px "Inter", "Segoe UI", Arial, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.fillRect(cx - 200, footY - 35, 400, 1);
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = '18px "Inter", "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
     ctx.fillText('Powered by', cx - 55, footY);
