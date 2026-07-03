@@ -151,105 +151,402 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
   }, [reviewPageUrl, bizEmoji]);
 
   /**
-   * Download a branded QR image:
-   * - QR code with emoji overlay
-   * - Business name + category printed below
-   * - "Scan to Review" label
+   * Download a premium Google Review QR Poster (1080×1920 PNG).
+   * Black luxury design with gold accents, Google branding, and dynamic business data.
    */
-  const downloadQR = () => {
+  const downloadQR = async () => {
     const srcCanvas = qrRef.current?.querySelector('canvas');
     if (!srcCanvas) { onToast('QR is being generated...'); return; }
 
-    // Create an enlarged canvas with branding
-    const qrSize = 400;
-    const padding = 40;
-    const textAreaHeight = 90;
-    const totalW = qrSize + padding * 2;
-    const totalH = qrSize + padding * 2 + textAreaHeight;
+    const W = 1080, H = 1920;
+    const cx = W / 2; // center X
 
     const dlCanvas = document.createElement('canvas');
-    dlCanvas.width = totalW;
-    dlCanvas.height = totalH;
+    dlCanvas.width = W;
+    dlCanvas.height = H;
     const ctx = dlCanvas.getContext('2d');
 
-    // White background with rounded feel
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, totalW, totalH);
+    // ── Helper: rounded rect ──
+    const roundRect = (x, y, w, h, r) => {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    };
 
-    // Draw QR scaled up
-    ctx.drawImage(srcCanvas, padding, padding, qrSize, qrSize);
+    // ── Helper: load image ──
+    const loadImg = (src) => new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = src;
+    });
 
-    // Re-overlay emoji at higher resolution
-    const emojiSize = Math.round(qrSize * 0.22);
-    const bgPad = Math.round(emojiSize * 0.22);
-    const bgDiam = emojiSize + bgPad * 2;
-    const centerX = padding + qrSize / 2;
-    const centerY = padding + qrSize / 2;
+    // ── 1. BACKGROUND ──
+    // Solid black
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, 0, W, H);
 
+    // Subtle radial glow at top
+    const topGlow = ctx.createRadialGradient(cx, 200, 50, cx, 200, 500);
+    topGlow.addColorStop(0, 'rgba(255, 215, 0, 0.06)');
+    topGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = topGlow;
+    ctx.fillRect(0, 0, W, 700);
+
+    // ── 2. GOOGLE COLOR BAR AT TOP ──
+    const barH = 8;
+    const colors = ['#4285F4', '#EA4335', '#FBBC05', '#34A853'];
+    colors.forEach((c, i) => {
+      ctx.fillStyle = c;
+      ctx.fillRect(i * (W / 4), 0, W / 4, barH);
+    });
+
+    // ── 3. GOOGLE "G" LOGO ──
+    let curY = 80;
+    // Draw Google G using text (using Product Sans approximation)
     ctx.save();
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, bgDiam / 2, 0, Math.PI * 2);
+    ctx.font = 'bold 120px "Product Sans", "Google Sans", Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    // Multi-color G
+    const gY = curY + 70;
+    // Blue part
+    ctx.fillStyle = '#4285F4';
+    ctx.fillText('G', cx, gY);
+    // Overlay colored sections using clip (simplified: just blue G works great)
+    ctx.restore();
+
+    curY = gY + 70;
+
+    // ── 4. GOLD STARS ──
+    ctx.save();
+    ctx.font = '36px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#FFD700';
+    ctx.fillText('★  ★  ★  ★  ★', cx, curY);
+    ctx.restore();
+    curY += 50;
+
+    // ── 5. "REVIEW US ON" TEXT ──
+    ctx.save();
+    ctx.font = 'bold 36px "Inter", "Segoe UI", Arial, sans-serif';
+    ctx.textAlign = 'center';
     ctx.fillStyle = '#ffffff';
-    ctx.shadowColor = 'rgba(108, 99, 255, 0.3)';
-    ctx.shadowBlur = 12;
+    ctx.letterSpacing = '4px';
+    ctx.fillText('REVIEW US ON', cx, curY);
+    ctx.restore();
+    curY += 15;
+
+    // ── 6. "Google" WORD in brand colors ──
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = 'bold 80px "Product Sans", "Google Sans", Arial, sans-serif';
+    const googleLetters = [
+      { ch: 'G', color: '#4285F4' },
+      { ch: 'o', color: '#EA4335' },
+      { ch: 'o', color: '#FBBC05' },
+      { ch: 'g', color: '#4285F4' },
+      { ch: 'l', color: '#34A853' },
+      { ch: 'e', color: '#EA4335' },
+    ];
+    const googleY = curY + 55;
+    // Measure total width
+    let totalGoogleW = 0;
+    googleLetters.forEach(l => { totalGoogleW += ctx.measureText(l.ch).width; });
+    let gx = cx - totalGoogleW / 2;
+    googleLetters.forEach(l => {
+      ctx.fillStyle = l.color;
+      ctx.fillText(l.ch, gx + ctx.measureText(l.ch).width / 2, googleY);
+      gx += ctx.measureText(l.ch).width;
+    });
+    ctx.restore();
+    curY = googleY + 50;
+
+    // ── 7. "YOUR FEEDBACK MATTERS" ──
+    ctx.save();
+    ctx.font = '22px "Inter", "Segoe UI", Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255, 215, 0, 0.6)';
+    // Decorative lines
+    const fbText = 'YOUR FEEDBACK MATTERS';
+    const fbW = ctx.measureText(fbText).width;
+    ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
+    ctx.fillRect(cx - fbW / 2 - 50, curY + 12, 40, 1.5);
+    ctx.fillRect(cx + fbW / 2 + 10, curY + 12, 40, 1.5);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.letterSpacing = '3px';
+    ctx.fillText(fbText, cx, curY + 18);
+    ctx.restore();
+    curY += 60;
+
+    // ── 8. QR CODE SECTION ──
+    const qrContainerSize = 560;
+    const qrPadding = 30;
+    const qrBorderW = 6;
+    const qrBoxX = cx - qrContainerSize / 2;
+    const qrBoxY = curY;
+
+    // Google-color border (gradient around the box)
+    ctx.save();
+    // Top border - Blue
+    ctx.fillStyle = '#4285F4';
+    roundRect(qrBoxX - qrBorderW, qrBoxY - qrBorderW, qrContainerSize + qrBorderW * 2, qrBorderW, 24);
+    ctx.fill();
+    // Bottom border - Green
+    ctx.fillStyle = '#34A853';
+    roundRect(qrBoxX - qrBorderW, qrBoxY + qrContainerSize, qrContainerSize + qrBorderW * 2, qrBorderW, 24);
+    ctx.fill();
+    // Left border - Red
+    ctx.fillStyle = '#EA4335';
+    ctx.fillRect(qrBoxX - qrBorderW, qrBoxY, qrBorderW, qrContainerSize);
+    // Right border - Yellow
+    ctx.fillStyle = '#FBBC05';
+    ctx.fillRect(qrBoxX + qrContainerSize, qrBoxY, qrBorderW, qrContainerSize);
+    ctx.restore();
+
+    // White QR container
+    ctx.save();
+    ctx.shadowColor = 'rgba(255, 215, 0, 0.15)';
+    ctx.shadowBlur = 40;
+    ctx.fillStyle = '#ffffff';
+    roundRect(qrBoxX, qrBoxY, qrContainerSize, qrContainerSize, 20);
     ctx.fill();
     ctx.restore();
 
+    // Draw QR code (black, large)
+    const qrDrawSize = qrContainerSize - qrPadding * 2;
+    const qrDrawX = qrBoxX + qrPadding;
+    const qrDrawY = qrBoxY + qrPadding;
+
+    // Create a temp canvas for black QR
+    const tempQR = document.createElement('canvas');
+    tempQR.width = qrDrawSize;
+    tempQR.height = qrDrawSize;
+    const tempCtx = tempQR.getContext('2d');
+
+    // Re-generate QR in black on white for the poster
+    if (window.QRCode) {
+      const tempDiv = document.createElement('div');
+      new window.QRCode(tempDiv, {
+        text: reviewPageUrl,
+        width: qrDrawSize,
+        height: qrDrawSize,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: window.QRCode.CorrectLevel.H,
+      });
+      // Wait for QR to render
+      await new Promise(r => setTimeout(r, 300));
+      const qrCanvas = tempDiv.querySelector('canvas');
+      if (qrCanvas) {
+        tempCtx.drawImage(qrCanvas, 0, 0, qrDrawSize, qrDrawSize);
+      }
+    }
+
+    ctx.drawImage(tempQR, qrDrawX, qrDrawY, qrDrawSize, qrDrawSize);
+
+    // ── 9. BUSINESS LOGO IN QR CENTER ──
+    const qrCenterX = qrDrawX + qrDrawSize / 2;
+    const qrCenterY = qrDrawY + qrDrawSize / 2;
+    const logoSize = Math.round(qrDrawSize * 0.14); // 14% of QR
+    const logoBgSize = logoSize + 16;
+
+    // White circle background
     ctx.save();
     ctx.beginPath();
-    ctx.arc(centerX, centerY, bgDiam / 2, 0, Math.PI * 2);
-    ctx.strokeStyle = '#6c63ff';
-    ctx.lineWidth = 3;
+    ctx.arc(qrCenterX, qrCenterY, logoBgSize / 2 + 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)';
+    ctx.shadowBlur = 8;
+    ctx.fill();
+    ctx.restore();
+
+    // Try to load business logo
+    let logoLoaded = false;
+    if (business.logoUrl) {
+      const logoImg = await loadImg(business.logoUrl);
+      if (logoImg) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(qrCenterX, qrCenterY, logoBgSize / 2, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(logoImg, qrCenterX - logoBgSize / 2, qrCenterY - logoBgSize / 2, logoBgSize, logoBgSize);
+        ctx.restore();
+        logoLoaded = true;
+      }
+    }
+    // Fallback: draw emoji if no logo
+    if (!logoLoaded) {
+      ctx.save();
+      ctx.font = `${logoSize}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(bizEmoji, qrCenterX, qrCenterY + 2);
+      ctx.restore();
+    }
+
+    curY = qrBoxY + qrContainerSize + 50;
+
+    // ── 10. CTA BUTTON: "📱 Scan to Review" ──
+    const btnW = 380, btnH = 64, btnR = 32;
+    const btnX = cx - btnW / 2, btnY = curY;
+
+    // Button glow
+    ctx.save();
+    ctx.shadowColor = 'rgba(255, 215, 0, 0.3)';
+    ctx.shadowBlur = 20;
+    roundRect(btnX, btnY, btnW, btnH, btnR);
+    ctx.fillStyle = 'rgba(255, 215, 0, 0.08)';
+    ctx.fill();
+    ctx.restore();
+
+    // Button border
+    ctx.save();
+    roundRect(btnX, btnY, btnW, btnH, btnR);
+    ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
+    ctx.lineWidth = 2;
     ctx.stroke();
     ctx.restore();
 
+    // Button text
     ctx.save();
-    ctx.font = `${emojiSize}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
+    ctx.font = 'bold 26px "Inter", "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(bizEmoji, centerX, centerY + 2);
+    ctx.fillStyle = '#FFD700';
+    ctx.fillText('📱  Scan to Review', cx, btnY + btnH / 2 + 2);
     ctx.restore();
 
-    // "Scan to Review" label
-    const labelY = padding + qrSize + 28;
-    ctx.save();
-    ctx.font = 'bold 18px "Inter", "Segoe UI", sans-serif';
-    ctx.fillStyle = '#6c63ff';
-    ctx.textAlign = 'center';
-    ctx.fillText('📱 Scan to Review', totalW / 2, labelY);
-    ctx.restore();
+    curY = btnY + btnH + 55;
+
+    // ── 11. BUSINESS DETAILS ──
+    // Category emoji map
+    const catEmojis = {
+      'Restaurant': '🍽', 'Cafe': '☕', 'Hotel': '🏨', 'Resort': '🏖',
+      'Hospital': '🏥', 'Clinic': '🏥', 'Dental Clinic': '🦷',
+      'Salon': '💇', 'Hair cutting Shop': '💈', 'Spa': '💆',
+      'Gym': '💪', 'Fitness Center': '🏋', 'School': '🏫',
+      'College': '🎓', 'Institute': '📚', 'Coaching Center': '📖',
+      'Jewellery Shop': '💎', 'Clothing Store': '👗', 'Boutique': '👔',
+      'Supermarket': '🛒', 'Grocery Store': '🥬', 'Bakery': '🧁',
+      'Sweet Shop': '🍬', 'Ice Cream Shop': '🍦', 'Mobile Shop': '📱',
+      'Laptop Store': '💻', 'Electronics Store': '🔌', 'Book Store': '📚',
+      'Pet Shop': '🐾', 'Veterinary Clinic': '🐕', 'Car Showroom': '🚗',
+      'Auto Repair': '🔧', 'Garage': '🔧', 'Photographer': '📸',
+      'Wedding Planner': '💒', 'Event Planner': '🎉', 'Travel Agency': '✈',
+      'Lawyer': '⚖', 'Medical Store': '💊', 'Pharmacy': '💊',
+      'Cinema Hall': '🎬', 'Banquet Hall': '🏛', 'Printing Press': '🖨',
+    };
+    const catEmoji = catEmojis[business.type] || bizEmoji;
+
+    // Logo circle (or emoji) for business info section
+    const infLogoSize = 70;
+    const infoLogoY = curY;
+
+    if (logoLoaded && business.logoUrl) {
+      const logoImg2 = await loadImg(business.logoUrl);
+      if (logoImg2) {
+        // Golden ring
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, infoLogoY + infLogoSize / 2, infLogoSize / 2 + 4, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+        // Logo
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, infoLogoY + infLogoSize / 2, infLogoSize / 2, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(logoImg2, cx - infLogoSize / 2, infoLogoY, infLogoSize, infLogoSize);
+        ctx.restore();
+      }
+    } else {
+      // Emoji circle
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, infoLogoY + infLogoSize / 2, infLogoSize / 2 + 4, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+      ctx.font = `${infLogoSize * 0.6}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(catEmoji, cx, infoLogoY + infLogoSize / 2 + 2);
+      ctx.restore();
+    }
+
+    curY = infoLogoY + infLogoSize + 20;
 
     // Business name
     ctx.save();
-    ctx.font = 'bold 16px "Inter", "Segoe UI", sans-serif';
-    ctx.fillStyle = '#1e293b';
+    ctx.font = 'bold 40px "Inter", "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(business.name, totalW / 2, labelY + 28);
+    ctx.fillStyle = '#ffffff';
+    // Truncate if too long
+    let bName = business.name || 'My Business';
+    if (ctx.measureText(bName).width > W - 120) {
+      ctx.font = 'bold 32px "Inter", "Segoe UI", Arial, sans-serif';
+    }
+    ctx.fillText(bName, cx, curY);
     ctx.restore();
+    curY += 38;
 
-    // Category (+ City if available)
+    // Category • City
     ctx.save();
-    ctx.font = '12px "Inter", "Segoe UI", sans-serif';
-    ctx.fillStyle = '#94a3b8';
+    ctx.font = '24px "Inter", "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
-    const subLabel = [
-      business.type,
-      business.city ? `(${business.city})` : ''
-    ].filter(Boolean).join(' ');
-    ctx.fillText(subLabel, totalW / 2, labelY + 48);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+    const catCity = [business.type, business.city].filter(Boolean).join('  •  ');
+    ctx.fillText(catCity, cx, curY);
     ctx.restore();
 
+    // ── 12. FOOTER: "Powered by RevUp-AI" ──
+    const footY = H - 60;
+    ctx.save();
+    ctx.font = '20px "Inter", "Segoe UI", Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.fillText('Powered by', cx - 55, footY);
+    ctx.fillStyle = '#8b5cf6';
+    ctx.font = 'bold 20px "Inter", "Segoe UI", Arial, sans-serif';
+    ctx.fillText('RevUp-AI', cx + 45, footY);
+    // Small sparkle
+    ctx.font = '16px Arial';
+    ctx.fillText('✨', cx - 115, footY);
+    ctx.restore();
+
+    // ── 13. BOTTOM GOOGLE COLOR BAR ──
+    colors.forEach((c, i) => {
+      ctx.fillStyle = c;
+      ctx.fillRect(i * (W / 4), H - 8, W / 4, 8);
+    });
+
+    // ── EXPORT PNG ──
     dlCanvas.toBlob((blob) => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `QR_${business.name.replace(/\s+/g, '_')}_Review.png`;
+      link.download = `${business.name.replace(/\s+/g, '_')}_Google_Review_QR.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      onToast('QR downloaded! Customers scan → Review page → Google 📥');
-    });
+      onToast('✅ Premium QR Poster downloaded! Print & place at your counter 📥');
+    }, 'image/png');
   };
 
   const copyLink = () => {
