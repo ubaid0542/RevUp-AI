@@ -438,34 +438,46 @@ export async function adminLogin(password) {
  * Works for all businesses — no DB ID required.
  */
 export async function generateReviewProxy(businessName, businessType, ratings, language = 'hinglish', options = {}) {
-  try {
-    const res = await fetch(`${API_BASE}/reviews/generate-proxy`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        business_name: businessName,
-        business_type: businessType,
-        ratings,
-        language,
-        subcategory: options.businessSubcategory || '',
-        options: {
-          regenerate:       options.regenerate || false,
-          previous_text:    options.previousText || '',
-          variation_seed:   options.variationSeed || '',
-          customerKeywords: options.customerKeywords || '',
-          city:             options.city || '',
-          selectedDish:     options.selectedDish || '',
-        },
-      }),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      return data.success ? data.data.text : null;
+  const payload = {
+    business_name: businessName,
+    business_type: businessType,
+    ratings,
+    language,
+    subcategory: options.businessSubcategory || '',
+    options: {
+      regenerate:       options.regenerate || false,
+      previous_text:    options.previousText || '',
+      variation_seed:   options.variationSeed || '',
+      customerKeywords: options.customerKeywords || '',
+      city:             options.city || '',
+      selectedDish:     options.selectedDish || '',
+    },
+  };
+
+  // Try up to 2 times (original + 1 retry)
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const res = await fetch(`${API_BASE}/reviews/generate-proxy`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.data?.text) return data.data.text;
+      }
+      // If first attempt failed, wait 2s before retry
+      if (attempt < 2) {
+        await new Promise(r => setTimeout(r, 2000));
+      }
+    } catch {
+      // Network error — wait and retry
+      if (attempt < 2) {
+        await new Promise(r => setTimeout(r, 2000));
+      }
     }
-    return null;
-  } catch {
-    return null;
   }
+  return null;
 }
 
 /**

@@ -197,7 +197,7 @@ class ReviewGeneratorService
                     'HTTP-Referer' => env('APP_URL', 'http://localhost:8000'),
                     'X-Title' => 'Review Generator',
                 ])
-                ->timeout(15)
+                ->timeout(30)
                 ->post('https://openrouter.ai/api/v1/chat/completions', [
                     'model' => $model,
                     'messages' => [

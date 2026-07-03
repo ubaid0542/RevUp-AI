@@ -107,3 +107,10 @@ Route::middleware('throttle:5,1')->group(function () {
 });
 
 
+// ─── Health Check (Keep-alive for cron-job.org) ──────────────────────────────
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toIso8601String(),
+    ]);
+});

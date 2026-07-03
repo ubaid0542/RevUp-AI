@@ -238,6 +238,13 @@ class ReviewController extends Controller
             options: $options
         );
 
+        if (empty($generatedText)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'AI could not generate a review. Please try again.',
+            ], 503);
+        }
+
         return response()->json([
             'success' => true,
             'data'    => ['text' => $generatedText],
