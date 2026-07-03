@@ -158,7 +158,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     const srcCanvas = qrRef.current?.querySelector('canvas');
     if (!srcCanvas) { onToast('QR is being generated...'); return; }
 
-    const W = 1080, H = 1620;
+    const W = 1080, H = 1480;
     const cx = W / 2; // center X
 
     const dlCanvas = document.createElement('canvas');
@@ -212,14 +212,29 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
 
     // ── 3. GOOGLE "G" LOGO ──
     let curY = 110;
-    // Draw Google G using text
-    ctx.save();
-    ctx.font = 'bold 130px "Product Sans", "Google Sans", Arial, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#4285F4';
-    ctx.fillText('G', cx, curY);
-    ctx.restore();
+    
+    // Draw 4-color Google G using composite operations
+    const gSize = 130;
+    const gCanvas = document.createElement('canvas');
+    gCanvas.width = 160; 
+    gCanvas.height = 160;
+    const gCtx = gCanvas.getContext('2d');
+    
+    gCtx.font = 'bold 130px "Product Sans", "Google Sans", Arial, sans-serif';
+    gCtx.textAlign = 'center'; 
+    gCtx.textBaseline = 'middle';
+    gCtx.fillStyle = '#000';
+    gCtx.fillText('G', 80, 85);
+    
+    // Apply source-in for colors
+    gCtx.globalCompositeOperation = 'source-in';
+    gCtx.fillStyle = '#4285F4'; gCtx.fillRect(0, 0, 75, 160); // Blue left
+    gCtx.fillStyle = '#EA4335'; gCtx.fillRect(75, 0, 85, 75); // Red top right
+    gCtx.fillStyle = '#FBBC05'; gCtx.fillRect(75, 75, 85, 40); // Yellow right mid
+    gCtx.fillStyle = '#34A853'; gCtx.fillRect(75, 115, 85, 45); // Green bottom right
+    gCtx.fillRect(0, 115, 160, 45); // Green bottom curve
+    
+    ctx.drawImage(gCanvas, cx - 80, curY - 80);
 
     curY += 80;
 
@@ -290,22 +305,51 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     const qrBoxX = cx - qrContainerSize / 2;
     const qrBoxY = curY;
 
-    // Google-color border (gradient around the box)
+    // ── Google-color exact border ──
+    const sX = qrBoxX - qrBorderW / 2;
+    const sY = qrBoxY - qrBorderW / 2;
+    const sSize = qrContainerSize + qrBorderW;
+    const sR = 24;
+
     ctx.save();
-    // Top border - Blue
-    ctx.fillStyle = '#4285F4';
-    roundRect(qrBoxX - qrBorderW, qrBoxY - qrBorderW, qrContainerSize + qrBorderW * 2, qrBorderW, 24);
-    ctx.fill();
-    // Bottom border - Green
-    ctx.fillStyle = '#34A853';
-    roundRect(qrBoxX - qrBorderW, qrBoxY + qrContainerSize, qrContainerSize + qrBorderW * 2, qrBorderW, 24);
-    ctx.fill();
-    // Left border - Red
-    ctx.fillStyle = '#EA4335';
-    ctx.fillRect(qrBoxX - qrBorderW, qrBoxY, qrBorderW, qrContainerSize);
-    // Right border - Yellow
-    ctx.fillStyle = '#FBBC05';
-    ctx.fillRect(qrBoxX + qrContainerSize, qrBoxY, qrBorderW, qrContainerSize);
+    ctx.lineWidth = qrBorderW;
+    
+    // Top-left: Red
+    ctx.beginPath();
+    ctx.moveTo(sX + sSize/2, sY);
+    ctx.lineTo(sX + sR, sY);
+    ctx.quadraticCurveTo(sX, sY, sX, sY + sR);
+    ctx.lineTo(sX, sY + sSize/2);
+    ctx.strokeStyle = '#EA4335';
+    ctx.stroke();
+
+    // Top-right: Blue
+    ctx.beginPath();
+    ctx.moveTo(sX + sSize/2, sY);
+    ctx.lineTo(sX + sSize - sR, sY);
+    ctx.quadraticCurveTo(sX + sSize, sY, sX + sSize, sY + sR);
+    ctx.lineTo(sX + sSize, sY + sSize/2);
+    ctx.strokeStyle = '#4285F4';
+    ctx.stroke();
+
+    // Bottom-right: Yellow
+    ctx.beginPath();
+    ctx.moveTo(sX + sSize, sY + sSize/2);
+    ctx.lineTo(sX + sSize, sY + sSize - sR);
+    ctx.quadraticCurveTo(sX + sSize, sY + sSize, sX + sSize - sR, sY + sSize);
+    ctx.lineTo(sX + sSize/2, sY + sSize);
+    ctx.strokeStyle = '#FBBC05';
+    ctx.stroke();
+
+    // Bottom-left: Green
+    ctx.beginPath();
+    ctx.moveTo(sX + sSize/2, sY + sSize);
+    ctx.lineTo(sX + sR, sY + sSize);
+    ctx.quadraticCurveTo(sX, sY + sSize, sX, sY + sSize - sR);
+    ctx.lineTo(sX, sY + sSize/2);
+    ctx.strokeStyle = '#34A853';
+    ctx.stroke();
+    
     ctx.restore();
 
     // White QR container
