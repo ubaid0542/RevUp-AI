@@ -66,7 +66,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
   const isRealDbId = business.id && !business.id.toString().startsWith('biz_') && !business.id.toString().startsWith('demo');
 
   // Fetch real statistics and reviews from backend on mount/id change
-  useEffect(() => {
+  const fetchStats = () => {
     if (isRealDbId) {
       setLoading(true);
       fetchBusinessStatsAPI(business.id)
@@ -82,6 +82,13 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
         setLoading(false);
       });
     }
+  };
+
+  useEffect(() => {
+    fetchStats();
+    // Auto-refresh stats every 15 seconds so owner doesn't need to manually refresh
+    const interval = setInterval(fetchStats, 15000);
+    return () => clearInterval(interval);
   }, [business.id]);
 
   // Build review-page URL that customers land on when they scan the QR
@@ -659,8 +666,17 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
 
       {/* Reviews List */}
       <div className="reviews-section glass-card">
-        <div className="reviews-section-header">
-          <div className="qr-section-title">⭐ Recent Reviews</div>
+        <div className="reviews-section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="qr-section-title" style={{ margin: 0 }}>⭐ Recent Reviews</div>
+            <button 
+              onClick={fetchStats} 
+              disabled={loading}
+              style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '14px', color: 'var(--accent)', padding: '4px 8px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}
+            >
+              {loading ? '⏳...' : '↻ Refresh'}
+            </button>
+          </div>
           <div className="reviews-count">{displayTotalReviews} reviews</div>
         </div>
         <div className="reviews-list">
