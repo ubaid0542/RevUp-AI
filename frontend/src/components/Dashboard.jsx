@@ -489,17 +489,16 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     }
     
     if (logoLoaded && logoImg2) {
-        ctx.beginPath();
-        ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2 + 2, 0, Math.PI * 2);
-        ctx.strokeStyle = '#FFD700';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2 + 2, 0, Math.PI * 2);
+      ctx.strokeStyle = '#FFD700';
+      ctx.lineWidth = 2;
+      ctx.stroke();
         
-        ctx.beginPath();
-        ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2, 0, Math.PI * 2);
-        ctx.clip();
-        ctx.drawImage(logoImg2, startX, curY, iconSize, iconSize);
-      }
+      ctx.beginPath();
+      ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.drawImage(logoImg2, startX, curY, iconSize, iconSize);
     } else {
       ctx.beginPath();
       ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2 + 2, 0, Math.PI * 2);
