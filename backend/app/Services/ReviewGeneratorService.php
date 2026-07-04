@@ -176,28 +176,30 @@ class ReviewGeneratorService
         $prompt = $this->buildReviewPrompt($businessName, $businessType, $ratings, $language, $options);
         $temperature = !empty($options['regenerate']) ? 1.0 : 0.75;
 
-        // Model priority: Gemini 2.5 Pro → Claude 4 Sonnet → GPT-4.1
-        // Never skip a higher-priority model if it is available.
+        // Model priority: GPT-4.1 → Gemini 2.5 Pro → Claude 4 Sonnet → Flash → Llama
+        // Tighter per-model timeouts for faster fallback.
         $models = [
-            // 🥇 Priority 1: Gemini 2.5 Pro — highest quality, natural Hinglish, SEO-friendly
-            'google/gemini-2.5-pro',
-            // 🥈 Priority 2: Claude 4 Sonnet — excellent natural conversational tone
-            'anthropic/claude-sonnet-4',
-            // 🥉 Priority 3: GPT-4.1 — reliable, high quality
-            'openai/gpt-4.1',
-            // — Free fallback (if all paid models fail) —
-            'google/gemini-2.5-flash',
-            'meta-llama/llama-3.3-70b-instruct:free',
+            // 🥇 Priority 1: GPT-4.1 — fastest paid, reliable, high quality
+            ['id' => 'openai/gpt-4.1', 'timeout' => 15],
+            // 🥈 Priority 2: Gemini 2.5 Pro — highest quality, natural Hinglish
+            ['id' => 'google/gemini-2.5-pro', 'timeout' => 15],
+            // 🥉 Priority 3: Claude 4 Sonnet — excellent humanization
+            ['id' => 'anthropic/claude-sonnet-4', 'timeout' => 15],
+            // — Fast free fallback —
+            ['id' => 'google/gemini-2.5-flash', 'timeout' => 10],
+            ['id' => 'meta-llama/llama-3.3-70b-instruct:free', 'timeout' => 10],
         ];
 
-        foreach ($models as $model) {
+        foreach ($models as $modelConfig) {
+            $model = $modelConfig['id'];
+            $modelTimeout = $modelConfig['timeout'];
             try {
                 $response = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $apiKey,
                     'HTTP-Referer' => env('APP_URL', 'http://localhost:8000'),
                     'X-Title' => 'Review Generator',
                 ])
-                ->timeout(30)
+                ->timeout($modelTimeout)
                 ->post('https://openrouter.ai/api/v1/chat/completions', [
                     'model' => $model,
                     'messages' => [
@@ -228,7 +230,7 @@ class ReviewGeneratorService
                     Log::warning("OpenRouter model $model failed: $body");
                 }
             } catch (\Exception $e) {
-                Log::warning("OpenRouter model $model exception: " . $e->getMessage());
+                Log::warning("OpenRouter model $model timed out/exception ({$modelTimeout}s): " . $e->getMessage());
             }
         }
 

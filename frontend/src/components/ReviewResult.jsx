@@ -60,6 +60,24 @@ export default function ReviewResult({
     ? reviewText
     : words.slice(0, displayedWords).join(' ');
 
+  // Rotating loading messages to keep user engaged
+  const loadingMessages = [
+    '✨ AI aapka review likh raha hai...',
+    '⏳ Almost ready, please wait...',
+    '🔄 Server se connect ho raha hai...',
+    '📝 Best review craft ho raha hai...',
+    '⚡ Finalizing your review...',
+  ];
+  const [loadingMsgIndex, setLoadingMsgIndex] = useState(0);
+
+  useEffect(() => {
+    if (!isLoading) { setLoadingMsgIndex(0); return; }
+    const timer = setInterval(() => {
+      setLoadingMsgIndex(prev => (prev + 1) % loadingMessages.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [isLoading]);
+
   return (
     <div className={`result-card glass-card ${!isLoading && reviewText ? 'result-card--loaded' : ''}`} id="result-card">
       <div className="review-header-row">
@@ -80,7 +98,7 @@ export default function ReviewResult({
             <div className="typing-indicator">
               <span></span><span></span><span></span>
             </div>
-            <p className="loading-text">Crafting your review…</p>
+            <p className="loading-text">{loadingMessages[loadingMsgIndex]}</p>
           </div>
         ) : isEditing ? (
           <textarea

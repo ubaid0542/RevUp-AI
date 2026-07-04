@@ -454,8 +454,9 @@ export async function generateReviewProxy(businessName, businessType, ratings, l
     },
   };
 
-  // Try up to 2 times (original + 1 retry)
-  for (let attempt = 1; attempt <= 2; attempt++) {
+  // Try up to 3 times with progressive delays (handles Render cold starts)
+  const delays = [3000, 6000, 10000]; // 3s, 6s, 10s
+  for (let attempt = 1; attempt <= 3; attempt++) {
     try {
       const res = await fetch(`${API_BASE}/reviews/generate-proxy`, {
         method: 'POST',
@@ -466,14 +467,14 @@ export async function generateReviewProxy(businessName, businessType, ratings, l
         const data = await res.json();
         if (data.success && data.data?.text) return data.data.text;
       }
-      // If first attempt failed, wait 2s before retry
-      if (attempt < 2) {
-        await new Promise(r => setTimeout(r, 2000));
+      // Wait before retry (progressive delay)
+      if (attempt < 3) {
+        await new Promise(r => setTimeout(r, delays[attempt - 1]));
       }
     } catch {
-      // Network error — wait and retry
-      if (attempt < 2) {
-        await new Promise(r => setTimeout(r, 2000));
+      // Network error — wait and retry with progressive delay
+      if (attempt < 3) {
+        await new Promise(r => setTimeout(r, delays[attempt - 1]));
       }
     }
   }
