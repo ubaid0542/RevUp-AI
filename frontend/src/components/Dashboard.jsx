@@ -399,46 +399,6 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
 
     ctx.drawImage(tempQR, qrDrawX, qrDrawY, qrDrawSize, qrDrawSize);
 
-    // ── 9. BUSINESS LOGO IN QR CENTER ──
-    const qrCenterX = qrDrawX + qrDrawSize / 2;
-    const qrCenterY = qrDrawY + qrDrawSize / 2;
-    const logoSize = Math.round(qrDrawSize * 0.14); // 14% of QR
-    const logoBgSize = logoSize + 16;
-
-    // White circle background
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(qrCenterX, qrCenterY, logoBgSize / 2 + 4, 0, Math.PI * 2);
-    ctx.fillStyle = '#ffffff';
-    ctx.shadowColor = 'rgba(0,0,0,0.2)';
-    ctx.shadowBlur = 8;
-    ctx.fill();
-    ctx.restore();
-
-    // Try to load business logo
-    let logoLoaded = false;
-    if (business.logoUrl) {
-      const logoImg = await loadImg(business.logoUrl);
-      if (logoImg) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(qrCenterX, qrCenterY, logoBgSize / 2, 0, Math.PI * 2);
-        ctx.clip();
-        ctx.drawImage(logoImg, qrCenterX - logoBgSize / 2, qrCenterY - logoBgSize / 2, logoBgSize, logoBgSize);
-        ctx.restore();
-        logoLoaded = true;
-      }
-    }
-    // Fallback: draw emoji if no logo
-    if (!logoLoaded) {
-      ctx.save();
-      ctx.font = `${logoSize}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(bizEmoji, qrCenterX, qrCenterY + 2);
-      ctx.restore();
-    }
-
     curY = qrBoxY + qrContainerSize + 40;
 
     // ── 10. CTA BUTTON: "📱 Scan to Review" ──
@@ -521,9 +481,14 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     // Draw Icon Circle
     const iconCenterY = curY + iconSize / 2;
     
-    if (logoLoaded && business.logoUrl) {
-      const logoImg2 = await loadImg(business.logoUrl);
-      if (logoImg2) {
+    let logoLoaded = false;
+    let logoImg2 = null;
+    if (business.logoUrl) {
+      logoImg2 = await loadImg(business.logoUrl);
+      if (logoImg2) logoLoaded = true;
+    }
+    
+    if (logoLoaded && logoImg2) {
         ctx.beginPath();
         ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2 + 2, 0, Math.PI * 2);
         ctx.strokeStyle = '#FFD700';
