@@ -183,6 +183,12 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
 
     // ── Helper: load image ──
     const loadImg = (src) => new Promise((resolve) => {
+      if (src && src.startsWith('/storage/')) {
+        const baseUrl = import.meta.env.VITE_API_BASE_URL 
+          ? import.meta.env.VITE_API_BASE_URL.replace(/\/api\/?$/, '') 
+          : window.location.origin;
+        src = baseUrl + src;
+      }
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => resolve(img);
