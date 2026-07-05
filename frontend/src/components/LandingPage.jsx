@@ -7,24 +7,28 @@ import './LandingPage.css';
 export default function LandingPage({ onNavigate, onSelectPlan }) {
   return (
     <div className="landing-page screen">
-      {/* Hero */}
       <div className="hero-section">
-        <div className="hero-tag">🚀 REVUP AI — REVIEW THAT HELP YOU GROW</div>
-        <h1 className="hero-title">
-          More Reviews,<br />
-          <span className="gradient-text">Zero Effort</span>
-        </h1>
-        <p className="hero-desc">
-          Scan the QR, pick your stars — AI writes a Google-ready review instantly.
-          Simple for your customers, powerful for your business growth.
-        </p>
-        <div className="hero-btns">
-          <button className="btn-primary hero-btn" onClick={() => onNavigate('register')}>
-            🚀 Start Free Trial
-          </button>
-          <button className="btn-outline hero-btn" onClick={() => onNavigate('demo')}>
-            📱 View Demo
-          </button>
+        <div className="hero-content">
+          <div className="hero-tag">🚀 REVUP AI — REVIEW THAT HELP YOU GROW</div>
+          <h1 className="hero-title">
+            More Reviews,<br />
+            <span className="gradient-text">Zero Effort</span>
+          </h1>
+          <p className="hero-desc">
+            Scan the QR, pick your stars — AI writes a Google-ready review instantly.
+            Simple for your customers, powerful for your business growth.
+          </p>
+          <div className="hero-btns">
+            <button className="btn-primary hero-btn" onClick={() => onNavigate('register')}>
+              🚀 Start Free Trial
+            </button>
+            <button className="btn-outline hero-btn" onClick={() => onNavigate('demo')}>
+              📱 View Demo
+            </button>
+          </div>
+        </div>
+        <div className="hero-image-wrapper">
+          <img src="/assets/hero_illustration.png" alt="RevUp AI 3D Illustration" className="hero-image" />
         </div>
       </div>
 
