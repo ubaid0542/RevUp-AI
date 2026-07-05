@@ -97,7 +97,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
   const bizEmoji = business.emoji || '⭐';
 
   // Fallback local calculations
-  const bizReviews = reviews.filter((r) => r.bizId === business.id);
+  const bizReviews = reviews.filter((r) => String(r.bizId) === String(business.id));
   const displayTotalReviews = stats ? stats.totalReviews : bizReviews.length;
   const displayAvgRating = stats 
     ? (stats.avgRating > 0 ? stats.avgRating : '—') 
