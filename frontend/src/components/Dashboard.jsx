@@ -106,14 +106,24 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
   const displayScans = stats ? stats.scans : (bizReviews.length + Math.floor(bizReviews.length * 0.3));
 
   // Format reviews list
-  const displayReviewsList = stats 
-    ? recentReviews.map(r => ({
-        stars: r.stars,
-        text: r.generated_text,
-        time: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
-        photos: r.photos,
-      }))
-    : bizReviews.slice().reverse().slice(0, 10);
+  let displayReviewsList = [];
+  if (stats) {
+    displayReviewsList = recentReviews.map(r => ({
+      stars: r.stars,
+      text: r.generated_text,
+      time: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
+      photos: r.photos,
+    }));
+    
+    // Add local reviews that aren't in the backend yet (for instant feedback when testing on same device)
+    const backendTexts = new Set(displayReviewsList.map(r => r.text));
+    const localNew = bizReviews.filter(r => !backendTexts.has(r.text));
+    
+    // Merge, sort by newest, and take top 15
+    displayReviewsList = [...localNew, ...displayReviewsList].sort((a, b) => b.time - a.time).slice(0, 15);
+  } else {
+    displayReviewsList = bizReviews.slice().reverse().slice(0, 10);
+  }
 
   useEffect(() => {
     if (!business.id || !qrRef.current) return;
