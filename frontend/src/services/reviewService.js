@@ -509,6 +509,7 @@ export async function logCustomerEvent(businessId, eventType) {
   try {
     await fetch(`${API_BASE}/public/business/${businessId}/event`, {
       method: 'POST',
+      keepalive: true,
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({ event_type: eventType }),
     });
@@ -524,6 +525,7 @@ export async function markReviewPostedAPI(reviewId, text = '') {
   try {
     const res = await fetch(`${API_BASE}/reviews/${reviewId}/posted`, {
       method: 'POST',
+      keepalive: true,
       headers: { 
         'Content-Type': 'application/json',
         'Accept': 'application/json' 

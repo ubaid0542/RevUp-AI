@@ -322,10 +322,14 @@ class ReviewController extends Controller
      */
     public function markPosted(Request $request, Review $review): JsonResponse
     {
+        \Log::info('markPosted hit for review: ' . $review->id);
+        
         $review->update([
             'is_posted' => true,
             'generated_text' => $request->text ?? $review->generated_text,
         ]);
+        
+        \Log::info('Review updated. is_posted is now: ' . $review->is_posted);
 
         return response()->json([
             'success' => true,
