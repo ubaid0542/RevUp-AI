@@ -65,6 +65,7 @@ class ReviewController extends Controller
             'language' => $language,
             'source' => 'Backend API (Laravel)',
             'stars' => $request->ratings['overall'] ?? 4,
+            'is_posted' => true,
         ]);
 
         return response()->json([
@@ -123,6 +124,7 @@ class ReviewController extends Controller
             'language' => $language,
             'source' => 'Backend API (Laravel)',
             'stars' => $request->ratings['overall'] ?? 4,
+            'is_posted' => true,
         ]);
 
         return response()->json([
@@ -194,6 +196,7 @@ class ReviewController extends Controller
             'source' => $request->source ?? 'External API',
             'stars' => $request->stars ?? 4,
             'photos' => null,
+            'is_posted' => true,
         ]);
 
         return response()->json([
