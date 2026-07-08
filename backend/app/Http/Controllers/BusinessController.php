@@ -88,10 +88,10 @@ class BusinessController extends Controller
             ], 403);
         }
 
-        $totalReviews = $business->reviews()->count();
-        $avgRating = $business->reviews()->avg('stars') ?? 0.0;
+        $totalReviews = $business->reviews()->where('is_posted', true)->count();
+        $avgRating = $business->reviews()->where('is_posted', true)->avg('stars') ?? 0.0;
         $scanCount = $business->qrScans()->count();
-        $thisMonthReviews = $business->reviews()->where('created_at', '>=', now()->subDays(30))->count();
+        $thisMonthReviews = $business->reviews()->where('is_posted', true)->where('created_at', '>=', now()->subDays(30))->count();
 
         // format business with logo URL
         $formattedBusiness = [
@@ -119,7 +119,7 @@ class BusinessController extends Controller
                     'scans' => $scanCount,
                     'thisMonth' => $thisMonthReviews,
                 ],
-                'recentReviews' => $business->reviews()->latest()->limit(20)->get(),
+                'recentReviews' => $business->reviews()->where('is_posted', true)->latest()->limit(20)->get(),
             ],
         ]);
     }

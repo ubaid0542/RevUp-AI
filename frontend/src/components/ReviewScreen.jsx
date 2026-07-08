@@ -604,21 +604,39 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
       });
     }
 
-    // 3. Track post event
+    // 3. Mark review as posted in backend BEFORE opening Google
+    const isRealDbId = businessData.id && !businessData.id.toString().startsWith('biz_') && !businessData.id.toString().startsWith('demo');
+    if (isRealDbId) {
+      try {
+        let reviewId = backendReviewId;
+
+        // If we don't have a backend review ID, save the review first
+        if (!reviewId && generatedReview) {
+          const savedReview = await saveExternalReviewAPI(businessData.id, answers, generatedReview, 'Post on Google', 'hinglish');
+          if (savedReview && savedReview.id) {
+            reviewId = savedReview.id;
+          }
+        }
+
+        // Now mark as posted — AWAIT this so it completes before Google opens
+        if (reviewId) {
+          await markReviewPostedAPI(reviewId, generatedReview);
+        }
+      } catch (err) {
+        console.error('Failed to mark review as posted:', err);
+      }
+
+      // Fire-and-forget analytics
+      logCustomerEvent(businessData.id, 'review_posted');
+    }
+
+    // 4. Track post event
     trackEvent(EVENT_TYPES.REVIEW_POSTED, {
       bizId: businessData.id,
       businessName: businessData.name,
     });
-    // Track in backend database
-    const isRealDbId = businessData.id && !businessData.id.toString().startsWith('biz_') && !businessData.id.toString().startsWith('demo');
-    if (isRealDbId) {
-      logCustomerEvent(businessData.id, 'review_posted');
-      if (backendReviewId) {
-        markReviewPostedAPI(backendReviewId, generatedReview);
-      }
-    }
 
-    // 4. Open GMB link — customer just needs to paste (Ctrl+V / long-press Paste)
+    // 5. Open GMB link — customer just needs to paste (Ctrl+V / long-press Paste)
     const searchQuery = encodeURIComponent(`${businessData.name} ${businessData.city || ''}`.trim());
     const fallbackLink = `https://www.google.com/search?q=${searchQuery}`;
     const gmbLink = businessData.gmb || fallbackLink;
