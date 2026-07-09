@@ -482,7 +482,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
 
         {/* Business Name */}
         <div className="field">
-          <label>Business Name *</label>
+          <label>🏢 Business Name *</label>
           <input
             type="text"
             placeholder="e.g. LG Multispeciality Hospital"
@@ -494,7 +494,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
 
         {/* Category */}
         <div className="field">
-          <label>Business Category *</label>
+          <label>💼 Business Category *</label>
           <select value={category} onChange={(e) => { setCategory(e.target.value); setSubcategory(''); setExtras({}); }}>
             <option value="">— Select Category —</option>
             <option value="Restaurant">🍽️ Restaurant</option>
@@ -559,7 +559,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
         {/* Subcategory */}
         {catData && (
           <div className="field">
-            <label>Sub Category</label>
+            <label>🏷️ Business Subcategory</label>
             <select value={subcategory} onChange={(e) => setSubcategory(e.target.value)}>
               <option value="">— Select Sub Category —</option>
               {catData.sub.map((s) => (
@@ -571,7 +571,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
 
         {/* City */}
         <div className="field">
-          <label>City</label>
+          <label>📍 City</label>
           <input
             type="text"
             placeholder="e.g. Varanasi, Delhi, Mumbai"
@@ -595,7 +595,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
 
         {/* GMB Link */}
         <div className="field">
-          <label>Google My Business Review Link *</label>
+          <label>🔗 Google My Business Review Link *</label>
           <input
             type="text"
             placeholder="https://g.page/r/YOUR_GMB_LINK/review"

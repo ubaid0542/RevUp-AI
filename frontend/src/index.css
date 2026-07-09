@@ -345,6 +345,11 @@ body.dark::after {
   box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
 }
 
+body.dark .field select option {
+  background-color: #120A2E;
+  color: #ffffff;
+}
+
 .field input::placeholder {
   color: var(--text3);
 }
