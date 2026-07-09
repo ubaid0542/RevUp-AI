@@ -495,40 +495,31 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     const totalBlockW = iconSize + gap + textBlockW;
     const startX = cx - totalBlockW / 2;
     
-    // Draw Icon Circle
+    // ── Draw Enhanced Category Icon ──
     const iconCenterY = curY + iconSize / 2;
+    const iconRadius = iconSize / 2;
     
-    let logoLoaded = false;
-    let logoImg2 = null;
-    if (business.logoUrl) {
-      logoImg2 = await loadImg(business.logoUrl);
-      if (logoImg2) logoLoaded = true;
-    }
+    // Outer glow & background
+    ctx.beginPath();
+    ctx.arc(startX + iconRadius, iconCenterY, iconRadius, 0, Math.PI * 2);
+    ctx.shadowColor = 'rgba(255, 215, 0, 0.6)';
+    ctx.shadowBlur = 25;
+    ctx.fillStyle = 'rgba(20, 20, 25, 0.9)'; // Dark premium background
+    ctx.fill();
+    ctx.shadowBlur = 0; // Reset shadow
+
+    // Gold border
+    ctx.lineWidth = 3.5;
+    ctx.strokeStyle = '#FFD700';
+    ctx.stroke();
+
+    // The Category Emoji
+    ctx.font = `${iconSize * 0.6}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#fff';
+    ctx.fillText(catEmoji, startX + iconRadius, iconCenterY + 4);
     
-    if (logoLoaded && logoImg2) {
-      ctx.beginPath();
-      ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2 + 2, 0, Math.PI * 2);
-      ctx.strokeStyle = '#FFD700';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-        
-      ctx.beginPath();
-      ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2, 0, Math.PI * 2);
-      ctx.clip();
-      ctx.drawImage(logoImg2, startX, curY, iconSize, iconSize);
-    } else {
-      ctx.beginPath();
-      ctx.arc(startX + iconSize / 2, iconCenterY, iconSize / 2 + 2, 0, Math.PI * 2);
-      ctx.strokeStyle = '#FFD700';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      
-      ctx.font = `${iconSize * 0.55}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = '#fff';
-      ctx.fillText(catEmoji, startX + iconSize / 2, iconCenterY + 4);
-    }
     ctx.restore();
 
     // Draw Texts
