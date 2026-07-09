@@ -465,22 +465,23 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
 
     // ── 11. BUSINESS DETAILS (Side-by-side layout) ──
     const catEmojis = {
-      'Restaurant': '🍽', 'Cafe': '☕', 'Hotel': '🏨', 'Resort': '🏖',
-      'Hospital': '🏥', 'Clinic': '🏥', 'Dental Clinic': '🦷',
-      'Salon': '💇', 'Hair cutting Shop': '💈', 'Spa': '💆',
-      'Gym': '💪', 'Fitness Center': '🏋', 'School': '🏫',
-      'College': '🎓', 'Institute': '📚', 'Coaching Center': '📖',
-      'Jewellery Shop': '💎', 'Clothing Store': '👗', 'Boutique': '👔',
-      'Supermarket': '🛒', 'Grocery Store': '🥬', 'Bakery': '🧁',
-      'Sweet Shop': '🍬', 'Ice Cream Shop': '🍦', 'Mobile Shop': '📱',
-      'Laptop Store': '💻', 'Electronics Store': '🔌', 'Book Store': '📚',
-      'Pet Shop': '🐾', 'Veterinary Clinic': '🐕', 'Car Showroom': '🚗',
-      'Auto Repair': '🔧', 'Garage': '🔧', 'Photographer': '📸',
-      'Wedding Planner': '💒', 'Event Planner': '🎉', 'Travel Agency': '✈',
-      'Lawyer': '⚖', 'Medical Store': '💊', 'Pharmacy': '💊',
-      'Cinema Hall': '🎬', 'Banquet Hall': '🏛', 'Printing Press': '🖨',
+      'Restaurant': '🍽️', 'Cafe': '☕', 'Hotel': '🏨', 'Resort': '🏖️',
+      'Hospital': '🏥', 'Clinic': '🩺', 'Dental Clinic': '🦷',
+      'Medical Store': '💊', 'Pharmacy': '⚕️', 'Salon': '💇',
+      'Hair cutting Shop': '✂️', 'Spa': '🧖', 'Gym': '🏋️',
+      'Fitness Center': '💪', 'School': '🏫', 'Coaching Center': '📚',
+      'College': '🎓', 'Institute': '🏛️', 'Jewellery Shop': '💍',
+      'Clothing Store': '👕', 'Boutique': '🛍️', 'Supermarket': '🛒',
+      'Grocery Store': '🥬', 'Mobile Shop': '📱', 'Laptop Store': '💻',
+      'Electronics Store': '🔌', 'Book Store': '📚', 'Bakery': '🧁',
+      'Sweet Shop': '🍬', 'Ice Cream Shop': '🍦', 'Pet Shop': '🐾',
+      'Veterinary Clinic': '🐕', 'Car Showroom': '🚗', 'Auto Repair': '🔧',
+      'Garage': '🛠️', 'Photographer': '📸', 'Wedding Planner': '💒',
+      'Event Planner': '🎉', 'Travel Agency': '✈️', 'Lawyer': '⚖️',
+      'Printing Press': '🖨️', 'Cinema Hall': '🎬', 'Banquet Hall': '🏛️',
+      'E-commerce Store': '🛒', 'Retail & Shopping': '🛍️', 'Other': '📦'
     };
-    const catEmoji = catEmojis[business.type] || bizEmoji;
+    const catEmoji = catEmojis[business.type] || business.emoji || '⭐';
     const catCity = [business.type, business.city].filter(Boolean).join('  •  ');
     let bName = business.name ? business.name.toUpperCase() : 'MY BUSINESS';
 
