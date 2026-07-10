@@ -10,12 +10,108 @@
   gap: 20px;
   text-align: left;
   padding: 60px 20px 40px;
-  background: transparent;
   border-radius: var(--radius);
   margin-bottom: 24px;
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  overflow: hidden;
+  /* Light mode: soft lavender ambient glow */
+  background:
+    radial-gradient(ellipse 60% 50% at 75% 40%, rgba(139, 92, 246, 0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 20% 60%, rgba(168, 85, 247, 0.05) 0%, transparent 70%);
+}
+
+/* Dark mode: deep purple immersive glow */
+body.dark .hero-section {
+  background:
+    radial-gradient(ellipse 60% 55% at 75% 35%, rgba(139, 92, 246, 0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 60% at 15% 60%, rgba(192, 132, 252, 0.1) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 50% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 60%);
+}
+
+/* ── Floating Particles (pure CSS) ── */
+.hero-section::before,
+.hero-section::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Particle 1 — top-right area */
+.hero-section::before {
+  width: 6px;
+  height: 6px;
+  top: 18%;
+  right: 12%;
+  background: rgba(139, 92, 246, 0.25);
+  box-shadow:
+    0 0 12px 4px rgba(139, 92, 246, 0.15),
+    /* Particle 2 */ -320px 80px 0 3px rgba(192, 132, 252, 0.2),
+    -320px 80px 10px 3px rgba(192, 132, 252, 0.1),
+    /* Particle 3 */ -600px -20px 0 2px rgba(168, 85, 247, 0.2),
+    -600px -20px 8px 2px rgba(168, 85, 247, 0.1),
+    /* Particle 4 */ 40px 200px 0 2px rgba(139, 92, 246, 0.15),
+    40px 200px 8px 2px rgba(139, 92, 246, 0.08),
+    /* Particle 5 */ -180px 260px 0 4px rgba(192, 132, 252, 0.15),
+    -180px 260px 12px 3px rgba(192, 132, 252, 0.08);
+  animation: heroParticleFloat1 8s ease-in-out infinite alternate;
+}
+
+/* Particle group 2 — left area */
+.hero-section::after {
+  width: 5px;
+  height: 5px;
+  bottom: 25%;
+  left: 8%;
+  background: rgba(168, 85, 247, 0.2);
+  box-shadow:
+    0 0 10px 3px rgba(168, 85, 247, 0.12),
+    /* Particle 6 */ 200px -150px 0 3px rgba(139, 92, 246, 0.18),
+    200px -150px 10px 3px rgba(139, 92, 246, 0.08),
+    /* Particle 7 */ 500px -60px 0 2px rgba(192, 132, 252, 0.15),
+    500px -60px 8px 2px rgba(192, 132, 252, 0.06);
+  animation: heroParticleFloat2 10s ease-in-out infinite alternate;
+}
+
+/* Dark mode: brighter particles */
+body.dark .hero-section::before {
+  background: rgba(192, 132, 252, 0.5);
+  box-shadow:
+    0 0 14px 5px rgba(192, 132, 252, 0.25),
+    -320px 80px 0 3px rgba(192, 132, 252, 0.4),
+    -320px 80px 12px 4px rgba(192, 132, 252, 0.15),
+    -600px -20px 0 2px rgba(168, 85, 247, 0.35),
+    -600px -20px 10px 3px rgba(168, 85, 247, 0.12),
+    40px 200px 0 2px rgba(139, 92, 246, 0.3),
+    40px 200px 10px 3px rgba(139, 92, 246, 0.12),
+    -180px 260px 0 4px rgba(192, 132, 252, 0.3),
+    -180px 260px 14px 4px rgba(192, 132, 252, 0.12);
+}
+
+body.dark .hero-section::after {
+  background: rgba(168, 85, 247, 0.45);
+  box-shadow:
+    0 0 12px 4px rgba(168, 85, 247, 0.2),
+    200px -150px 0 3px rgba(139, 92, 246, 0.35),
+    200px -150px 12px 4px rgba(139, 92, 246, 0.12),
+    500px -60px 0 2px rgba(192, 132, 252, 0.3),
+    500px -60px 10px 3px rgba(192, 132, 252, 0.1);
+}
+
+@keyframes heroParticleFloat1 {
+  0% { transform: translateY(0) translateX(0); opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-18px) translateX(12px); opacity: 0.6; }
+}
+
+@keyframes heroParticleFloat2 {
+  0% { transform: translateY(0) translateX(0); opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { transform: translateY(14px) translateX(-10px); opacity: 0.5; }
 }
 
 .hero-tag {
@@ -31,6 +127,8 @@
   margin-bottom: 24px;
   letter-spacing: 0.5px;
   animation: fadeUp 0.5s ease both;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-title {
@@ -40,6 +138,8 @@
   margin-bottom: 20px;
   letter-spacing: -0.5px;
   animation: fadeUp 0.6s ease both 0.1s;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-desc {
@@ -49,6 +149,8 @@
   margin: 0 0 32px 0;
   line-height: 1.7;
   animation: fadeUp 0.6s ease both 0.2s;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-btns {
@@ -57,6 +159,8 @@
   justify-content: flex-start;
   flex-wrap: wrap;
   animation: fadeUp 0.6s ease both 0.3s;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-image-wrapper {
@@ -64,6 +168,8 @@
   justify-content: flex-end;
   align-items: center;
   animation: fadeUp 0.6s ease both 0.4s;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-image {
@@ -72,7 +178,12 @@
   margin-right: -10%;
   height: auto;
   object-fit: contain;
-  /* drop-shadow removed as the 3D image has baked shadows */
+  filter: drop-shadow(0 8px 32px rgba(139, 92, 246, 0.12));
+}
+
+/* Dark mode: purple glow under the 3D image */
+body.dark .hero-image {
+  filter: drop-shadow(0 12px 40px rgba(139, 92, 246, 0.25));
 }
 
 @media (max-width: 900px) {
