@@ -387,3 +387,342 @@
     font-size: 20px;
   }
 }
+
+/* ── Review Card: Meta Row (Review ID + Customer Name) ── */
+.review-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.review-item-id {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.review-item-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ── Review Card: Bottom Row (status + reply button) ── */
+.review-item-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Reply Button ── */
+.review-reply-btn {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.review-reply-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* ── Replied Badge ── */
+.review-replied-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--green);
+  background: rgba(16, 185, 129, 0.1);
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.review-view-reply-btn {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text2);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.review-view-reply-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ══════════════════════════════════════════════════════════
+   Reply Modal
+   ══════════════════════════════════════════════════════════ */
+.reply-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.reply-modal {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: scaleIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reply-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.reply-modal-title {
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+
+.reply-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text3);
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.reply-modal-close:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ── Review Info inside Modal ── */
+.reply-review-info {
+  padding: 16px 24px;
+  background: var(--accent-soft);
+  margin: 0;
+}
+
+.reply-review-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.reply-review-stars {
+  color: var(--gold);
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.reply-review-id-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(139, 92, 246, 0.12);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.reply-review-text {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* ── Reply Textarea ── */
+.reply-modal-body {
+  padding: 20px 24px;
+}
+
+.reply-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.reply-textarea {
+  width: 100%;
+  min-height: 120px;
+  background: var(--bg-warm, var(--surface));
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--text);
+  font-family: inherit;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.reply-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+/* ── Modal Action Buttons ── */
+.reply-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--border-light);
+}
+
+.reply-action-btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-xs);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--border-light);
+  background: transparent;
+  color: var(--text2);
+}
+
+.reply-action-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.reply-action-btn.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+}
+
+.reply-action-btn.primary:hover {
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.45);
+}
+
+.reply-action-btn.success {
+  background: linear-gradient(135deg, var(--green), #059669);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.reply-action-btn.success:hover {
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+}
+
+.reply-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Loading Spinner inside modal ── */
+.reply-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0;
+  color: var(--text2);
+  font-size: 13px;
+}
+
+.reply-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-light);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Reply Modal Responsive ── */
+@media (max-width: 600px) {
+  .reply-modal {
+    max-width: 100%;
+    border-radius: var(--radius-sm);
+  }
+
+  .reply-modal-header,
+  .reply-review-info,
+  .reply-modal-body,
+  .reply-modal-actions {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .reply-modal-actions {
+    flex-direction: column;
+  }
+
+  .reply-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

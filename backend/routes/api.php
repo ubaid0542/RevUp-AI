@@ -62,6 +62,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Backend AI review generation (uses DB business ID — owner only)
     Route::post('/reviews/generate',    [ReviewController::class, 'generate']);
     Route::post('/reviews/regenerate',  [ReviewController::class, 'regenerate']);
+
+    // AI Review Reply (Growth/Pro plans only)
+    Route::post('/reviews/{review}/reply',      [ReviewController::class, 'generateReply']);
+    Route::post('/reviews/{review}/post-reply',  [ReviewController::class, 'postReply']);
 });
 
 // ─── Admin Routes (admin token required) ─────────────────────────────────────

@@ -337,4 +337,101 @@ class ReviewController extends Controller
             'data' => $review,
         ]);
     }
+
+    /**
+     * Generate AI reply for a review (Growth/Pro plan only)
+     */
+    public function generateReply(Request $request, Review $review): JsonResponse
+    {
+        // 1. Get the business and check ownership
+        $business = $review->business;
+        if (!$business || $business->user_id !== $request->user()->id) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
+        // 2. Plan check
+        $plan = strtolower($business->plan ?? 'starter');
+        if (!in_array($plan, ['growth', 'pro'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This feature is available only on the Growth and Pro plans.',
+            ], 403);
+        }
+
+        // 3. Generate AI reply
+        $isRegeneration = $request->boolean('regenerate', false);
+        $service = new \App\Services\ReviewGeneratorService();
+        $replyText = $service->generateReply(
+            $business->name,
+            $business->type ?? 'Business',
+            $review->generated_text,
+            $review->stars ?? 4,
+            $isRegeneration
+        );
+
+        if (empty($replyText)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate reply. Please try again.',
+            ], 500);
+        }
+
+        // 4. Save reply
+        $review->update([
+            'reply_text' => $replyText,
+            'reply_status' => 'generated',
+            'replied_at' => now(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'reply_text' => $replyText,
+                'reply_status' => 'generated',
+                'replied_at' => $review->replied_at,
+            ],
+        ]);
+    }
+
+    /**
+     * Mark reply as posted to Google
+     */
+    public function postReply(Request $request, Review $review): JsonResponse
+    {
+        // 1. Get the business and check ownership
+        $business = $review->business;
+        if (!$business || $business->user_id !== $request->user()->id) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
+        // 2. Plan check
+        $plan = strtolower($business->plan ?? 'starter');
+        if (!in_array($plan, ['growth', 'pro'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This feature is available only on the Growth and Pro plans.',
+            ], 403);
+        }
+
+        // 3. Update reply text if provided (user may have edited)
+        $replyText = $request->input('reply_text', $review->reply_text);
+        if (empty($replyText)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Reply text is required.',
+            ], 422);
+        }
+
+        $review->update([
+            'reply_text' => $replyText,
+            'reply_status' => 'posted',
+            'replied_at' => now(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Reply posted successfully.',
+            'data' => $review,
+        ]);
+    }
 }

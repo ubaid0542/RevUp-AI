@@ -12,12 +12,14 @@ class Review extends Model
 
     protected $fillable = [
         'business_id', 'ratings', 'generated_text', 'language', 'source', 'stars', 'photos', 'is_posted',
+        'reply_text', 'reply_status', 'replied_at',
     ];
 
     protected $casts = [
         'ratings' => 'array',
         'photos' => 'array',
         'is_posted' => 'boolean',
+        'replied_at' => 'datetime',
     ];
 
     public function business(): BelongsTo

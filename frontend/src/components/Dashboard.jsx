@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { fetchBusinessStatsAPI } from '../services/authService';
+import { generateReplyAPI, postReplyAPI } from '../services/reviewService';
 import './Dashboard.css';
 
 function timeAgo(ts) {
@@ -63,6 +64,15 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
   const [recentReviews, setRecentReviews] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Reply Modal State
+  const [replyModal, setReplyModal] = useState({
+    open: false, reviewId: null, reviewText: '', stars: 0, reviewIdDisplay: '',
+    replyText: '', loading: false, status: 'none', // none | generated | posted
+  });
+
+  // Plan check for Reply feature
+  const canReply = ['growth', 'pro'].includes(business.plan?.toLowerCase());
+
   const isRealDbId = business.id && !business.id.toString().startsWith('biz_') && !business.id.toString().startsWith('demo');
 
   // Fetch real statistics and reviews from backend on mount/id change
@@ -109,10 +119,13 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
   let displayReviewsList = [];
   if (stats) {
     displayReviewsList = recentReviews.map(r => ({
+      id: r.id,
       stars: r.stars,
       text: r.generated_text,
       time: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
       photos: r.photos,
+      reply_text: r.reply_text || null,
+      reply_status: r.reply_status || 'none',
     }));
     
     // Add local reviews that aren't in the backend yet (for instant feedback when testing on same device)
@@ -688,7 +701,13 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
             </div>
           ) : (
             displayReviewsList.map((r, i) => (
-              <div className="review-item glass-card" key={i}>
+              <div className="review-item glass-card" key={r.id || i}>
+                {/* Meta: Review ID */}
+                {r.id && (
+                  <div className="review-item-meta">
+                    <span className="review-item-id">REV-{r.id}</span>
+                  </div>
+                )}
                 <div className="review-item-top">
                   <span className="review-item-stars">
                     {'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}
@@ -703,12 +722,160 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
                     ))}
                   </div>
                 )}
-                <span className="review-item-status status-posted">✅ Posted on Google</span>
+                <div className="review-item-bottom">
+                  <span className="review-item-status status-posted">✅ Posted on Google</span>
+                  {/* Reply button — Growth/Pro only */}
+                  {canReply && r.id && (
+                    <>
+                      {r.reply_status === 'posted' ? (
+                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                          <span className="review-replied-badge">🟢 Replied</span>
+                          <button className="review-view-reply-btn" onClick={() => setReplyModal({
+                            open: true, reviewId: r.id, reviewText: r.text, stars: r.stars,
+                            reviewIdDisplay: `REV-${r.id}`, replyText: r.reply_text || '', loading: false, status: 'posted',
+                          })}>👁 View</button>
+                        </div>
+                      ) : r.reply_status === 'generated' ? (
+                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                          <button className="review-reply-btn" onClick={() => setReplyModal({
+                            open: true, reviewId: r.id, reviewText: r.text, stars: r.stars,
+                            reviewIdDisplay: `REV-${r.id}`, replyText: r.reply_text || '', loading: false, status: 'generated',
+                          })}>✏️ Edit Reply</button>
+                        </div>
+                      ) : (
+                        <button className="review-reply-btn" onClick={() => handleOpenReplyModal(r)}>💬 Reply</button>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
             ))
           )}
         </div>
       </div>
+
+      {/* ── Reply Modal ── */}
+      {replyModal.open && (
+        <div className="reply-modal-overlay" onClick={() => !replyModal.loading && setReplyModal(prev => ({ ...prev, open: false }))}>
+          <div className="reply-modal" onClick={e => e.stopPropagation()}>
+            {/* Header */}
+            <div className="reply-modal-header">
+              <div className="reply-modal-title">🤖 AI Review Reply</div>
+              <button className="reply-modal-close" onClick={() => !replyModal.loading && setReplyModal(prev => ({ ...prev, open: false }))}>✕</button>
+            </div>
+
+            {/* Review Info */}
+            <div className="reply-review-info">
+              <div className="reply-review-meta">
+                <span className="reply-review-stars">{'★'.repeat(replyModal.stars)}{'☆'.repeat(5 - replyModal.stars)}</span>
+                <span className="reply-review-id-tag">{replyModal.reviewIdDisplay}</span>
+              </div>
+              <div className="reply-review-text">"{replyModal.reviewText}"</div>
+            </div>
+
+            {/* Body */}
+            <div className="reply-modal-body">
+              {replyModal.loading ? (
+                <div className="reply-loading">
+                  <div className="reply-loading-spinner"></div>
+                  <span>Generating AI reply...</span>
+                </div>
+              ) : replyModal.replyText ? (
+                <>
+                  <label className="reply-label">🤖 AI Generated Reply</label>
+                  <textarea
+                    className="reply-textarea"
+                    value={replyModal.replyText}
+                    onChange={e => setReplyModal(prev => ({ ...prev, replyText: e.target.value }))}
+                    disabled={replyModal.status === 'posted'}
+                  />
+                </>
+              ) : (
+                <div className="reply-loading" style={{ padding: '20px 0' }}>
+                  <span style={{ color: 'var(--text3)' }}>Click "✨ Generate Reply" to create an AI reply</span>
+                </div>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="reply-modal-actions">
+              {replyModal.status !== 'posted' && (
+                <button
+                  className="reply-action-btn primary"
+                  disabled={replyModal.loading}
+                  onClick={() => handleGenerateReply(replyModal.replyText ? true : false)}
+                >
+                  {replyModal.replyText ? '✨ Regenerate' : '✨ Generate Reply'}
+                </button>
+              )}
+              {replyModal.replyText && (
+                <button className="reply-action-btn" onClick={() => {
+                  navigator.clipboard.writeText(replyModal.replyText);
+                  onToast('📋 Reply copied to clipboard!');
+                }}>📋 Copy</button>
+              )}
+              {replyModal.replyText && replyModal.status !== 'posted' && (
+                <button
+                  className="reply-action-btn success"
+                  disabled={replyModal.loading}
+                  onClick={handlePostReply}
+                >📤 Post to Google</button>
+              )}
+              <button
+                className="reply-action-btn"
+                onClick={() => setReplyModal(prev => ({ ...prev, open: false }))}
+                disabled={replyModal.loading}
+              >❌ Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
+
+  // ── Reply Handlers ──
+  function handleOpenReplyModal(review) {
+    setReplyModal({
+      open: true, reviewId: review.id, reviewText: review.text, stars: review.stars,
+      reviewIdDisplay: `REV-${review.id}`, replyText: '', loading: true, status: 'none',
+    });
+    // Auto-generate reply on open
+    generateReplyAPI(review.id, false).then(result => {
+      if (result && !result.error) {
+        setReplyModal(prev => ({ ...prev, replyText: result.reply_text, loading: false, status: 'generated' }));
+        // Update the review in the local list
+        setRecentReviews(prev => prev.map(r => r.id === review.id ? { ...r, reply_text: result.reply_text, reply_status: 'generated' } : r));
+      } else {
+        setReplyModal(prev => ({ ...prev, loading: false }));
+        onToast(result?.message || '❌ Failed to generate reply');
+      }
+    });
+  }
+
+  function handleGenerateReply(isRegeneration) {
+    setReplyModal(prev => ({ ...prev, loading: true }));
+    generateReplyAPI(replyModal.reviewId, isRegeneration).then(result => {
+      if (result && !result.error) {
+        setReplyModal(prev => ({ ...prev, replyText: result.reply_text, loading: false, status: 'generated' }));
+        setRecentReviews(prev => prev.map(r => r.id === replyModal.reviewId ? { ...r, reply_text: result.reply_text, reply_status: 'generated' } : r));
+      } else {
+        setReplyModal(prev => ({ ...prev, loading: false }));
+        onToast(result?.message || '❌ Failed to generate reply');
+      }
+    });
+  }
+
+  function handlePostReply() {
+    setReplyModal(prev => ({ ...prev, loading: true }));
+    postReplyAPI(replyModal.reviewId, replyModal.replyText).then(result => {
+      if (result && !result.error) {
+        setReplyModal(prev => ({ ...prev, loading: false, status: 'posted' }));
+        setRecentReviews(prev => prev.map(r => r.id === replyModal.reviewId ? { ...r, reply_text: replyModal.replyText, reply_status: 'posted' } : r));
+        onToast('✅ Reply posted successfully!');
+      } else {
+        setReplyModal(prev => ({ ...prev, loading: false }));
+        onToast(result?.message || '❌ Failed to post reply');
+      }
+    });
+  }
 }

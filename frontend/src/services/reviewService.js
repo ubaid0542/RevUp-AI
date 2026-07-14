@@ -603,3 +603,52 @@ export async function uploadReviewPhotosAPI(reviewId, base64Photos) {
   }
 }
 
+/**
+ * Generate AI reply for a review (Growth/Pro plan only)
+ * @param {number} reviewId - The backend review ID
+ * @param {boolean} regenerate - Whether this is a regeneration request
+ * @returns {{ reply_text, reply_status, replied_at } | null}
+ */
+export async function generateReplyAPI(reviewId, regenerate = false) {
+  const { authHeaders } = await import('./authService.js');
+  try {
+    const response = await fetch(`${API_BASE}/reviews/${reviewId}/reply`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ regenerate }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: true, message: data.message || 'Failed to generate reply', status: response.status };
+    }
+    return data.success ? data.data : null;
+  } catch (err) {
+    console.error("Failed to generate reply:", err);
+    return { error: true, message: 'Network error. Please try again.' };
+  }
+}
+
+/**
+ * Post/save reply for a review (Growth/Pro plan only)
+ * @param {number} reviewId - The backend review ID
+ * @param {string} replyText - The reply text (may have been edited by user)
+ * @returns {{ success, data } | null}
+ */
+export async function postReplyAPI(reviewId, replyText) {
+  const { authHeaders } = await import('./authService.js');
+  try {
+    const response = await fetch(`${API_BASE}/reviews/${reviewId}/post-reply`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ reply_text: replyText }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: true, message: data.message || 'Failed to post reply', status: response.status };
+    }
+    return data;
+  } catch (err) {
+    console.error("Failed to post reply:", err);
+    return { error: true, message: 'Network error. Please try again.' };
+  }
+}

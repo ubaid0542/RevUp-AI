@@ -570,4 +570,169 @@ class ReviewGeneratorService
         $template = $templates[array_rand($templates)];
         return $template();
     }
+
+    /**
+     * Generate an AI reply to a customer review as the business owner.
+     */
+    public function generateReply(
+        string $businessName,
+        string $businessType,
+        string $customerReview,
+        int $stars,
+        bool $isRegeneration = false
+    ): string {
+        $prompt = "You are {$businessName}, a {$businessType}. A customer left a {$stars}-star review:\n\n"
+            . "\"{$customerReview}\"\n\n"
+            . "Write a professional, warm reply as the business owner. Rules:\n"
+            . "- 2-3 sentences max\n"
+            . "- Thank the customer genuinely\n"
+            . "- If rating is 4-5 stars: express gratitude, mention you look forward to serving again\n"
+            . "- If rating is 1-3 stars: apologize, show empathy, offer to improve\n"
+            . "- Do NOT use generic phrases like \"Dear valued customer\"\n"
+            . "- Sound human and authentic\n"
+            . "- Do NOT include any greeting like \"Dear\" or \"Hi\"\n"
+            . "- Write in the same language as the customer review";
+
+        $temperature = $isRegeneration ? 0.9 : 0.7;
+
+        // 1st Priority: OpenRouter API
+        $openRouterKey = env('OPENROUTER_API_KEY');
+        if (!empty($openRouterKey)) {
+            $result = $this->callOpenRouter($prompt, $temperature, $openRouterKey);
+            if ($result) {
+                return $result;
+            }
+        }
+
+        // 2nd Priority: Direct Gemini API (fallback)
+        $geminiKey = env('GEMINI_API_KEY');
+        if (!empty($geminiKey)) {
+            $result = $this->callGemini($prompt, $temperature, $geminiKey);
+            if ($result) {
+                return $result;
+            }
+        }
+
+        Log::warning('All AI reply generation failed. Business: ' . $businessName);
+        return '';
+    }
+
+    /**
+     * Call OpenRouter API with a prompt and temperature.
+     */
+    protected function callOpenRouter(string $prompt, float $temperature, string $apiKey): ?string
+    {
+        $models = [
+            ['id' => 'openai/gpt-4.1', 'timeout' => 15],
+            ['id' => 'google/gemini-2.5-pro', 'timeout' => 15],
+            ['id' => 'anthropic/claude-sonnet-4', 'timeout' => 15],
+            ['id' => 'google/gemini-2.5-flash', 'timeout' => 10],
+            ['id' => 'meta-llama/llama-3.3-70b-instruct:free', 'timeout' => 10],
+        ];
+
+        foreach ($models as $modelConfig) {
+            $model = $modelConfig['id'];
+            $modelTimeout = $modelConfig['timeout'];
+            try {
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'HTTP-Referer' => env('APP_URL', 'http://localhost:8000'),
+                    'X-Title' => 'Review Reply Generator',
+                ])
+                ->timeout($modelTimeout)
+                ->post('https://openrouter.ai/api/v1/chat/completions', [
+                    'model' => $model,
+                    'messages' => [
+                        ['role' => 'user', 'content' => $prompt],
+                    ],
+                    'temperature' => $temperature,
+                ]);
+
+                if ($response->successful()) {
+                    $data = $response->json();
+                    $text = trim($data['choices'][0]['message']['content'] ?? '');
+                    if (!empty($text)) {
+                        Log::info("OpenRouter reply generated using model: $model");
+                        return $text;
+                    }
+                } else {
+                    if ($response->status() === 429) {
+                        Log::warning("OpenRouter model $model rate limited (reply), trying next.");
+                        continue;
+                    }
+                    Log::warning("OpenRouter model $model failed (reply): " . $response->body());
+                }
+            } catch (\Exception $e) {
+                Log::warning("OpenRouter model $model timed out/exception (reply): " . $e->getMessage());
+            }
+        }
+
+        Log::error('All OpenRouter models failed for reply generation.');
+        return null;
+    }
+
+    /**
+     * Call Gemini API with a prompt and temperature.
+     */
+    protected function callGemini(string $prompt, float $temperature, string $apiKey): ?string
+    {
+        try {
+            $response = Http::timeout(10)
+                ->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={$apiKey}", [
+                    'contents' => [
+                        [
+                            'parts' => [
+                                ['text' => $prompt]
+                            ]
+                        ]
+                    ],
+                    'generationConfig' => [
+                        'temperature' => $temperature,
+                        'topP' => 0.95,
+                    ]
+                ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                return trim($data['candidates'][0]['content']['parts'][0]['text'] ?? '');
+            } else {
+                if ($this->isGeminiApiKeyError($response->body())) {
+                    Log::error('Gemini API key is invalid or expired (reply).');
+                    return null;
+                }
+                Log::warning('Gemini 2.0 failed for reply: ' . $response->body());
+            }
+        } catch (\Exception $e) {
+            Log::error('Gemini Exception (reply): ' . $e->getMessage());
+        }
+
+        // Fallback to gemini-1.5-flash
+        try {
+            $response = Http::timeout(10)
+                ->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}", [
+                    'contents' => [
+                        [
+                            'parts' => [
+                                ['text' => $prompt]
+                            ]
+                        ]
+                    ],
+                    'generationConfig' => [
+                        'temperature' => $temperature,
+                        'topP' => 0.95,
+                    ]
+                ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                return trim($data['candidates'][0]['content']['parts'][0]['text'] ?? '');
+            } else {
+                Log::error('Gemini 1.5 failed for reply: ' . $response->body());
+            }
+        } catch (\Exception $e) {
+            Log::error('Gemini 1.5 Exception (reply): ' . $e->getMessage());
+        }
+
+        return null;
+    }
 }
