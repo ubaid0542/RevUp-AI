@@ -867,11 +867,25 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
 
   function handlePostReply() {
     setReplyModal(prev => ({ ...prev, loading: true }));
+
+    // 1. Copy reply to clipboard
+    navigator.clipboard.writeText(replyModal.replyText).catch(() => {});
+
+    // 2. Mark as posted in backend
     postReplyAPI(replyModal.reviewId, replyModal.replyText).then(result => {
       if (result && !result.error) {
         setReplyModal(prev => ({ ...prev, loading: false, status: 'posted' }));
         setRecentReviews(prev => prev.map(r => r.id === replyModal.reviewId ? { ...r, reply_text: replyModal.replyText, reply_status: 'posted' } : r));
-        onToast('✅ Reply posted successfully!');
+
+        // 3. Open Google Business Profile to paste reply
+        const searchQuery = encodeURIComponent(`${business.name} ${business.city || ''}`.trim());
+        const gmbLink = business.gmb || `https://www.google.com/search?q=${searchQuery}`;
+
+        onToast('✅ Reply copied! Opening Google — just paste & submit your reply!');
+
+        setTimeout(() => {
+          window.open(gmbLink, '_blank');
+        }, 600);
       } else {
         setReplyModal(prev => ({ ...prev, loading: false }));
         onToast(result?.message || '❌ Failed to post reply');
