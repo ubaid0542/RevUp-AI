@@ -227,7 +227,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     });
 
     // ── 1. BACKGROUND ──
-    // Solid black
+    // Solid black premium base
     ctx.fillStyle = '#0a0a0a';
     ctx.fillRect(0, 0, W, H);
 
@@ -237,6 +237,168 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     topGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = topGlow;
     ctx.fillRect(0, 0, W, 700);
+
+    // ── AI CIRCUIT BOARD BACKGROUND ──
+    // Google brand colors for circuit elements
+    const circuitColors = ['#4285F4', '#EA4335', '#FBBC05', '#34A853'];
+
+    // Helper: hex to rgba
+    const hexToRgba = (hex, alpha) => {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r},${g},${b},${alpha})`;
+    };
+
+    // Helper: draw a glowing node (small illuminated dot)
+    const drawNode = (nx, ny, color, radius = 3, glowR = 12) => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(nx, ny, glowR, 0, Math.PI * 2);
+      const ng = ctx.createRadialGradient(nx, ny, 0, nx, ny, glowR);
+      ng.addColorStop(0, hexToRgba(color, 0.35));
+      ng.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = ng;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(nx, ny, radius, 0, Math.PI * 2);
+      ctx.fillStyle = hexToRgba(color, 0.8);
+      ctx.fill();
+      ctx.restore();
+    };
+
+    // Helper: draw a glowing circuit line
+    const drawCircuitLine = (points, color, lineW = 1.5) => {
+      if (points.length < 2) return;
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineW;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 8;
+      ctx.globalAlpha = 0.18;
+      ctx.beginPath();
+      ctx.moveTo(points[0][0], points[0][1]);
+      for (let i = 1; i < points.length; i++) ctx.lineTo(points[i][0], points[i][1]);
+      ctx.stroke();
+      ctx.restore();
+    };
+
+    // Helper: draw hexagon outline
+    const drawHexagon = (hx, hy, size, color) => {
+      ctx.save();
+      ctx.globalAlpha = 0.1;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI / 3) * i - Math.PI / 6;
+        const px = hx + size * Math.cos(angle);
+        const py = hy + size * Math.sin(angle);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+    };
+
+    // ─── LEFT SIDE CIRCUIT PATTERNS ───
+    // Main vertical line (left edge)
+    drawCircuitLine([[60, 80], [60, 400], [90, 430], [90, 650], [60, 680], [60, 900], [90, 930], [90, 1100], [60, 1130], [60, 1350]], circuitColors[0]);
+    // Branch lines from left
+    drawCircuitLine([[60, 200], [140, 200], [140, 280], [180, 320]], circuitColors[1]);
+    drawCircuitLine([[60, 400], [120, 400], [160, 440], [160, 520]], circuitColors[2]);
+    drawCircuitLine([[90, 650], [160, 650], [190, 680], [190, 750]], circuitColors[3]);
+    drawCircuitLine([[90, 930], [150, 930], [150, 1000], [200, 1050]], circuitColors[0]);
+    drawCircuitLine([[60, 1130], [130, 1130], [170, 1170]], circuitColors[1]);
+    // Secondary left vertical
+    drawCircuitLine([[140, 120], [140, 200]], circuitColors[3]);
+    drawCircuitLine([[160, 440], [200, 440], [200, 380]], circuitColors[2]);
+
+    // Left nodes (glowing dots at intersections)
+    drawNode(60, 200, circuitColors[1], 3, 14);
+    drawNode(140, 280, circuitColors[1], 2, 10);
+    drawNode(60, 400, circuitColors[2], 3, 14);
+    drawNode(160, 520, circuitColors[2], 2, 10);
+    drawNode(90, 650, circuitColors[3], 3, 14);
+    drawNode(190, 750, circuitColors[3], 2, 10);
+    drawNode(90, 930, circuitColors[0], 3, 14);
+    drawNode(200, 1050, circuitColors[0], 2, 10);
+    drawNode(60, 1130, circuitColors[1], 3, 14);
+
+    // ─── RIGHT SIDE CIRCUIT PATTERNS (mirrored) ───
+    drawCircuitLine([[W-60, 80], [W-60, 400], [W-90, 430], [W-90, 650], [W-60, 680], [W-60, 900], [W-90, 930], [W-90, 1100], [W-60, 1130], [W-60, 1350]], circuitColors[0]);
+    drawCircuitLine([[W-60, 200], [W-140, 200], [W-140, 280], [W-180, 320]], circuitColors[1]);
+    drawCircuitLine([[W-60, 400], [W-120, 400], [W-160, 440], [W-160, 520]], circuitColors[2]);
+    drawCircuitLine([[W-90, 650], [W-160, 650], [W-190, 680], [W-190, 750]], circuitColors[3]);
+    drawCircuitLine([[W-90, 930], [W-150, 930], [W-150, 1000], [W-200, 1050]], circuitColors[0]);
+    drawCircuitLine([[W-60, 1130], [W-130, 1130], [W-170, 1170]], circuitColors[1]);
+    drawCircuitLine([[W-140, 120], [W-140, 200]], circuitColors[3]);
+    drawCircuitLine([[W-160, 440], [W-200, 440], [W-200, 380]], circuitColors[2]);
+
+    // Right nodes
+    drawNode(W-60, 200, circuitColors[1], 3, 14);
+    drawNode(W-140, 280, circuitColors[1], 2, 10);
+    drawNode(W-60, 400, circuitColors[2], 3, 14);
+    drawNode(W-160, 520, circuitColors[2], 2, 10);
+    drawNode(W-90, 650, circuitColors[3], 3, 14);
+    drawNode(W-190, 750, circuitColors[3], 2, 10);
+    drawNode(W-90, 930, circuitColors[0], 3, 14);
+    drawNode(W-200, 1050, circuitColors[0], 2, 10);
+    drawNode(W-60, 1130, circuitColors[1], 3, 14);
+
+    // ─── HEXAGONS (subtle, scattered on sides) ───
+    drawHexagon(100, 150, 25, circuitColors[0]);
+    drawHexagon(70, 550, 20, circuitColors[2]);
+    drawHexagon(130, 800, 30, circuitColors[3]);
+    drawHexagon(80, 1200, 22, circuitColors[1]);
+    // Right side hexagons
+    drawHexagon(W-100, 150, 25, circuitColors[0]);
+    drawHexagon(W-70, 550, 20, circuitColors[2]);
+    drawHexagon(W-130, 800, 30, circuitColors[3]);
+    drawHexagon(W-80, 1200, 22, circuitColors[1]);
+    // Mid-area hexagons (very subtle)
+    drawHexagon(200, 350, 18, circuitColors[3]);
+    drawHexagon(W-200, 350, 18, circuitColors[3]);
+    drawHexagon(220, 1050, 16, circuitColors[0]);
+    drawHexagon(W-220, 1050, 16, circuitColors[0]);
+
+    // ─── DIGITAL PARTICLES (tiny glowing dots scattered) ───
+    const particlePositions = [
+      [45, 130], [170, 160], [30, 500], [200, 600], [50, 1050], [180, 1250],
+      [W-45, 130], [W-170, 160], [W-30, 500], [W-200, 600], [W-50, 1050], [W-180, 1250],
+      [250, 250], [W-250, 250], [230, 900], [W-230, 900],
+    ];
+    particlePositions.forEach((p, i) => {
+      ctx.save();
+      ctx.globalAlpha = 0.12 + (i % 3) * 0.04;
+      ctx.beginPath();
+      ctx.arc(p[0], p[1], 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = circuitColors[i % 4];
+      ctx.fill();
+      ctx.restore();
+    });
+
+    // ─── AMBIENT GLOW (soft Google-color neon from edges) ───
+    // Left edge blue glow
+    const leftGlow = ctx.createLinearGradient(0, 0, 120, 0);
+    leftGlow.addColorStop(0, 'rgba(66, 133, 244, 0.06)');
+    leftGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = leftGlow;
+    ctx.fillRect(0, 0, 120, H);
+
+    // Right edge green glow
+    const rightGlow = ctx.createLinearGradient(W, 0, W-120, 0);
+    rightGlow.addColorStop(0, 'rgba(52, 168, 83, 0.06)');
+    rightGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = rightGlow;
+    ctx.fillRect(W-120, 0, 120, H);
+
+    // Bottom red glow
+    const bottomGlow = ctx.createLinearGradient(0, H, 0, H-100);
+    bottomGlow.addColorStop(0, 'rgba(234, 67, 53, 0.05)');
+    bottomGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = bottomGlow;
+    ctx.fillRect(0, H-100, W, 100);
 
     // ── 2. GOOGLE COLOR BAR AT TOP ──
     const barH = 8;
