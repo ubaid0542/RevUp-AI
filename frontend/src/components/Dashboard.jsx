@@ -418,6 +418,58 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.fillStyle = bottomGlow;
     ctx.fillRect(0, H-100, W, 100);
 
+    // ─── AI CIRCULAR ARCS (concentric rings / radar pattern) ───
+    // Left-side arcs radiating from circuit nodes
+    const drawArc = (arcX, arcY, radius, startAngle, endAngle, color, alpha = 0.12, dashPattern = []) => {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 4;
+      if (dashPattern.length) ctx.setLineDash(dashPattern);
+      ctx.beginPath();
+      ctx.arc(arcX, arcY, radius, startAngle, endAngle);
+      ctx.stroke();
+      ctx.restore();
+    };
+
+    // Left side concentric arcs (from top-left area)
+    drawArc(0, 300, 180, -0.3, 1.2, circuitColors[0], 0.10, [6, 8]);
+    drawArc(0, 300, 240, -0.2, 0.9, circuitColors[1], 0.08, [4, 10]);
+    drawArc(0, 300, 310, -0.1, 0.7, circuitColors[2], 0.06, [3, 12]);
+
+    // Left side lower arcs
+    drawArc(30, 900, 150, -0.5, 1.0, circuitColors[3], 0.10, [5, 8]);
+    drawArc(30, 900, 220, -0.3, 0.8, circuitColors[0], 0.07, [4, 10]);
+
+    // Right side concentric arcs (mirror)
+    drawArc(W, 300, 180, Math.PI - 1.2, Math.PI + 0.3, circuitColors[0], 0.10, [6, 8]);
+    drawArc(W, 300, 240, Math.PI - 0.9, Math.PI + 0.2, circuitColors[1], 0.08, [4, 10]);
+    drawArc(W, 300, 310, Math.PI - 0.7, Math.PI + 0.1, circuitColors[2], 0.06, [3, 12]);
+
+    // Right side lower arcs
+    drawArc(W - 30, 900, 150, Math.PI - 1.0, Math.PI + 0.5, circuitColors[3], 0.10, [5, 8]);
+    drawArc(W - 30, 900, 220, Math.PI - 0.8, Math.PI + 0.3, circuitColors[0], 0.07, [4, 10]);
+
+    // Center-area subtle full rings (very faint, behind QR)
+    drawArc(cx, 700, 380, 0, Math.PI * 2, circuitColors[0], 0.03, [2, 15]);
+    drawArc(cx, 700, 450, 0, Math.PI * 2, circuitColors[2], 0.025, [2, 20]);
+
+    // Corner accent arcs
+    drawArc(0, 0, 120, 0, Math.PI / 2, circuitColors[1], 0.15, [8, 6]);
+    drawArc(W, 0, 120, Math.PI / 2, Math.PI, circuitColors[3], 0.15, [8, 6]);
+    drawArc(0, H, 100, -Math.PI / 2, 0, circuitColors[2], 0.12, [6, 8]);
+    drawArc(W, H, 100, Math.PI, Math.PI * 1.5, circuitColors[0], 0.12, [6, 8]);
+
+    // Small dotted circles at node points (AI network feel)
+    drawArc(140, 280, 20, 0, Math.PI * 2, circuitColors[1], 0.18, [2, 4]);
+    drawArc(190, 750, 18, 0, Math.PI * 2, circuitColors[3], 0.18, [2, 4]);
+    drawArc(W - 140, 280, 20, 0, Math.PI * 2, circuitColors[1], 0.18, [2, 4]);
+    drawArc(W - 190, 750, 18, 0, Math.PI * 2, circuitColors[3], 0.18, [2, 4]);
+    drawArc(200, 1050, 15, 0, Math.PI * 2, circuitColors[0], 0.15, [2, 4]);
+    drawArc(W - 200, 1050, 15, 0, Math.PI * 2, circuitColors[0], 0.15, [2, 4]);
+
     // ── 2. GOOGLE COLOR BAR AT TOP ──
     const barH = 8;
     const colors = ['#4285F4', '#EA4335', '#FBBC05', '#34A853'];
@@ -794,7 +846,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.fillText(catCity, textX, curY + 75);
     ctx.restore();
 
-    curY += 100;
+    curY += 115;
 
     // ── "Thank you!" + "WE APPRECIATE YOUR SUPPORT" ──
     // Gold divider line
@@ -804,7 +856,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.fillRect(cx + 30, curY, 130, 1.5);
     ctx.restore();
 
-    curY += 30;
+    curY += 40;
 
     // "Thank you!" in cursive italic gold
     ctx.save();
