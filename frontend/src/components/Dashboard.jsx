@@ -794,6 +794,41 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.fillText(catCity, textX, curY + 75);
     ctx.restore();
 
+    curY += 100;
+
+    // ── "Thank you!" + "WE APPRECIATE YOUR SUPPORT" ──
+    // Gold divider line
+    ctx.save();
+    ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
+    ctx.fillRect(cx - 160, curY, 130, 1.5);
+    ctx.fillRect(cx + 30, curY, 130, 1.5);
+    ctx.restore();
+
+    curY += 30;
+
+    // "Thank you!" in cursive italic gold
+    ctx.save();
+    ctx.font = 'italic 52px "Georgia", "Palatino", "Times New Roman", serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#FFD700';
+    ctx.shadowColor = 'rgba(255, 215, 0, 0.4)';
+    ctx.shadowBlur = 15;
+    ctx.fillText('Thank you!', cx, curY);
+    ctx.restore();
+
+    curY += 35;
+
+    // "WE APPRECIATE YOUR SUPPORT" in small white caps
+    ctx.save();
+    ctx.font = '600 16px "Inter", "Segoe UI", Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.letterSpacing = '3px';
+    ctx.fillText('WE APPRECIATE YOUR SUPPORT', cx, curY);
+    ctx.restore();
+
+    curY += 30;
+
     // ── 12. FOOTER: "Powered by RevUp-AI" ──
     const footY = H - 50;
     // Divider line above footer
