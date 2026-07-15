@@ -251,31 +251,47 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     };
 
     // Helper: draw a glowing node (small illuminated dot)
-    const drawNode = (nx, ny, color, radius = 3, glowR = 12) => {
+    const drawNode = (nx, ny, color, radius = 3, glowR = 16) => {
       ctx.save();
       ctx.beginPath();
       ctx.arc(nx, ny, glowR, 0, Math.PI * 2);
       const ng = ctx.createRadialGradient(nx, ny, 0, nx, ny, glowR);
-      ng.addColorStop(0, hexToRgba(color, 0.35));
+      ng.addColorStop(0, hexToRgba(color, 0.6));
+      ng.addColorStop(0.5, hexToRgba(color, 0.2));
       ng.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = ng;
       ctx.fill();
       ctx.beginPath();
       ctx.arc(nx, ny, radius, 0, Math.PI * 2);
-      ctx.fillStyle = hexToRgba(color, 0.8);
+      ctx.fillStyle = hexToRgba(color, 0.95);
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 10;
       ctx.fill();
       ctx.restore();
     };
 
     // Helper: draw a glowing circuit line
-    const drawCircuitLine = (points, color, lineW = 1.5) => {
+    const drawCircuitLine = (points, color, lineW = 2) => {
       if (points.length < 2) return;
+      // Outer glow pass
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineW + 4;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 20;
+      ctx.globalAlpha = 0.12;
+      ctx.beginPath();
+      ctx.moveTo(points[0][0], points[0][1]);
+      for (let i = 1; i < points.length; i++) ctx.lineTo(points[i][0], points[i][1]);
+      ctx.stroke();
+      ctx.restore();
+      // Core line pass
       ctx.save();
       ctx.strokeStyle = color;
       ctx.lineWidth = lineW;
       ctx.shadowColor = color;
-      ctx.shadowBlur = 8;
-      ctx.globalAlpha = 0.18;
+      ctx.shadowBlur = 12;
+      ctx.globalAlpha = 0.45;
       ctx.beginPath();
       ctx.moveTo(points[0][0], points[0][1]);
       for (let i = 1; i < points.length; i++) ctx.lineTo(points[i][0], points[i][1]);
@@ -286,9 +302,11 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     // Helper: draw hexagon outline
     const drawHexagon = (hx, hy, size, color) => {
       ctx.save();
-      ctx.globalAlpha = 0.1;
+      ctx.globalAlpha = 0.2;
       ctx.strokeStyle = color;
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 1.2;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 6;
       ctx.beginPath();
       for (let i = 0; i < 6; i++) {
         const angle = (Math.PI / 3) * i - Math.PI / 6;
@@ -380,18 +398,18 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
 
     // ─── AMBIENT GLOW (soft Google-color neon from edges) ───
     // Left edge blue glow
-    const leftGlow = ctx.createLinearGradient(0, 0, 120, 0);
-    leftGlow.addColorStop(0, 'rgba(66, 133, 244, 0.06)');
+    const leftGlow = ctx.createLinearGradient(0, 0, 150, 0);
+    leftGlow.addColorStop(0, 'rgba(66, 133, 244, 0.12)');
     leftGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = leftGlow;
-    ctx.fillRect(0, 0, 120, H);
+    ctx.fillRect(0, 0, 150, H);
 
     // Right edge green glow
-    const rightGlow = ctx.createLinearGradient(W, 0, W-120, 0);
-    rightGlow.addColorStop(0, 'rgba(52, 168, 83, 0.06)');
+    const rightGlow = ctx.createLinearGradient(W, 0, W-150, 0);
+    rightGlow.addColorStop(0, 'rgba(52, 168, 83, 0.12)');
     rightGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = rightGlow;
-    ctx.fillRect(W-120, 0, 120, H);
+    ctx.fillRect(W-150, 0, 150, H);
 
     // Bottom red glow
     const bottomGlow = ctx.createLinearGradient(0, H, 0, H-100);
@@ -509,6 +527,68 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     const sSize = qrContainerSize + qrBorderW;
     const sR = 24;
 
+    // ── NEON GLOW PASSES (outer glow behind border) ──
+    // Red glow (top-left)
+    ctx.save();
+    ctx.lineWidth = 18;
+    ctx.shadowColor = '#EA4335';
+    ctx.shadowBlur = 35;
+    ctx.globalAlpha = 0.25;
+    ctx.beginPath();
+    ctx.moveTo(sX + sSize/2, sY);
+    ctx.lineTo(sX + sR, sY);
+    ctx.quadraticCurveTo(sX, sY, sX, sY + sR);
+    ctx.lineTo(sX, sY + sSize/2);
+    ctx.strokeStyle = '#EA4335';
+    ctx.stroke();
+    ctx.restore();
+
+    // Blue glow (top-right)
+    ctx.save();
+    ctx.lineWidth = 18;
+    ctx.shadowColor = '#4285F4';
+    ctx.shadowBlur = 35;
+    ctx.globalAlpha = 0.25;
+    ctx.beginPath();
+    ctx.moveTo(sX + sSize/2, sY);
+    ctx.lineTo(sX + sSize - sR, sY);
+    ctx.quadraticCurveTo(sX + sSize, sY, sX + sSize, sY + sR);
+    ctx.lineTo(sX + sSize, sY + sSize/2);
+    ctx.strokeStyle = '#4285F4';
+    ctx.stroke();
+    ctx.restore();
+
+    // Yellow glow (bottom-right)
+    ctx.save();
+    ctx.lineWidth = 18;
+    ctx.shadowColor = '#FBBC05';
+    ctx.shadowBlur = 35;
+    ctx.globalAlpha = 0.25;
+    ctx.beginPath();
+    ctx.moveTo(sX + sSize, sY + sSize/2);
+    ctx.lineTo(sX + sSize, sY + sSize - sR);
+    ctx.quadraticCurveTo(sX + sSize, sY + sSize, sX + sSize - sR, sY + sSize);
+    ctx.lineTo(sX + sSize/2, sY + sSize);
+    ctx.strokeStyle = '#FBBC05';
+    ctx.stroke();
+    ctx.restore();
+
+    // Green glow (bottom-left)
+    ctx.save();
+    ctx.lineWidth = 18;
+    ctx.shadowColor = '#34A853';
+    ctx.shadowBlur = 35;
+    ctx.globalAlpha = 0.25;
+    ctx.beginPath();
+    ctx.moveTo(sX + sSize/2, sY + sSize);
+    ctx.lineTo(sX + sR, sY + sSize);
+    ctx.quadraticCurveTo(sX, sY + sSize, sX, sY + sSize - sR);
+    ctx.lineTo(sX, sY + sSize/2);
+    ctx.strokeStyle = '#34A853';
+    ctx.stroke();
+    ctx.restore();
+
+    // ── CORE BORDER (sharp, on top of glow) ──
     ctx.save();
     ctx.lineWidth = qrBorderW;
     
