@@ -1,6 +1,5 @@
 Gmail- mu0430218@gmail.com
-App name : RevUp AI
-PWS: hsew mupw adcw fsou
+App name : RevWriteAI
 
 Brevo pr maine account banaya hai Email verification ka liya
 API Key : (stored in Render environment variables - do not commit here)
@@ -34,4 +33,4 @@ Ab jab real customer aaye → server already jaaga hua → review 1-2 sec me gen
 
 
 #Render pe Database Expire hone ke baad Neon database se connect kiya hai
-Neon Database Connection link : postgresql://neondb_owner:npg_dBD2m5zuNQIh@ep-dark-paper-a63sa7vv-pooler.us-west-2.aws.neon.tech/neondb?sslmode=require
+#Neon Database Connection link : (stored in Render environment variables - do not commit here)
