@@ -9,7 +9,7 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
     <div className="landing-page screen">
       <div className="hero-section">
         <div className="hero-content">
-          <div className="hero-tag">🚀 REVUP AI — REVIEW THAT HELP YOU GROW</div>
+          <div className="hero-tag">🚀 REVWRITEAI — REVIEWS THAT DRIVE GROWTH</div>
           <h1 className="hero-title">
             More Reviews,<br />
             <span className="gradient-text">Zero Effort</span>
@@ -28,7 +28,7 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
           </div>
         </div>
         <div className="hero-image-wrapper">
-          <img src="/assets/hero_illustration.png" alt="RevUp AI 3D Illustration" className="hero-image" />
+          <img src="/assets/hero_illustration.png" alt="RevWriteAI 3D Illustration" className="hero-image" />
         </div>
       </div>
 
@@ -100,8 +100,8 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
       {/* Footer */}
       <footer className="landing-footer">
         <div className="footer-brand">
-          <div className="footer-logo">🚀 RevUp AI</div>
-          <div className="footer-tagline">Review That Help You Grow</div>
+          <div className="footer-logo">🚀 RevWriteAI</div>
+          <div className="footer-tagline">Reviews That Drive Growth</div>
           <div className="footer-legal-links" style={{ marginTop: '15px' }}>
             <button onClick={() => onNavigate('legal')} style={{ background: 'none', border: 'none', color: 'var(--text2)', cursor: 'pointer', fontSize: '14px', padding: 0 }}>Terms & Privacy</button>
           </div>
@@ -115,7 +115,7 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
           </div>
         </div>
         <div className="footer-copy">
-          © {new Date().getFullYear()} RevUp AI. All rights reserved.
+          © {new Date().getFullYear()} RevWriteAI. All rights reserved.
         </div>
       </footer>
     </div>

@@ -8,7 +8,7 @@ export function LegalPages() {
     <div className="legal-container">
       <div className="legal-header">
         <h1>Legal & Policies</h1>
-        <p>Everything you need to know about RevUp AI.</p>
+        <p>Everything you need to know about RevWriteAI.</p>
       </div>
 
       <div className="legal-tabs">
@@ -38,9 +38,9 @@ export function LegalPages() {
             <h2>Terms of Service</h2>
             <p>Last updated: {new Date().toLocaleDateString()}</p>
             <h3>1. Agreement to Terms</h3>
-            <p>By accessing or using RevUp AI, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you may not access the service.</p>
+            <p>By accessing or using RevWriteAI, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you may not access the service.</p>
             <h3>2. Service Description</h3>
-            <p>RevUp AI provides an AI-powered review generation tool for businesses. We do not guarantee the publication or success of reviews on third-party platforms like Google My Business.</p>
+            <p>RevWriteAI provides an AI-powered review generation tool for businesses. We do not guarantee the publication or success of reviews on third-party platforms like Google My Business.</p>
             <h3>3. User Accounts</h3>
             <p>You are responsible for safeguarding the password and for all activities that occur under your account.</p>
             <h3>4. Acceptable Use</h3>

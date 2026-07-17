@@ -201,10 +201,10 @@ export default function App() {
   useEffect(() => {
     if (bizIdFromUrl && businessData && businessData.name) {
       updateFavicon(businessData.logoUrl, businessData.name);
-      document.title = `RevUp AI — ${businessData.name}`;
+      document.title = `RevWriteAI — ${businessData.name}`;
     } else if (savedBusiness && !bizIdFromUrl) {
       updateFavicon(savedBusiness.logoUrl, savedBusiness.name);
-      document.title = `${savedBusiness.name} — RevUp AI Dashboard`;
+      document.title = `${savedBusiness.name} — RevWriteAI Dashboard`;
     }
   }, [businessData, bizIdFromUrl]);
 
@@ -364,7 +364,7 @@ export default function App() {
     localStorage.setItem(BUSINESSES_KEY, JSON.stringify(businesses));
 
     updateFavicon(finalData.logoUrl, finalData.name);
-    document.title = `${finalData.name} — RevUp AI Dashboard`;
+    document.title = `${finalData.name} — RevWriteAI Dashboard`;
 
     // Track registration
     trackEvent(EVENT_TYPES.BUSINESS_REGISTERED, {
@@ -432,7 +432,7 @@ export default function App() {
   if (!authChecked) {
     return (
       <div className="app-shell" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-        <div style={{ color: 'var(--accent, #6c63ff)', fontSize: '20px', fontWeight: 'bold' }}>⏳ Loading RevUp AI...</div>
+        <div style={{ color: 'var(--accent, #6c63ff)', fontSize: '20px', fontWeight: 'bold' }}>⏳ Loading RevWriteAI...</div>
       </div>
     );
   }

@@ -12,7 +12,7 @@ export default function Navbar({ currentPage, onNavigate, hasBusiness, onAdminAc
   return (
     <nav className="navbar" id="navbar">
       <div className="nav-logo" onClick={() => onNavigate('landing')}>
-        🚀 <span className="nav-logo-text">RevUp AI</span>
+        🚀 <span className="nav-logo-text">RevWriteAI</span>
       </div>
       <div className="nav-btns">
         {/* Theme Toggle */}

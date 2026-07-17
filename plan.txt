@@ -31,3 +31,7 @@ cron-job.org = Ek watchman 🧑‍✈️
 Ye har 14 min me tumhare server ko "hello" bolta hai (ek chhoti si ping request)
 Server sochta hai "koi aaya hai" → jagta rehta hai, soya nahi kabhi
 Ab jab real customer aaye → server already jaaga hua → review 1-2 sec me generate ✅
+
+
+#Render pe Database Expire hone ke baad Neon database se connect kiya hai
+Neon Database Connection link : postgresql://neondb_owner:npg_dBD2m5zuNQIh@ep-dark-paper-a63sa7vv-pooler.us-west-2.aws.neon.tech/neondb?sslmode=require

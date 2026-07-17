@@ -881,7 +881,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
 
     curY += 30;
 
-    // ── 12. FOOTER: "Powered by RevUp-AI" ──
+    // ── 12. FOOTER: "Powered by RevWriteAI" ──
     const footY = H - 50;
     // Divider line above footer
     ctx.save();
@@ -896,7 +896,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.fillText('Powered by', cx - 55, footY);
     ctx.fillStyle = '#8b5cf6';
     ctx.font = 'bold 20px "Inter", "Segoe UI", Arial, sans-serif';
-    ctx.fillText('RevUp-AI', cx + 45, footY);
+    ctx.fillText('RevWriteAI', cx + 55, footY);
     // Small sparkle
     ctx.font = '16px Arial';
     ctx.fillText('✨', cx - 115, footY);

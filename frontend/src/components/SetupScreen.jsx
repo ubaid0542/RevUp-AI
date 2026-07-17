@@ -86,7 +86,7 @@ export default function SetupScreen({ initialData, onComplete }) {
       {/* App Header */}
       <div className="app-header">
         <div className="app-logo-mark">⭐</div>
-        <div className="app-name">RevUp AI</div>
+        <div className="app-name">RevWriteAI</div>
       </div>
 
       {/* Setup Card */}

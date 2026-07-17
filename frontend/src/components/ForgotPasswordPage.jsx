@@ -77,7 +77,7 @@ export default function ForgotPasswordPage({ onGoToLogin }) {
         <div className="auth-header">
           <div className="auth-icon">🔑</div>
           <h2 className="auth-title gradient-text">Reset Password</h2>
-          <p className="auth-sub">Recover access to your RevUp AI account</p>
+          <p className="auth-sub">Recover access to your RevWriteAI account</p>
         </div>
 
         {message.text && (
