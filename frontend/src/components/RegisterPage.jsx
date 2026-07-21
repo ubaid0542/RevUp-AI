@@ -661,6 +661,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
                 <li>3 QR Codes</li>
                 <li>750 reviews/month</li>
                 <li>Advanced AI review</li>
+                <li>AI Review Reply</li>
                 <li>GMB redirect</li>
                 <li>Analytics dashboard</li>
               </ul>
@@ -675,6 +676,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
                 <li>Unlimited QR Codes</li>
                 <li>Unlimited reviews</li>
                 <li>Premium AI reviews</li>
+                <li>AI Review Reply</li>
                 <li>White-label option</li>
                 <li>API access</li>
               </ul>
