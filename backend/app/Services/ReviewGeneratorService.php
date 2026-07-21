@@ -581,17 +581,33 @@ class ReviewGeneratorService
         int $stars,
         bool $isRegeneration = false
     ): string {
-        $prompt = "You are {$businessName}, a {$businessType}. A customer left a {$stars}-star review:\n\n"
+        $starContext = ($stars >= 4)
+            ? "This is a POSITIVE review ({$stars} stars). The customer is happy.\n"
+              . "Reply guidelines for positive reviews:\n"
+              . "- Express genuine gratitude for their kind words\n"
+              . "- Reference a specific detail from their review to show you read it\n"
+              . "- Mention you look forward to serving them again\n"
+              . "- Keep the tone warm, professional, and appreciative\n"
+            : "This is a NEGATIVE review ({$stars} stars). The customer is unhappy.\n"
+              . "Reply guidelines for negative reviews:\n"
+              . "- Sincerely apologize for their poor experience\n"
+              . "- Show empathy — acknowledge their frustration\n"
+              . "- Take responsibility without making excuses\n"
+              . "- Offer to make it right (e.g., 'Please reach out to us directly so we can resolve this')\n"
+              . "- Keep the tone humble, professional, and solution-oriented\n";
+
+        $prompt = "You are the owner of {$businessName}, a {$businessType}. A customer left the following {$stars}-star review on Google:\n\n"
             . "\"{$customerReview}\"\n\n"
-            . "Write a professional, warm reply as the business owner. Rules:\n"
-            . "- 2-3 sentences max\n"
-            . "- Thank the customer genuinely\n"
-            . "- If rating is 4-5 stars: express gratitude, mention you look forward to serving again\n"
-            . "- If rating is 1-3 stars: apologize, show empathy, offer to improve\n"
-            . "- Do NOT use generic phrases like \"Dear valued customer\"\n"
-            . "- Sound human and authentic\n"
-            . "- Do NOT include any greeting like \"Dear\" or \"Hi\"\n"
-            . "- Write in the same language as the customer review";
+            . $starContext
+            . "\nWrite a professional reply in ENGLISH only. Strict rules:\n"
+            . "- 2-4 sentences maximum\n"
+            . "- ALWAYS reply in English regardless of the review language\n"
+            . "- Sound human, warm, and professional — like a real business owner\n"
+            . "- Do NOT start with 'Dear', 'Hi', 'Hello', or any greeting\n"
+            . "- Do NOT use generic corporate phrases like 'Dear valued customer' or 'We appreciate your feedback'\n"
+            . "- Do NOT use emojis\n"
+            . "- Make the reply feel personal and specific to this review\n"
+            . "- Output ONLY the reply text, nothing else";
 
         $temperature = $isRegeneration ? 0.9 : 0.7;
 
