@@ -78,6 +78,7 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
               <li>250 reviews/month</li>
               <li>Basic AI review</li>
               <li>GMB redirect</li>
+              <li>Analytics dashboard</li>
             </ul>
           </div>
           <div className="plan-card glass-card popular" onClick={() => onSelectPlan('Growth')}>

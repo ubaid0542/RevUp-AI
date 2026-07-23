@@ -661,6 +661,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
                 <li>250 reviews/month</li>
                 <li>Basic AI review</li>
                 <li>GMB redirect</li>
+                <li>Analytics dashboard</li>
               </ul>
             </div>
             <div
