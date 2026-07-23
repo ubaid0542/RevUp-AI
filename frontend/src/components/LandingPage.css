@@ -314,14 +314,14 @@ body.dark .hero-image {
 
 .plans-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  max-width: 900px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
 .plan-card {
-  padding: 28px;
+  padding: 24px 20px;
   cursor: pointer;
   transition: all 0.25s;
   position: relative;
@@ -360,7 +360,7 @@ body.dark .hero-image {
 }
 
 .plan-price {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 800;
   margin-bottom: 4px;
   color: var(--text);
@@ -405,8 +405,8 @@ body.dark .hero-image {
     grid-template-columns: repeat(2, 1fr);
   }
   .plans-grid {
-    grid-template-columns: 1fr;
-    max-width: 420px;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 600px;
   }
 }
 
@@ -447,6 +447,8 @@ body.dark .hero-image {
   }
 
   .plans-grid {
+    grid-template-columns: 1fr;
+    max-width: 380px;
     gap: 14px;
   }
 
