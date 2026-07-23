@@ -58,6 +58,17 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
         <h2 className="section-heading gradient-text">Plans & Pricing</h2>
         <p className="section-sub">Choose the right plan for your business</p>
         <div className="plans-grid">
+          <div className="plan-card glass-card" onClick={() => onSelectPlan('Free')}>
+            <div className="plan-name">Free</div>
+            <div className="plan-price">₹0<span>/month</span></div>
+            <div className="plan-desc">Try it free</div>
+            <ul className="plan-features">
+              <li>1 QR Code</li>
+              <li>20 reviews/month</li>
+              <li>Basic AI review</li>
+              <li>GMB redirect</li>
+            </ul>
+          </div>
           <div className="plan-card glass-card" onClick={() => onSelectPlan('Starter')}>
             <div className="plan-name">Starter</div>
             <div className="plan-price">₹699<span>/month</span></div>
@@ -78,6 +89,7 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
               <li>3 QR Codes</li>
               <li>750 reviews/month</li>
               <li>Advanced AI review</li>
+              <li>AI Review Reply</li>
               <li>GMB redirect</li>
               <li>Analytics dashboard</li>
             </ul>
@@ -90,6 +102,7 @@ export default function LandingPage({ onNavigate, onSelectPlan }) {
               <li>Unlimited QR Codes</li>
               <li>Unlimited reviews</li>
               <li>Premium AI reviews</li>
+              <li>AI Review Reply</li>
               <li>White-label option</li>
               <li>API access</li>
             </ul>
