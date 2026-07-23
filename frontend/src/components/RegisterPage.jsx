@@ -410,7 +410,7 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
   const [city, setCity] = useState(initialData?.city || '');
   const [gmb, setGmb] = useState(initialData?.gmb || '');
   const [emoji, setEmoji] = useState(initialData?.emoji || '');
-  const [plan, setPlan] = useState(initialData?.plan || initialPlan || 'Starter');
+  const [plan, setPlan] = useState(initialData?.plan || initialPlan || 'Free');
   const [extras, setExtras] = useState(initialData?.extras || {});
   const [logoUrl, setLogoUrl] = useState(initialData?.logoUrl || '');
   const [logoFile, setLogoFile] = useState(null);
@@ -637,6 +637,19 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
         <div className="field">
           <label>Choose Your Plan *</label>
           <div className="reg-plans-grid">
+            <div
+              className={`reg-plan-card glass-card ${plan === 'Free' ? 'selected' : ''}`}
+              onClick={() => setPlan('Free')}
+            >
+              <div className="reg-plan-name">Free</div>
+              <div className="reg-plan-price">₹0<span>/mo</span></div>
+              <ul className="reg-plan-features">
+                <li>1 QR Code</li>
+                <li>20 reviews/month</li>
+                <li>Basic AI review</li>
+                <li>GMB redirect</li>
+              </ul>
+            </div>
             <div
               className={`reg-plan-card glass-card ${plan === 'Starter' ? 'selected' : ''}`}
               onClick={() => setPlan('Starter')}

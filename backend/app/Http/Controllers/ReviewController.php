@@ -230,6 +230,31 @@ class ReviewController extends Controller
             $options['businessSubcategory'] = $request->subcategory;
         }
 
+        // Free plan monthly review limit check (20 reviews/month)
+        $business = Business::where('name', $request->business_name)->first();
+        if ($business) {
+            $plan = strtolower($business->plan ?? 'free');
+            $limits = [
+                'free' => 20,
+                'starter' => 250,
+                'growth' => 750,
+                // 'pro' => unlimited (no check)
+            ];
+
+            if (isset($limits[$plan])) {
+                $monthlyCount = Review::where('business_id', $business->id)
+                    ->where('created_at', '>=', now()->startOfMonth())
+                    ->count();
+
+                if ($monthlyCount >= $limits[$plan]) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Monthly review limit reached ({$limits[$plan]} reviews). Please upgrade your plan for more reviews.",
+                    ], 429);
+                }
+            }
+        }
+
         $generatedText = $this->generator->generate(
             businessName: $request->business_name,
             businessType: $request->business_type,
