@@ -78,8 +78,8 @@ Route::middleware('admin')->prefix('admin')->group(function () {
 
 
 // ─── Public Customer Routes (QR scan flow — no auth, rate-limited) ───────────
-// throttle:60,1 = 60 requests per minute per IP — allows owners to test the flow without getting blocked
-Route::middleware('throttle:60,1')->group(function () {
+// throttle:15,1 = 15 requests per minute per IP — prevents AI API abuse
+Route::middleware('throttle:15,1')->group(function () {
 
     // Show public business info for QR scan page
     Route::get('/public/business/{business}',       [BusinessController::class, 'showPublic']);

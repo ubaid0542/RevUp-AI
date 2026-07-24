@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getAnalyticsDashboard, getBusinessStats, EVENT_TYPES } from '../services/analyticsService';
-import { isLoggedIn, fetchAdminBusinesses, fetchAdminUsers, getAdminToken, adminDeleteUserAPI, fetchAdminStats } from '../services/authService';
+import { fetchAdminBusinesses, fetchAdminUsers, getAdminToken, adminDeleteUserAPI, fetchAdminStats } from '../services/authService';
 import './AdminPanel.css';
 
 const EVENT_LABELS = {
@@ -208,8 +208,8 @@ export default function AdminPanel({ onBack }) {
     setData(dashboard);
     setBusinesses(localBiz);
 
-    // Fetch real data from backend database
-    if (isLoggedIn() || getAdminToken()) {
+    // Fetch real data from backend database (admin token required)
+    if (getAdminToken()) {
       // Fetch admin stats (overview, reviews, scans, funnel)
       fetchAdminStats().then(backendStats => {
         if (backendStats) {
