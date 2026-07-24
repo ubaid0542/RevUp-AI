@@ -639,6 +639,7 @@ class ReviewGeneratorService
     protected function callOpenRouter(string $prompt, float $temperature, string $apiKey): ?string
     {
         $models = [
+            ['id' => 'openai/gpt-5.6-terra', 'timeout' => 15],
             ['id' => 'openai/gpt-4.1', 'timeout' => 15],
             ['id' => 'google/gemini-2.5-pro', 'timeout' => 15],
             ['id' => 'anthropic/claude-sonnet-4', 'timeout' => 15],
