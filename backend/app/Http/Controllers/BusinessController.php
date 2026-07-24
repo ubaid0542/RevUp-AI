@@ -285,6 +285,19 @@ class BusinessController extends Controller
         $anonIp     = preg_replace('/\.\d+$/', '.0', $rawIp);   // IPv4: 192.168.1.x → 192.168.1.0
         $anonIp     = preg_replace('/:[^:]+$/', ':0', $anonIp); // IPv6: last segment masked
 
+        // Deduplication: skip if same IP scanned this business within 30 seconds
+        $recentScan = $business->qrScans()
+            ->where('ip_address', $anonIp)
+            ->where('created_at', '>=', now()->subSeconds(30))
+            ->exists();
+
+        if ($recentScan) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Scan already tracked',
+            ]);
+        }
+
         $business->qrScans()->create([
             'ip_address'  => $anonIp,
             'user_agent'  => substr($userAgent, 0, 500),

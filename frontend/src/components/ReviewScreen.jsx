@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import BusinessCard from './BusinessCard';
 import QuestionSlider from './QuestionSlider';
 import ReviewResult from './ReviewResult';
@@ -364,10 +364,12 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     return [...new Set(allItems)]; // Return unique items
   }, [businessData.extras]);
 
-  // Track QR scan on mount (if opened via ?biz= URL)
+  // Track QR scan on mount — useRef guard ensures it fires only ONCE per page load
+  const hasScannedRef = useRef(false);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('biz') && businessData && businessData.id) {
+    if (params.get('biz') && businessData && businessData.id && !hasScannedRef.current) {
+      hasScannedRef.current = true;
       trackEvent(EVENT_TYPES.QR_SCANNED, {
         bizId: businessData.id,
         businessName: businessData.name,
