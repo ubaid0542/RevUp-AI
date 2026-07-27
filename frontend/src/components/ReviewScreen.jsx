@@ -587,18 +587,18 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
   }, [generatedReview, copyToClipboard, businessData]);
 
   const handlePostGoogle = useCallback(async () => {
-    // 1. Copy review to clipboard FIRST
+    // 1. Open GMB link FIRST — must be synchronous, before any await, or mobile browsers block it as popup
+    const searchQuery = encodeURIComponent(`${businessData.name} ${businessData.city || ''}`.trim());
+    const fallbackLink = `https://www.google.com/search?q=${searchQuery}`;
+    const gmbLink = businessData.gmb || fallbackLink;
+    window.open(gmbLink, '_blank');
+
+    // 2. Copy review to clipboard (after window.open so gesture isn't consumed)
     if (generatedReview) {
       await copyToClipboard(generatedReview);
     }
 
-    // 2. Open GMB link IMMEDIATELY (must be in direct user gesture — not inside setTimeout or after long async)
-    const searchQuery = encodeURIComponent(`${businessData.name} ${businessData.city || ''}`.trim());
-    const fallbackLink = `https://www.google.com/search?q=${searchQuery}`;
-    const gmbLink = businessData.gmb || fallbackLink;
-
-    showToastMsg('✅ Review copied — opening Google Reviews… Just paste & post!');
-    window.open(gmbLink, '_blank');
+    showToastMsg('✅ Review copied — Google Reviews opened… Just paste & post!');
 
     // 3. Save review locally (fire-and-forget, after redirect)
     if (onSaveReview && businessData.id) {
