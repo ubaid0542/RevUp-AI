@@ -587,12 +587,20 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
   }, [generatedReview, copyToClipboard, businessData]);
 
   const handlePostGoogle = useCallback(async () => {
-    // 1. Copy review to clipboard
+    // 1. Copy review to clipboard FIRST
     if (generatedReview) {
       await copyToClipboard(generatedReview);
     }
 
-    // 2. Save review locally
+    // 2. Open GMB link IMMEDIATELY (must be in direct user gesture — not inside setTimeout or after long async)
+    const searchQuery = encodeURIComponent(`${businessData.name} ${businessData.city || ''}`.trim());
+    const fallbackLink = `https://www.google.com/search?q=${searchQuery}`;
+    const gmbLink = businessData.gmb || fallbackLink;
+
+    showToastMsg('✅ Review copied — opening Google Reviews… Just paste & post!');
+    window.open(gmbLink, '_blank');
+
+    // 3. Save review locally (fire-and-forget, after redirect)
     if (onSaveReview && businessData.id) {
       const avgStars = Object.values(answers).length > 0
         ? Math.round(Object.values(answers).reduce((s, v) => s + v, 0) / Object.values(answers).length)
@@ -606,13 +614,12 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
       });
     }
 
-    // 3. Mark review as posted in backend BEFORE opening Google
+    // 4. Mark review as posted in backend (fire-and-forget)
     const isRealDbId = businessData.id && !businessData.id.toString().startsWith('biz_') && !businessData.id.toString().startsWith('demo');
     if (isRealDbId) {
       try {
         let reviewId = backendReviewId;
 
-        // If we don't have a backend review ID, save the review first
         if (!reviewId && generatedReview) {
           const savedReview = await saveExternalReviewAPI(businessData.id, answers, generatedReview, 'Post on Google', 'hinglish');
           if (savedReview && savedReview.id) {
@@ -620,7 +627,6 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
           }
         }
 
-        // Now mark as posted — AWAIT this so it completes before Google opens
         if (reviewId) {
           await markReviewPostedAPI(reviewId, generatedReview);
         }
@@ -628,27 +634,14 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
         console.error('Failed to mark review as posted:', err);
       }
 
-      // Fire-and-forget analytics
       logCustomerEvent(businessData.id, 'review_posted');
     }
 
-    // 4. Track post event
+    // 5. Track post event
     trackEvent(EVENT_TYPES.REVIEW_POSTED, {
       bizId: businessData.id,
       businessName: businessData.name,
     });
-
-    // 5. Open GMB link — customer just needs to paste (Ctrl+V / long-press Paste)
-    const searchQuery = encodeURIComponent(`${businessData.name} ${businessData.city || ''}`.trim());
-    const fallbackLink = `https://www.google.com/search?q=${searchQuery}`;
-    const gmbLink = businessData.gmb || fallbackLink;
-    
-    showToastMsg('✅ Review copied — opening Google Reviews… Just paste & post!');
-
-    // Small delay so toast is visible before redirect
-    setTimeout(() => {
-      window.open(gmbLink, '_blank');
-    }, 600);
   }, [generatedReview, businessData, answers, onSaveReview, copyToClipboard, photos, backendReviewId]);
 
   const handlePhotoChange = (e) => {
