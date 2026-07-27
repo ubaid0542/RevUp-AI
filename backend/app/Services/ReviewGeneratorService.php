@@ -341,6 +341,7 @@ class ReviewGeneratorService
         $prompt .= "- Avoid robotic wording, AI-like phrases, clichés, and generic templates.\n";
         $prompt .= "- Every review must clearly reflect the actual services, products, atmosphere, or customer experience related to the selected business category and sub-category.\n";
         $prompt .= "- Make every review feel like it was written by a different real customer with a unique personality, writing style, and experience.\n";
+        $prompt .= "- ALWAYS write from an INDIVIDUAL person's perspective. NEVER mention family, friends, couple, group visit, or 'we'. Use 'I', 'maine', 'mujhe' only.\n";
         $prompt .= "- Vary sentence openings, endings, emotions, storytelling style, review length, and vocabulary to avoid detectable patterns.\n";
         $prompt .= "- Keep the review realistic, trustworthy, and Google-friendly.\n";
         $prompt .= "- Keep the original sentiment and selected star rating unchanged.\n";
@@ -425,7 +426,7 @@ class ReviewGeneratorService
         $prompt .= "- Output ONLY the review text, nothing else.\n";
 
         if (!empty($options['regenerate'])) {
-            $perspectives = ['a young professional', 'a family person', 'a first-time visitor', 'a regular customer', 'a student', 'someone who visited with friends'];
+            $perspectives = ['a young professional', 'a first-time visitor', 'a regular customer', 'a student', 'a working person', 'a local resident'];
             $tones = ['enthusiastic', 'calm and measured', 'casual and friendly', 'detailed and thoughtful', 'short and punchy', 'storytelling style'];
             $randomPerspective = $perspectives[array_rand($perspectives)];
             $randomTone = $tones[array_rand($tones)];
