@@ -734,14 +734,14 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.shadowColor = 'rgba(255, 215, 0, 0.3)';
     ctx.shadowBlur = 20;
     roundRect(btnX, btnY, btnW, btnH, btnR);
-    ctx.fillStyle = 'rgba(255, 215, 0, 0.08)';
+    ctx.fillStyle = 'rgba(139, 92, 246, 0.08)';
     ctx.fill();
     ctx.restore();
 
     // Button border
     ctx.save();
     roundRect(btnX, btnY, btnW, btnH, btnR);
-    ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
+    ctx.strokeStyle = 'rgba(139, 92, 246, 0.5)';
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.restore();
@@ -750,7 +750,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.save();
     ctx.font = 'bold 24px "Inter", "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillStyle = '#FFD700';
+    ctx.fillStyle = '#8b5cf6';
     ctx.fillText('📱  SCAN TO REVIEW', cx, btnY + btnH / 2 + 8);
     ctx.restore();
 
@@ -862,8 +862,8 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.save();
     ctx.font = 'italic 52px "Georgia", "Palatino", "Times New Roman", serif';
     ctx.textAlign = 'center';
-    ctx.fillStyle = '#FFD700';
-    ctx.shadowColor = 'rgba(255, 215, 0, 0.4)';
+    ctx.fillStyle = '#8b5cf6';
+    ctx.shadowColor = 'rgba(139, 92, 246, 0.4)';
     ctx.shadowBlur = 15;
     ctx.fillText('Thank you!', cx, curY);
     ctx.restore();
