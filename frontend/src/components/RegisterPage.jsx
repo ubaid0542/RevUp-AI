@@ -388,6 +388,24 @@ const categoryData = {
       { id: 'products', label: 'Key Products', placeholder: 'e.g. Ethnic Wear, Footwear, Jewellery' },
     ],
   },
+  'Interior Products Store': {
+    sub: ['All', 'Tiles & Flooring', 'Sanitary Ware', 'Bathroom Fittings', 'Modular Kitchen', 'False Ceiling', 'Wall Panels', 'Paint & Texture', 'Glass & Mirror', 'Wooden Flooring', 'PVC Panels'],
+    questions: [
+      { id: 'products', label: 'Key Products', placeholder: 'e.g. Tiles, Sanitary, Modular Kitchen' },
+    ],
+  },
+  'Home Furnishing Store': {
+    sub: ['All', 'Curtains & Blinds', 'Bedsheets & Linen', 'Carpets & Rugs', 'Cushions & Covers', 'Sofa Covers', 'Table Linen', 'Towels & Bath Linen', 'Mattress Store', 'Upholstery Fabric', 'Wallpaper Store'],
+    questions: [
+      { id: 'products', label: 'Key Products', placeholder: 'e.g. Curtains, Bedsheets, Carpets' },
+    ],
+  },
+  'Home Decor': {
+    sub: ['All', 'Wall Art & Frames', 'Candles & Fragrances', 'Vases & Planters', 'Showpieces & Figurines', 'Clocks & Mirrors', 'Lighting & Lamps', 'Photo Frames', 'Artificial Flowers', 'Handicrafts', 'Gift & Decor Items'],
+    questions: [
+      { id: 'products', label: 'Key Products', placeholder: 'e.g. Wall Art, Candles, Showpieces' },
+    ],
+  },
   'Other': {
     sub: ['All', 'Service Business', 'Manufacturing', 'Freelance / Consultant', 'NGO / Non-Profit', 'Logistics'],
     questions: [
@@ -552,6 +570,9 @@ export default function RegisterPage({ selectedPlan: initialPlan, initialData, o
             <option value="Banquet Hall">🏛️ Banquet Hall</option>
             <option value="E-commerce Store">🛒 E-commerce Store</option>
             <option value="Retail & Shopping">🛍️ Retail & Shopping</option>
+            <option value="Interior Products Store">🏗️ Interior Products Store</option>
+            <option value="Home Furnishing Store">🛋️ Home Furnishing Store</option>
+            <option value="Home Decor">🏠 Home Decor</option>
             <option value="Other">📦 Other</option>
           </select>
         </div>
