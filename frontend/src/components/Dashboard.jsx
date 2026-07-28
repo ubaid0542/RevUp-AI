@@ -227,8 +227,8 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     });
 
     // ── 1. BACKGROUND ──
-    // Solid black premium base
-    ctx.fillStyle = '#0a0a0a';
+    // Solid white clean base
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, W, H);
 
     // Subtle radial glow at top
@@ -519,7 +519,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.save();
     ctx.font = 'bold 32px "Inter", "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#1a1a1a';
     ctx.letterSpacing = '4px';
     ctx.fillText('REVIEW US ON', cx, curY);
     ctx.restore();
@@ -560,7 +560,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.fillStyle = 'rgba(255, 215, 0, 0.4)';
     ctx.fillRect(cx - fbW / 2 - 50, curY - 5, 35, 1.5);
     ctx.fillRect(cx + fbW / 2 + 15, curY - 5, 35, 1.5);
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#1a1a1a';
     ctx.letterSpacing = '3px';
     ctx.fillText(fbText, cx, curY);
     ctx.restore();
@@ -812,7 +812,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.arc(startX + iconRadius, iconCenterY, iconRadius, 0, Math.PI * 2);
     ctx.shadowColor = 'rgba(255, 215, 0, 0.6)';
     ctx.shadowBlur = 25;
-    ctx.fillStyle = 'rgba(20, 20, 25, 0.9)'; // Dark premium background
+    ctx.fillStyle = 'rgba(245, 245, 245, 0.95)'; // Light background for icon
     ctx.fill();
     ctx.shadowBlur = 0; // Reset shadow
 
@@ -837,12 +837,12 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     
     // Name
     ctx.font = 'bold 36px "Inter", "Segoe UI", Arial, sans-serif';
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#1a1a1a';
     ctx.fillText(bName, textX, curY + 35);
     
     // Subtext
     ctx.font = '22px "Inter", "Segoe UI", Arial, sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.fillText(catCity, textX, curY + 75);
     ctx.restore();
 
@@ -874,7 +874,7 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     ctx.save();
     ctx.font = '600 16px "Inter", "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
     ctx.letterSpacing = '3px';
     ctx.fillText('WE APPRECIATE YOUR SUPPORT', cx, curY);
     ctx.restore();
@@ -885,14 +885,14 @@ export default function Dashboard({ business, reviews, onPreview, onNewBusiness,
     const footY = H - 50;
     // Divider line above footer
     ctx.save();
-    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
     ctx.fillRect(cx - 200, footY - 35, 400, 1);
     ctx.restore();
 
     ctx.save();
     ctx.font = '18px "Inter", "Segoe UI", Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
     ctx.fillText('Powered by', cx - 55, footY);
     ctx.fillStyle = '#8b5cf6';
     ctx.font = 'bold 20px "Inter", "Segoe UI", Arial, sans-serif';
