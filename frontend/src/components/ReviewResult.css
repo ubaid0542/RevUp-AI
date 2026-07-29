@@ -179,8 +179,9 @@
 }
 
 .btn-gmb {
-  flex: 1.5;
-  padding: 13px;
+  flex: 1;
+  width: 100%;
+  padding: 14px 16px;
   border-radius: var(--radius-sm);
   border: none;
   background: linear-gradient(135deg, #4285f4, #1a73e8);

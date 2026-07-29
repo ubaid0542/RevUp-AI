@@ -197,14 +197,6 @@ export default function ReviewResult({
       {/* Action Buttons */}
       <div className="action-row">
         <button
-          className="btn-copy"
-          id="btn-copy"
-          onClick={onCopy}
-          disabled={isLoading || !reviewText || !animationDone}
-        >
-          📋 Copy
-        </button>
-        <button
           className="btn-gmb"
           id="btn-gmb"
           onClick={onPostGoogle}
