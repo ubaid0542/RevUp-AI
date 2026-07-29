@@ -114,6 +114,20 @@ export default function ReviewResult({
         )}
       </div>
 
+      {/* Regenerate — right below review */}
+      {!isLoading && reviewText && animationDone && (
+        <div className="regen-row">
+          <button
+            className="regen-btn"
+            id="regen-btn"
+            onClick={onRegenerate}
+            disabled={isLoading}
+          >
+            🔄 Not happy? Regenerate
+          </button>
+        </div>
+      )}
+
       {/* Auto-copied badge + source */}
       {!isLoading && reviewText && animationDone && (
         <div className="review-meta-row">
@@ -167,18 +181,6 @@ export default function ReviewResult({
           </div>
         </div>
       )}
-
-      {/* Regenerate */}
-      <div className="regen-row">
-        <button
-          className="regen-btn"
-          id="regen-btn"
-          onClick={onRegenerate}
-          disabled={isLoading}
-        >
-          ↻ Regenerate
-        </button>
-      </div>
 
       {/* Action Button */}
       <div className="action-row">
