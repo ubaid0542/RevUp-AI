@@ -153,31 +153,17 @@ export default function ReviewResult({
         </div>
       )}
 
-      {/* Prominent Instruction Card */}
-      {!isLoading && reviewText && animationDone && (
-        <div className="instruction-card">
-          <div className="instruction-card-title">🎉 Your Review is Ready!</div>
-          <div className="instruction-card-desc">
-            Your review has already been copied to your clipboard. Click the button below to open Google Reviews. Once Google opens, simply paste your review into the review box, add your rating/photos if you want, and tap "Post".
-          </div>
-        </div>
-      )}
-
-      {/* Step-by-step instructions */}
+      {/* Step-by-step instructions — simplified 2 steps */}
       {!isLoading && reviewText && animationDone && (
         <div className="post-steps">
           <div className="post-steps-title">📋 How to post your review:</div>
           <div className="post-step">
             <span className="step-num">1</span>
-            <span>Tap <strong>"Open Google &amp; Paste Review →"</strong> below</span>
+            <span>Neeche button tap karo → <strong>Google Reviews</strong> khulega</span>
           </div>
           <div className="post-step">
             <span className="step-num">2</span>
-            <span>Google Reviews will open — <strong>long-press</strong> the text box &amp; tap <strong>Paste</strong></span>
-          </div>
-          <div className="post-step">
-            <span className="step-num">3</span>
-            <span>Select your star rating, <strong>attach your photos</strong>, &amp; hit <strong>Post</strong> ⭐</span>
+            <span>Review box me 👆 <strong>long-press</strong> karo → <strong>Paste</strong> tap karo → <strong>Post</strong> karo ⭐</span>
           </div>
         </div>
       )}
@@ -194,7 +180,7 @@ export default function ReviewResult({
         </button>
       </div>
 
-      {/* Action Buttons */}
+      {/* Action Button */}
       <div className="action-row">
         <button
           className="btn-gmb"
@@ -202,14 +188,14 @@ export default function ReviewResult({
           onClick={onPostGoogle}
           disabled={isLoading || !reviewText || !animationDone}
         >
-          Open Google &amp; Paste Review →
+          📋 Open Google &amp; Paste Your Review →
         </button>
       </div>
 
       {/* Small Helper Text below button */}
       {!isLoading && reviewText && animationDone && (
         <p className="btn-helper-text">
-          💡 Google Reviews will open in a new tab. Paste your copied review and press "Post" to publish it.
+          💡 Google Reviews new tab me khulega. Apna copied review paste karo aur "Post" dabao.
         </p>
       )}
 
