@@ -118,7 +118,7 @@ export default function ReviewResult({
       {!isLoading && reviewText && animationDone && (
         <div className="review-meta-row">
           <div className="auto-copied-badge">
-            ✅ Review auto-copied to clipboard
+            ✅ Review copied successfully! You're one step away from posting it on Google.
           </div>
           {reviewSource && (
             <div className="review-source-badge">
@@ -153,21 +153,31 @@ export default function ReviewResult({
         </div>
       )}
 
+      {/* Prominent Instruction Card */}
+      {!isLoading && reviewText && animationDone && (
+        <div className="instruction-card">
+          <div className="instruction-card-title">🎉 Your Review is Ready!</div>
+          <div className="instruction-card-desc">
+            Your review has already been copied to your clipboard. Click the button below to open Google Reviews. Once Google opens, simply paste your review into the review box, add your rating/photos if you want, and tap "Post".
+          </div>
+        </div>
+      )}
+
       {/* Step-by-step instructions */}
       {!isLoading && reviewText && animationDone && (
         <div className="post-steps">
           <div className="post-steps-title">📋 How to post your review:</div>
           <div className="post-step">
             <span className="step-num">1</span>
-            <span>Tap <strong>"Post on Google"</strong> below</span>
+            <span>Tap <strong>"Open Google &amp; Paste Review →"</strong> below</span>
           </div>
           <div className="post-step">
             <span className="step-num">2</span>
-            <span>Google Reviews will open — <strong>long-press</strong> the text box & tap <strong>Paste</strong></span>
+            <span>Google Reviews will open — <strong>long-press</strong> the text box &amp; tap <strong>Paste</strong></span>
           </div>
           <div className="post-step">
             <span className="step-num">3</span>
-            <span>Select your star rating, <strong>attach your photos</strong>, & hit <strong>Post</strong> ⭐</span>
+            <span>Select your star rating, <strong>attach your photos</strong>, &amp; hit <strong>Post</strong> ⭐</span>
           </div>
         </div>
       )}
@@ -200,9 +210,16 @@ export default function ReviewResult({
           onClick={onPostGoogle}
           disabled={isLoading || !reviewText || !animationDone}
         >
-          Post on Google ↗
+          Open Google &amp; Paste Review →
         </button>
       </div>
+
+      {/* Small Helper Text below button */}
+      {!isLoading && reviewText && animationDone && (
+        <p className="btn-helper-text">
+          💡 Google Reviews will open in a new tab. Paste your copied review and press "Post" to publish it.
+        </p>
+      )}
 
       {/* Toast Message */}
       <div
