@@ -281,20 +281,20 @@ class ReviewGeneratorService
         foreach ($ratings as $key => $value) {
             if (!is_numeric($value)) continue;
             $label = $this->ratingLabels[$key] ?? $this->formatRatingKey($key);
-            $level = (int)$value >= 4 ? 'very positive' : ((int)$value === 3 ? 'average' : 'negative');
+            $level = (int)$value >= 2 ? 'positive' : 'negative';
             $ratingLines[] = "- {$label}: {$level}";
         }
         if (empty($ratingLines)) {
-            $level = $overall >= 4 ? 'very positive' : ($overall === 3 ? 'average' : 'negative');
+            $level = $overall >= 2 ? 'positive' : 'negative';
             $ratingLines[] = "- Overall Experience: {$level}";
         }
 
         // Rating-based tone
         $toneMap = [
             5 => 'Very positive, highly satisfied, naturally recommend the business.',
-            4 => 'Positive with balanced appreciation and a small neutral observation if appropriate.',
-            3 => 'Mixed experience with both good and average points.',
-            2 => 'Mostly dissatisfied but polite and constructive.',
+            4 => 'Positive, happy with the experience, appreciative tone.',
+            3 => 'Positive overall, satisfied customer, good experience.',
+            2 => 'Positive but brief, decent experience, satisfied.',
             1 => 'Clearly disappointed while remaining respectful.',
         ];
         $tone = $toneMap[$overall] ?? $toneMap[3];
@@ -344,6 +344,7 @@ class ReviewGeneratorService
         $prompt .= "- ALWAYS write from an INDIVIDUAL person's perspective. NEVER mention family, friends, couple, group visit, or 'we'. Use 'I', 'maine', 'mujhe' only.\n";
         $prompt .= "- Vary sentence openings, endings, emotions, storytelling style, review length, and vocabulary to avoid detectable patterns.\n";
         $prompt .= "- Keep the review realistic, trustworthy, and Google-friendly.\n";
+        $prompt .= "- IMPORTANT: Every single review MUST be completely unique. Use different opening words, different sentence structures, different vocabulary, and different storytelling angles every time. NEVER repeat the same patterns.\n";
         $prompt .= "- Keep the original sentiment and selected star rating unchanged.\n";
         $prompt .= "- Return ONLY the final review text without quotes, headings, or explanations.\n\n";
 
@@ -377,10 +378,10 @@ class ReviewGeneratorService
         $prompt .= "### Filler Words\n";
         $prompt .= "- Use natural conversational filler words ONLY when they fit naturally: kaafi, actually, overall, personally, waise, genuinely.\n";
         $prompt .= "- Maximum 1-2 filler words per review. Never overuse them.\n";
-        if ($overall >= 4) {
-            $prompt .= "- Since the rating is {$overall} stars (4 or above), naturally include the word \"best\" somewhere in the review as part of a human-like sentence. Do not force it at the beginning.\n";
+        if ($overall >= 2) {
+            $prompt .= "- Since the rating is {$overall} stars (2 or above), the review MUST be POSITIVE. Naturally include the word \"best\" somewhere in the review as part of a human-like sentence. Do not force it at the beginning.\n";
         } else {
-            $prompt .= "- Since the rating is {$overall} stars (3 or below), do NOT use the word \"best\" anywhere in the review.\n";
+            $prompt .= "- Since the rating is {$overall} star (1 star), the review should express disappointment while remaining respectful. Do NOT use the word \"best\".\n";
         }
 
         $prompt .= "\n### Rating-Based Tone\n";
