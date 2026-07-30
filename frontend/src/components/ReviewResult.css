@@ -447,3 +447,115 @@
   outline: none;
   padding: 0;
 }
+
+/* ── Paste Instruction Modal ── */
+.paste-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.25s ease both;
+}
+
+.paste-modal {
+  background: var(--surface, #181824);
+  border: 1.5px solid rgba(139, 92, 246, 0.3);
+  border-radius: 20px;
+  padding: 28px 22px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(139, 92, 246, 0.2);
+  animation: scaleIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.paste-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text3, #888);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.paste-modal-icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+  animation: bounce 1s infinite alternate;
+}
+
+.paste-modal-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text, #fff);
+  margin-bottom: 6px;
+}
+
+.paste-modal-subtitle {
+  font-size: 13px;
+  color: var(--text2, #aaa);
+  margin-bottom: 20px;
+}
+
+.paste-modal-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.paste-modal-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--text, #ddd);
+}
+
+.paste-step-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.paste-modal-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #4285f4, #1a73e8);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(66, 133, 244, 0.4);
+  transition: all 0.2s ease;
+}
+
+.paste-modal-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(66, 133, 244, 0.6);
+}

@@ -23,6 +23,7 @@ export default function ReviewResult({
   const [isEditing, setIsEditing] = useState(false);
   const [displayedWords, setDisplayedWords] = useState(0);
   const [animationDone, setAnimationDone] = useState(false);
+  const [showPasteModal, setShowPasteModal] = useState(false);
   const prevReviewRef = useRef('');
 
   // Typewriter animation — reveal words one by one
@@ -77,6 +78,15 @@ export default function ReviewResult({
     }, 4000);
     return () => clearInterval(timer);
   }, [isLoading]);
+
+  const handleOpenGoogleClick = () => {
+    setShowPasteModal(true);
+  };
+
+  const handleGotItClick = () => {
+    setShowPasteModal(false);
+    if (onPostGoogle) onPostGoogle();
+  };
 
   return (
     <div className={`result-card glass-card ${!isLoading && reviewText ? 'result-card--loaded' : ''}`} id="result-card">
@@ -187,7 +197,7 @@ export default function ReviewResult({
         <button
           className="btn-gmb"
           id="btn-gmb"
-          onClick={onPostGoogle}
+          onClick={handleOpenGoogleClick}
           disabled={isLoading || !reviewText || !animationDone}
         >
           📋 Open Google &amp; Paste Your Review →
@@ -209,6 +219,38 @@ export default function ReviewResult({
       >
         {toast}
       </div>
+
+      {/* ── Paste Instruction Modal ── */}
+      {showPasteModal && (
+        <div className="paste-modal-overlay" onClick={() => setShowPasteModal(false)}>
+          <div className="paste-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="paste-modal-close" onClick={() => setShowPasteModal(false)}>✕</button>
+            
+            <div className="paste-modal-icon">✅</div>
+            <h3 className="paste-modal-title">Review Copy Ho Gaya!</h3>
+            <p className="paste-modal-subtitle">Ab Google pe jaake paste karo — bas 3 simple steps:</p>
+
+            <div className="paste-modal-steps">
+              <div className="paste-modal-step">
+                <span className="paste-step-num">1</span>
+                <span>Google review box me <strong>long-press</strong> karo 👆</span>
+              </div>
+              <div className="paste-modal-step">
+                <span className="paste-step-num">2</span>
+                <span><strong>"Paste"</strong> option aayega — usse tap karo 📋</span>
+              </div>
+              <div className="paste-modal-step">
+                <span className="paste-step-num">3</span>
+                <span>Star rating do aur <strong>"Post"</strong> dabao ⭐</span>
+              </div>
+            </div>
+
+            <button className="paste-modal-btn" onClick={handleGotItClick}>
+              Samajh Gaya! Open Google →
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
