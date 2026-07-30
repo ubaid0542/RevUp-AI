@@ -327,24 +327,24 @@ class ReviewGeneratorService
         $relevantAspects = $categoryAspects[$businessType] ?? 'service quality, staff behavior, overall experience, value for money';
 
         // ── Build the prompt ──
-        $prompt  = "You are a humanizer and SEO expert. Your task is to rewrite a review so it sounds like a genuine customer sharing a real personal experience, while being naturally SEO-friendly.\n\n";
+        $prompt  = "You are a Google review writer. Your task is to write a short, genuine customer review — NOT a story, NOT a narrative. Write it exactly how a real customer would type a quick review on Google after visiting the business.\n\n";
 
         $prompt .= "### Input Variables\n{$bizContext}\nSelected Rating: {$overall} out of 5 stars\n";
         if (!empty($keywords)) $prompt .= "Customer Keywords: {$keywords}\n";
         $prompt .= "\nDetailed aspect ratings:\n" . implode("\n", $ratingLines) . "\n\n";
 
         $prompt .= "### Core Rules\n";
-        $prompt .= "- Write a 100% human-like, authentic, and believable review as if a genuine customer is sharing a real personal experience.\n";
+        $prompt .= "- Write a short, direct, genuine Google review — like a real customer typing quickly on their phone.\n";
         $prompt .= "- Keep the review between 25 to 50 words ONLY. Not a single word more.\n";
         $prompt .= "- Use approximately 80% Hinglish (Roman Hindi — Hindi words written in English script) and 20% English.\n";
-        $prompt .= "- Use natural conversational language with varied vocabulary and sentence structures.\n";
+        $prompt .= "- DO NOT write a story or narrative. NO backstory, NO setup lines like 'Exam time stress me...', 'Student hoon aur...', 'Ek din socha ki...'. Just directly talk about the business experience.\n";
+        $prompt .= "- Start the review directly with the experience — mention the product, service, staff, quality, or atmosphere. NO introduction about yourself or why you visited.\n";
+        $prompt .= "- Write like a normal person leaving a quick Google review, NOT like a writer crafting a story.\n";
         $prompt .= "- Avoid robotic wording, AI-like phrases, clichés, and generic templates.\n";
-        $prompt .= "- Every review must clearly reflect the actual services, products, atmosphere, or customer experience related to the selected business category and sub-category.\n";
-        $prompt .= "- Make every review feel like it was written by a different real customer with a unique personality, writing style, and experience.\n";
+        $prompt .= "- Every review must clearly reflect the actual services, products, or customer experience related to the business category.\n";
         $prompt .= "- ALWAYS write from an INDIVIDUAL person's perspective. NEVER mention family, friends, couple, group visit, or 'we'. Use 'I', 'maine', 'mujhe' only.\n";
-        $prompt .= "- Vary sentence openings, endings, emotions, storytelling style, review length, and vocabulary to avoid detectable patterns.\n";
         $prompt .= "- Keep the review realistic, trustworthy, and Google-friendly.\n";
-        $prompt .= "- IMPORTANT: Every single review MUST be completely unique. Use different opening words, different sentence structures, different vocabulary, and different storytelling angles every time. NEVER repeat the same patterns.\n";
+        $prompt .= "- IMPORTANT: Every single review MUST be completely unique. Use different opening words, different sentence structures, different vocabulary every time.\n";
         $prompt .= "- Keep the original sentiment and selected star rating unchanged.\n";
         $prompt .= "- Return ONLY the final review text without quotes, headings, or explanations.\n\n";
 
@@ -428,7 +428,7 @@ class ReviewGeneratorService
 
         if (!empty($options['regenerate'])) {
             $perspectives = ['a young professional', 'a first-time visitor', 'a regular customer', 'a student', 'a working person', 'a local resident'];
-            $tones = ['enthusiastic', 'calm and measured', 'casual and friendly', 'detailed and thoughtful', 'short and punchy', 'storytelling style'];
+            $tones = ['enthusiastic', 'calm and measured', 'casual and friendly', 'short and direct', 'short and punchy', 'simple and honest'];
             $randomPerspective = $perspectives[array_rand($perspectives)];
             $randomTone = $tones[array_rand($tones)];
 
