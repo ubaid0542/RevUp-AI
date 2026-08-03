@@ -152,30 +152,6 @@ export default function ReviewResult({
         </div>
       )}
 
-      {/* Photo Upload Option */}
-      {!isLoading && reviewText && animationDone && (
-        <div className="photo-upload-section">
-          <p className="photo-upload-label">📸 Add Photos to your review (Optional)</p>
-          <input
-            type="file"
-            id="photo-upload"
-            multiple
-            accept="image/*"
-            onChange={onPhotoChange}
-            style={{ display: 'none' }}
-          />
-          <label htmlFor="photo-upload" className="btn-upload-photo">
-            Select Photos
-          </label>
-          {photos && photos.length > 0 && (
-            <div className="photo-thumbnails">
-              {photos.map((photo, idx) => (
-                <img key={idx} src={photo} alt={`Upload ${idx}`} className="photo-thumb" />
-              ))}
-            </div>
-          )}
-        </div>
-      )}
 
       {/* Step-by-step instructions — simplified 2 steps */}
       {!isLoading && reviewText && animationDone && (
