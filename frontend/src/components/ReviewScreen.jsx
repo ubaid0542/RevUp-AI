@@ -494,7 +494,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     }
   }, [businessData, answers, selectedDishes, copyToClipboard]);
 
-  const handleRegenerate = useCallback(async () => {
+  const handleRegenerate = useCallback(async (gender) => {
     if (isLoading) return;
     setIsLoading(true);
     setGeneratedReview('');
@@ -527,6 +527,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
       regenerate: true,
       previousText: generatedReview,
       variationSeed: `${Date.now()}-${Math.random()}`,
+      gender: gender || '',
     });
     if (text) source = '🔗 Backend Proxy';
 

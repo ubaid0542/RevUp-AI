@@ -451,6 +451,7 @@ export async function generateReviewProxy(businessName, businessType, ratings, l
       customerKeywords: options.customerKeywords || '',
       city:             options.city || '',
       selectedDish:     options.selectedDish || '',
+      gender:           options.gender || '',
     },
   };
 

@@ -128,12 +128,26 @@ export default function ReviewResult({
       {!isLoading && reviewText && animationDone && (
         <div className="regen-row">
           <button
-            className="regen-btn"
-            id="regen-btn"
-            onClick={onRegenerate}
+            className="regen-gender-btn regen-gender-btn--male"
+            onClick={() => onRegenerate('male')}
             disabled={isLoading}
           >
-            🔄 Not happy? Regenerate
+            🙋‍♂️ Male
+          </button>
+          <button
+            className="regen-btn"
+            id="regen-btn"
+            onClick={() => onRegenerate()}
+            disabled={isLoading}
+          >
+            🔄 Regenerate
+          </button>
+          <button
+            className="regen-gender-btn regen-gender-btn--female"
+            onClick={() => onRegenerate('female')}
+            disabled={isLoading}
+          >
+            🙋‍♀️ Female
           </button>
         </div>
       )}

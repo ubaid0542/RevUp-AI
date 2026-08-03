@@ -426,6 +426,20 @@ class ReviewGeneratorService
         $prompt .= "- Never generate duplicate, templated, or AI-detectable reviews.\n";
         $prompt .= "- Output ONLY the review text, nothing else.\n";
 
+        // Gender-based perspective
+        $gender = $options['gender'] ?? '';
+        if ($gender === 'male') {
+            $prompt .= "\n### Gender Perspective\n";
+            $prompt .= "Write this review from a MALE customer's perspective.\n";
+            $prompt .= "Use masculine Hindi verb forms: 'gaya' (not 'gayi'), 'dekha' (not 'dekhi'), 'kiya' (not 'ki'), 'liya' (not 'li'), 'aaya' (not 'aayi').\n";
+            $prompt .= "Example: 'maine yaha jaake dekha...', 'mujhe bahut accha laga...'\n";
+        } elseif ($gender === 'female') {
+            $prompt .= "\n### Gender Perspective\n";
+            $prompt .= "Write this review from a FEMALE customer's perspective.\n";
+            $prompt .= "Use feminine Hindi verb forms: 'gayi' (not 'gaya'), 'dekhi' (not 'dekha'), 'ki' (not 'kiya'), 'li' (not 'liya'), 'aayi' (not 'aaya').\n";
+            $prompt .= "Example: 'maine yaha jaake dekhi...', 'mujhe bahut accha laga...'\n";
+        }
+
         if (!empty($options['regenerate'])) {
             $perspectives = ['a young professional', 'a first-time visitor', 'a regular customer', 'a student', 'a working person', 'a local resident'];
             $tones = ['enthusiastic', 'calm and measured', 'casual and friendly', 'short and direct', 'short and punchy', 'simple and honest'];
