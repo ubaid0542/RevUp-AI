@@ -160,7 +160,12 @@ export default function ReviewResult({
                 <button
                   key={lang}
                   className={`lang-btn ${selectedLang === lang.toLowerCase() ? 'lang-btn--active' : ''}`}
-                  onClick={() => setSelectedLang(lang.toLowerCase())}
+                  onClick={() => {
+                    const newLang = lang.toLowerCase();
+                    setSelectedLang(newLang);
+                    onRegenerate(null, newLang);
+                  }}
+                  disabled={isLoading}
                 >
                   {lang}
                 </button>
