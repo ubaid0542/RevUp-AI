@@ -156,7 +156,7 @@ export default function ReviewResult({
           <div className="lang-selector-row">
             <span className="lang-selector-label">🌐 Language:</span>
             <div className="lang-selector-btns">
-              {['English', 'Hinglish', 'Hindi'].map((lang) => (
+              {['English', 'Hinglish'].map((lang) => (
                 <button
                   key={lang}
                   className={`lang-btn ${selectedLang === lang.toLowerCase() ? 'lang-btn--active' : ''}`}
