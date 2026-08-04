@@ -341,7 +341,11 @@ class ReviewGeneratorService
         if ($language === 'english') {
             $prompt .= "- Write the ENTIRE review in pure English ONLY. Do NOT use any Hindi, Hinglish, or Roman Hindi words at all.\n";
         } elseif ($language === 'hindi') {
-            $prompt .= "- Write the ENTIRE review in pure Hindi (Devanagari script — हिंदी). Do NOT use English or Roman Hindi. Use proper Hindi grammar and Devanagari characters only.\n";
+            $prompt .= "- Write the ENTIRE review in 100% pure Hindi using ONLY Devanagari script (हिंदी).\n";
+            $prompt .= "- ABSOLUTELY ZERO English words allowed. Every single word must be in Devanagari Hindi.\n";
+            $prompt .= "- Translate ALL English words to Hindi: 'best' → 'सबसे अच्छा', 'quality' → 'गुणवत्ता', 'experience' → 'अनुभव', 'overall' → 'कुल मिलाकर', 'positive' → 'सकारात्मक', 'recommend' → 'सिफारिश', 'staff' → 'कर्मचारी', 'service' → 'सेवा', 'collection' → 'संग्रह', 'variety' → 'विविधता', 'mattress' → 'गद्दा', 'wallpaper' → 'दीवार कागज', 'curtains' → 'पर्दे'.\n";
+            $prompt .= "- ONLY the business name can remain in English (e.g., 'Home Fashion'). Everything else MUST be in Devanagari Hindi.\n";
+            $prompt .= "- Do NOT mix languages. If even one English word (other than business name) appears, the review is REJECTED.\n";
         } else {
             $prompt .= "- Use approximately 80% Hinglish (Roman Hindi — Hindi words written in English script) and 20% English.\n";
         }
