@@ -32,7 +32,7 @@ class ReviewController extends Controller
             'ratings.value' => 'nullable|integer|min:1|max:5',
             'ratings.ambience' => 'nullable|integer|min:1|max:5',
             'ratings.recommend' => 'nullable|integer|min:1|max:5',
-            'language' => 'nullable|string|in:hinglish,english,hindi',
+            'language' => 'nullable|string|in:hinglish,english',
             'subcategory' => 'nullable|string|max:255',
             'customer_keywords' => 'nullable|string|max:500',
         ]);
@@ -85,7 +85,7 @@ class ReviewController extends Controller
             'business_id' => 'required|exists:businesses,id',
             'ratings' => 'required|array',
             'ratings.overall' => 'required|integer|min:1|max:5',
-            'language' => 'nullable|string|in:hinglish,english,hindi',
+            'language' => 'nullable|string|in:hinglish,english',
             'previous_text' => 'nullable|string|max:2000',
             'variation_seed' => 'nullable|string|max:100',
             'subcategory' => 'nullable|string|max:255',
@@ -215,7 +215,7 @@ class ReviewController extends Controller
             'business_name' => 'required|string|max:255',
             'business_type' => 'required|string|max:255',
             'ratings'       => 'required|array',
-            'language'      => 'nullable|string|in:hinglish,english,hindi',
+            'language'      => 'nullable|string|in:hinglish,english',
             'subcategory'   => 'nullable|string|max:255',
             'options'       => 'nullable|array',
         ]);
