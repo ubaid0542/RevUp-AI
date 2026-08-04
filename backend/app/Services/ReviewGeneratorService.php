@@ -336,7 +336,15 @@ class ReviewGeneratorService
         $prompt .= "### Core Rules\n";
         $prompt .= "- Write a short, direct, genuine Google review — like a real customer typing quickly on their phone.\n";
         $prompt .= "- Keep the review between 45 to 60 words ONLY. Not a single word more.\n";
-        $prompt .= "- Use approximately 80% Hinglish (Roman Hindi — Hindi words written in English script) and 20% English.\n";
+
+        // Dynamic language rules
+        if ($language === 'english') {
+            $prompt .= "- Write the ENTIRE review in pure English ONLY. Do NOT use any Hindi, Hinglish, or Roman Hindi words at all.\n";
+        } elseif ($language === 'hindi') {
+            $prompt .= "- Write the ENTIRE review in pure Hindi (Devanagari script — हिंदी). Do NOT use English or Roman Hindi. Use proper Hindi grammar and Devanagari characters only.\n";
+        } else {
+            $prompt .= "- Use approximately 80% Hinglish (Roman Hindi — Hindi words written in English script) and 20% English.\n";
+        }
         $prompt .= "- DO NOT write a story or narrative. NO backstory, NO setup lines like 'Exam time stress me...', 'Student hoon aur...', 'Ek din socha ki...'. Just directly talk about the business experience.\n";
         $prompt .= "- Start the review directly with the experience — mention the product, service, staff, quality, or atmosphere. NO introduction about yourself or why you visited.\n";
         $prompt .= "- Write like a normal person leaving a quick Google review, NOT like a writer crafting a story.\n";

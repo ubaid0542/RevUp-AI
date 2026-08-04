@@ -123,6 +123,51 @@
   flex-wrap: wrap;
 }
 
+/* Language Selector */
+.lang-selector-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.lang-selector-label {
+  font-size: 12px;
+  color: var(--text3);
+  font-weight: 600;
+}
+
+.lang-selector-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.lang-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid var(--border-light, rgba(255,255,255,0.12));
+  color: var(--text3, #888);
+}
+
+.lang-btn:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  color: var(--text, #fff);
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.lang-btn--active {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.22));
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #34d399;
+}
+
 .regen-gender-btn {
   padding: 8px 16px;
   border-radius: 24px;

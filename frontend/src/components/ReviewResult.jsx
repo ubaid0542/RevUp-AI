@@ -24,6 +24,7 @@ export default function ReviewResult({
   const [displayedWords, setDisplayedWords] = useState(0);
   const [animationDone, setAnimationDone] = useState(false);
   const [showPasteModal, setShowPasteModal] = useState(false);
+  const [selectedLang, setSelectedLang] = useState('hinglish');
   const prevReviewRef = useRef('');
 
   // Typewriter animation — reveal words one by one
@@ -126,30 +127,47 @@ export default function ReviewResult({
 
       {/* Regenerate — right below review */}
       {!isLoading && reviewText && animationDone && (
-        <div className="regen-row">
-          <button
-            className="regen-gender-btn regen-gender-btn--male"
-            onClick={() => onRegenerate('male')}
-            disabled={isLoading}
-          >
-            🙋‍♂️ Male
-          </button>
-          <button
-            className="regen-btn"
-            id="regen-btn"
-            onClick={() => onRegenerate()}
-            disabled={isLoading}
-          >
-            🔄 Regenerate
-          </button>
-          <button
-            className="regen-gender-btn regen-gender-btn--female"
-            onClick={() => onRegenerate('female')}
-            disabled={isLoading}
-          >
-            🙋‍♀️ Female
-          </button>
-        </div>
+        <>
+          <div className="regen-row">
+            <button
+              className="regen-gender-btn regen-gender-btn--male"
+              onClick={() => onRegenerate('male', selectedLang)}
+              disabled={isLoading}
+            >
+              🙋‍♂️ Male
+            </button>
+            <button
+              className="regen-btn"
+              id="regen-btn"
+              onClick={() => onRegenerate(null, selectedLang)}
+              disabled={isLoading}
+            >
+              🔄 Regenerate
+            </button>
+            <button
+              className="regen-gender-btn regen-gender-btn--female"
+              onClick={() => onRegenerate('female', selectedLang)}
+              disabled={isLoading}
+            >
+              🙋‍♀️ Female
+            </button>
+          </div>
+
+          <div className="lang-selector-row">
+            <span className="lang-selector-label">🌐 Language:</span>
+            <div className="lang-selector-btns">
+              {['English', 'Hinglish', 'Hindi'].map((lang) => (
+                <button
+                  key={lang}
+                  className={`lang-btn ${selectedLang === lang.toLowerCase() ? 'lang-btn--active' : ''}`}
+                  onClick={() => setSelectedLang(lang.toLowerCase())}
+                >
+                  {lang}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
       )}
 
       {/* Auto-copied badge + source */}

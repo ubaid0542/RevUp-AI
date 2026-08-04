@@ -494,7 +494,7 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     }
   }, [businessData, answers, selectedDishes, copyToClipboard]);
 
-  const handleRegenerate = useCallback(async (gender) => {
+  const handleRegenerate = useCallback(async (gender, language) => {
     if (isLoading) return;
     setIsLoading(true);
     setGeneratedReview('');
@@ -518,8 +518,10 @@ export default function ReviewScreen({ businessData, onEdit, onSaveReview }) {
     const selectedDishStr = selectedDishes.join(', ');
     const combinedKeywords = [selectedDishStr, randomKeyword].filter(k => k).join(', ');
 
+    const reviewLang = language || 'hinglish';
+
     // Regenerate review via Backend Proxy (OpenRouter — API keys stay server-side)
-    text = await generateReviewProxy(businessData.name, businessData.type, answers, 'hinglish', {
+    text = await generateReviewProxy(businessData.name, businessData.type, answers, reviewLang, {
       businessSubcategory: businessData.subcategory,
       city: businessData.city,
       customerKeywords: combinedKeywords,
