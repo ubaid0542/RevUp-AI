@@ -176,18 +176,20 @@ class ReviewGeneratorService
         $prompt = $this->buildReviewPrompt($businessName, $businessType, $ratings, $language, $options);
         $temperature = !empty($options['regenerate']) ? 1.0 : 0.75;
 
-        // Model priority: GPT-4.1 → Gemini 2.5 Pro → Claude 4 Sonnet → Flash → Llama
+        // Model priority: GPT-5.6 Terra → GPT-4.1 → Gemini 2.5 Pro → Claude 4 Sonnet → Flash → Llama
         // Tighter per-model timeouts for faster fallback.
         $models = [
-            // 🥇 Priority 1: GPT-4.1 — fastest paid, reliable, high quality
-            ['id' => 'openai/gpt-4.1', 'timeout' => 15],
-            // 🥈 Priority 2: Gemini 2.5 Pro — highest quality, natural Hinglish
-            ['id' => 'google/gemini-2.5-pro', 'timeout' => 15],
-            // 🥉 Priority 3: Claude 4 Sonnet — excellent humanization
-            ['id' => 'anthropic/claude-sonnet-4', 'timeout' => 15],
+            // 🥇 Priority 1: GPT-5.6 Terra — best quality, tight timeout for speed
+            ['id' => 'openai/gpt-5.6-terra', 'timeout' => 8],
+            // 🥈 Priority 2: GPT-4.1 — fast & reliable fallback
+            ['id' => 'openai/gpt-4.1', 'timeout' => 12],
+            // 🥉 Priority 3: Gemini 2.5 Pro — highest quality, natural Hinglish
+            ['id' => 'google/gemini-2.5-pro', 'timeout' => 12],
+            // Priority 4: Claude 4 Sonnet — excellent humanization
+            ['id' => 'anthropic/claude-sonnet-4', 'timeout' => 12],
             // — Fast free fallback —
-            ['id' => 'google/gemini-2.5-flash', 'timeout' => 10],
-            ['id' => 'meta-llama/llama-3.3-70b-instruct:free', 'timeout' => 10],
+            ['id' => 'google/gemini-2.5-flash', 'timeout' => 8],
+            ['id' => 'meta-llama/llama-3.3-70b-instruct:free', 'timeout' => 8],
         ];
 
         foreach ($models as $modelConfig) {
