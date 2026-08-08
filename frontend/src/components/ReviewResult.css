@@ -596,7 +596,20 @@
 .paste-modal-subtitle {
   font-size: 13px;
   color: var(--text2, #aaa);
+  margin-bottom: 16px;
+}
+
+.paste-modal-gif-wrap {
   margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid rgba(139, 92, 246, 0.2);
+}
+
+.paste-modal-gif {
+  width: 100%;
+  display: block;
+  border-radius: 11px;
 }
 
 .paste-modal-steps {
