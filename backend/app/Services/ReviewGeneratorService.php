@@ -176,13 +176,13 @@ class ReviewGeneratorService
         $prompt = $this->buildReviewPrompt($businessName, $businessType, $ratings, $language, $options);
         $temperature = !empty($options['regenerate']) ? 1.0 : 0.75;
 
-        // Model priority: GPT-5.6 Terra → GPT-4.1 → Gemini 2.5 Pro → Claude 4 Sonnet → Flash → Llama
+        // Model priority: GPT-4.1 → GPT-5.6 Terra → Gemini 2.5 Pro → Claude 4 Sonnet → Flash → Llama
         // Tighter per-model timeouts for faster fallback.
         $models = [
-            // 🥇 Priority 1: GPT-5.6 Terra — best quality, tight timeout for speed
-            ['id' => 'openai/gpt-5.6-terra', 'timeout' => 8],
-            // 🥈 Priority 2: GPT-4.1 — fast & reliable fallback
+            // 🥇 Priority 1: GPT-4.1 — fastest, reliable, high quality
             ['id' => 'openai/gpt-4.1', 'timeout' => 12],
+            // 🥈 Priority 2: GPT-5.6 Terra — best quality fallback
+            ['id' => 'openai/gpt-5.6-terra', 'timeout' => 12],
             // 🥉 Priority 3: Gemini 2.5 Pro — highest quality, natural Hinglish
             ['id' => 'google/gemini-2.5-pro', 'timeout' => 12],
             // Priority 4: Claude 4 Sonnet — excellent humanization
